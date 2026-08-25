@@ -1,0 +1,657 @@
+{
+    "id":  "2d6746f5-5649-42f5-9567-f32f8a17f6dd",
+    "title":  "python-year1",
+    "description":  "A fifteen-week introduction to Python for learners with no prior programming experience, progressing from how programs execute to shipping a tested, documented application.",
+    "prerequisites":  {
+                          "url":  "README.md",
+                          "title":  "Prerequisites and Learning Objectives",
+                          "tooltip":  "Prerequisites and Learning Objectives"
+                      },
+    "studyGuide":  {
+                       "url":  "python-study-guide.md",
+                       "title":  "Study Guide",
+                       "tooltip":  "Study Guide"
+                   },
+    "references":  [
+                       {
+                           "url":  "python-reference-materials/python-additional-resources.md",
+                           "title":  "Additional Resources",
+                           "tooltip":  "Additional Resources"
+                       },
+                       {
+                           "url":  "python-reference-materials/python-advanced-topics.md",
+                           "title":  "Advanced Topics",
+                           "tooltip":  "Advanced Topics"
+                       },
+                       {
+                           "url":  "python-reference-materials/python-industry-leaders.md",
+                           "title":  "Industry Leaders",
+                           "tooltip":  "Industry Leaders"
+                       },
+                       {
+                           "url":  "python-reference-materials/python-release-notes.md",
+                           "title":  "Release Notes",
+                           "tooltip":  "Release Notes"
+                       }
+                   ],
+    "modules":  [
+                    {
+                        "id":  "b2afad96-2553-4d3c-b2d4-3f5a94e12e76",
+                        "title":  "M1 - Programming and Computational Thinking",
+                        "description":  "How code runs, environment, CLI, variables, types, operators, pseudocode, spec-first mindset, and an introduction to Git.",
+                        "url":  "modules/m1-programming-and-computational-thinking",
+                        "prerequisites":  {
+                                              "url":  "modules/m1-programming-and-computational-thinking/readme.md",
+                                              "title":  "Prerequisites and Learning Objectives",
+                                              "tooltip":  "Prerequisites and Learning Objectives"
+                                          },
+                        "tooltip":  "Weeks 1-2 . 8 hours . Programming and Computational Thinking",
+                        "topics":  [
+                                       {
+                                           "id":  "e6697d14-2b33-4ede-8fa9-2b2a6548a189",
+                                           "title":  "Program Execution Models",
+                                           "tooltip":  "Week 1 - Compilation and interpretation compared, and the consequences of each",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python.md"
+                                       },
+                                       {
+                                           "id":  "244fc850-ff02-4c33-a732-11d4937f541e",
+                                           "title":  "The Python Execution Pipeline",
+                                           "tooltip":  "Week 1 - Source to bytecode to the Python Virtual Machine",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python.md"
+                                       },
+                                       {
+                                           "id":  "8f9a5855-e54a-4712-88a9-5a320521bddf",
+                                           "title":  "Origin and Industry Position of Python",
+                                           "tooltip":  "Week 1 - Python\u0027s history, the Python 2 boundary, and where the language is used",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python.md"
+                                       },
+                                       {
+                                           "id":  "25ffe439-746c-4109-93a5-e1a2b803b87b",
+                                           "title":  "Development Environment Setup",
+                                           "tooltip":  "Week 1 - Installing Python, Visual Studio Code, and Google Colab as a fallback",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python.md"
+                                       },
+                                       {
+                                           "id":  "21fff4ce-faac-45f2-a15b-c000bd5d95be",
+                                           "title":  "Command Line and Filesystem Navigation",
+                                           "tooltip":  "Week 1 - Working directory, paths, and the essential shell commands",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python.md"
+                                       },
+                                       {
+                                           "id":  "cd7a609b-b6f5-42a3-9af3-b3442cec002b",
+                                           "title":  "Variables and Core Data Types",
+                                           "tooltip":  "Week 1 - Assignment, naming rules, and int, float, str, bool",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python.md"
+                                       },
+                                       {
+                                           "id":  "2424fa1b-539c-4356-8ef8-7edacd5962dd",
+                                           "title":  "Input, Output and Comments",
+                                           "tooltip":  "Week 1 - print, input, f-strings, type conversion, and commenting discipline",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python.md"
+                                       },
+                                       {
+                                           "id":  "32359f5d-7250-4e29-aa8b-631475d5f374",
+                                           "title":  "Version Control Initialization",
+                                           "tooltip":  "Week 1 - Configuring Git and creating a first repository and commit",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python.md"
+                                       },
+                                       {
+                                           "id":  "ffbe81ae-6826-4439-96bb-85bd89c66316",
+                                           "title":  "Arithmetic Operators and Precedence",
+                                           "tooltip":  "Week 2 - The seven arithmetic operators and the order of evaluation",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking.md"
+                                       },
+                                       {
+                                           "id":  "3cc88903-ffe7-4765-b953-326d3507eaeb",
+                                           "title":  "Comparison Operators",
+                                           "tooltip":  "Week 2 - Relational tests and the boolean results they produce",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking.md"
+                                       },
+                                       {
+                                           "id":  "2d43b540-b88b-4784-8d41-290689cdf279",
+                                           "title":  "Logical Operators",
+                                           "tooltip":  "Week 2 - and, or, not, and short-circuit evaluation",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking.md"
+                                       },
+                                       {
+                                           "id":  "8c7809f9-64af-4976-9f0b-d93e12e38cd2",
+                                           "title":  "Type Conversion",
+                                           "tooltip":  "Week 2 - Implicit promotion and explicit conversion between types",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking.md"
+                                       },
+                                       {
+                                           "id":  "a1136ddf-9388-4f82-aa95-a12e07fbf1bc",
+                                           "title":  "Problem Decomposition",
+                                           "tooltip":  "Week 2 - Breaking a requirement into independently solvable steps",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking.md"
+                                       },
+                                       {
+                                           "id":  "d288f738-5a83-404e-b9f3-4e0e25c6060f",
+                                           "title":  "Pseudocode and Flowcharts",
+                                           "tooltip":  "Week 2 - Expressing an algorithm before committing it to code",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking.md"
+                                       },
+                                       {
+                                           "id":  "299876d6-881c-4033-9430-66d3e09b436c",
+                                           "title":  "Specification-First Development",
+                                           "tooltip":  "Week 2 - Defining inputs, outputs, and edge cases before writing code",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking.md"
+                                       }
+                                   ]
+                    },
+                    {
+                        "id":  "1f8300ea-ec56-44c5-b77d-e9382ca49636",
+                        "title":  "M2 - Control Flow and Functions",
+                        "description":  "Conditionals, loops, functions, scope, exceptions, and debugging.",
+                        "url":  "modules/m2-control-flow-and-functions",
+                        "prerequisites":  {
+                                              "url":  "modules/m2-control-flow-and-functions/readme.md",
+                                              "title":  "Prerequisites and Learning Objectives",
+                                              "tooltip":  "Prerequisites and Learning Objectives"
+                                          },
+                        "tooltip":  "Weeks 3-5 . 12 hours . Control Flow and Functions",
+                        "topics":  [
+                                       {
+                                           "id":  "e686a25f-9032-4992-9b14-dd5b604c22f6",
+                                           "title":  "Conditional Statements",
+                                           "tooltip":  "Week 3 - if, elif, and else, and the role of indentation",
+                                           "url":  "modules/m2-control-flow-and-functions/wk3-decisions-conditionals.md"
+                                       },
+                                       {
+                                           "id":  "e438357f-7f21-4075-bfc8-b4f2df5c9721",
+                                           "title":  "Nested Conditions",
+                                           "tooltip":  "Week 3 - Decisions inside decisions, and when to flatten them",
+                                           "url":  "modules/m2-control-flow-and-functions/wk3-decisions-conditionals.md"
+                                       },
+                                       {
+                                           "id":  "dcdcfed4-df14-4f91-91ce-8b8b81a5571e",
+                                           "title":  "Boolean Logic in Conditions",
+                                           "tooltip":  "Week 3 - Combining tests with and, or, and not",
+                                           "url":  "modules/m2-control-flow-and-functions/wk3-decisions-conditionals.md"
+                                       },
+                                       {
+                                           "id":  "6a6b5426-44db-43b7-9757-757472962bee",
+                                           "title":  "Truthy and Falsy Values",
+                                           "tooltip":  "Week 3 - How non-boolean values behave in a condition",
+                                           "url":  "modules/m2-control-flow-and-functions/wk3-decisions-conditionals.md"
+                                       },
+                                       {
+                                           "id":  "e6189c1f-83d9-40a2-b3fd-b2c037673c6b",
+                                           "title":  "Structural Pattern Matching",
+                                           "tooltip":  "Week 3 - The match-case statement and its appropriate uses",
+                                           "url":  "modules/m2-control-flow-and-functions/wk3-decisions-conditionals.md"
+                                       },
+                                       {
+                                           "id":  "53247635-4359-4488-8316-6f1bcf2588d6",
+                                           "title":  "The while Loop",
+                                           "tooltip":  "Week 4 - Condition-controlled repetition and the causes of infinite loops",
+                                           "url":  "modules/m2-control-flow-and-functions/wk4-repetition-loops.md"
+                                       },
+                                       {
+                                           "id":  "6d9e0fdc-a7b3-4dbf-824d-5cd056f93129",
+                                           "title":  "The for Loop and range",
+                                           "tooltip":  "Week 4 - Count-controlled repetition over sequences and ranges",
+                                           "url":  "modules/m2-control-flow-and-functions/wk4-repetition-loops.md"
+                                       },
+                                       {
+                                           "id":  "44f6be16-8487-4902-b657-08688f71c572",
+                                           "title":  "Nested Loops",
+                                           "tooltip":  "Week 4 - Loops within loops, and reasoning about their combined work",
+                                           "url":  "modules/m2-control-flow-and-functions/wk4-repetition-loops.md"
+                                       },
+                                       {
+                                           "id":  "8ca05408-4eb6-4040-a6ac-b8d0e2a0529f",
+                                           "title":  "Loop Control Statements",
+                                           "tooltip":  "Week 4 - break, continue, and the else clause on a loop",
+                                           "url":  "modules/m2-control-flow-and-functions/wk4-repetition-loops.md"
+                                       },
+                                       {
+                                           "id":  "e54bfdce-d735-42e1-9a31-5afe0ff2e034",
+                                           "title":  "Accumulator, Counter and Flag Patterns",
+                                           "tooltip":  "Week 4 - The three loop patterns that solve most problems",
+                                           "url":  "modules/m2-control-flow-and-functions/wk4-repetition-loops.md"
+                                       },
+                                       {
+                                           "id":  "f65bfdd1-1267-4c9f-a758-e95b128b6a8c",
+                                           "title":  "Function Definition and Invocation",
+                                           "tooltip":  "Week 5 - Defining reusable blocks and calling them",
+                                           "url":  "modules/m2-control-flow-and-functions/wk5-functions-errors-and-debugging.md"
+                                       },
+                                       {
+                                           "id":  "ccbfe60c-703d-4823-845a-7b21c66eff7f",
+                                           "title":  "Parameters and Return Values",
+                                           "tooltip":  "Week 5 - Passing data in and returning results out",
+                                           "url":  "modules/m2-control-flow-and-functions/wk5-functions-errors-and-debugging.md"
+                                       },
+                                       {
+                                           "id":  "badc660c-d806-45a4-8c1b-426f09c17d8f",
+                                           "title":  "Default and Keyword Arguments",
+                                           "tooltip":  "Week 5 - Flexible call signatures and their pitfalls",
+                                           "url":  "modules/m2-control-flow-and-functions/wk5-functions-errors-and-debugging.md"
+                                       },
+                                       {
+                                           "id":  "000d4fae-35d8-49b1-a170-9179e08bdb74",
+                                           "title":  "Variable Scope",
+                                           "tooltip":  "Week 5 - Local and global names, and the LEGB resolution order",
+                                           "url":  "modules/m2-control-flow-and-functions/wk5-functions-errors-and-debugging.md"
+                                       },
+                                       {
+                                           "id":  "e7246f64-2c58-4737-8ef7-29c0e17b7e85",
+                                           "title":  "Docstrings and Function Documentation",
+                                           "tooltip":  "Week 5 - Documenting intent, parameters, and return values",
+                                           "url":  "modules/m2-control-flow-and-functions/wk5-functions-errors-and-debugging.md"
+                                       },
+                                       {
+                                           "id":  "08349dfb-9d49-482c-bb04-1c66a9ef0911",
+                                           "title":  "Exception Handling",
+                                           "tooltip":  "Week 5 - try, except, else, and finally",
+                                           "url":  "modules/m2-control-flow-and-functions/wk5-functions-errors-and-debugging.md"
+                                       },
+                                       {
+                                           "id":  "71170b38-0b05-4c87-ab8f-8713fddbbb7c",
+                                           "title":  "Tracebacks and Debugging Technique",
+                                           "tooltip":  "Week 5 - Reading a traceback and locating a fault methodically",
+                                           "url":  "modules/m2-control-flow-and-functions/wk5-functions-errors-and-debugging.md"
+                                       }
+                                   ]
+                    },
+                    {
+                        "id":  "0e41624b-4c98-4a7f-a5a1-b4c104cd4073",
+                        "title":  "M3 - Built-in Data Structures",
+                        "description":  "Lists, tuples, dictionaries, sets, strings, comprehensions, generators, and data wrangling.",
+                        "url":  "modules/m3-built-in-data-structures",
+                        "prerequisites":  {
+                                              "url":  "modules/m3-built-in-data-structures/readme.md",
+                                              "title":  "Prerequisites and Learning Objectives",
+                                              "tooltip":  "Prerequisites and Learning Objectives"
+                                          },
+                        "tooltip":  "Weeks 6-8 . 12 hours . Built-in Data Structures",
+                        "topics":  [
+                                       {
+                                           "id":  "226bfd39-421d-4226-85c4-aa2ff6d5753f",
+                                           "title":  "List Fundamentals",
+                                           "tooltip":  "Week 6 - Creating, storing, and inspecting ordered collections",
+                                           "url":  "modules/m3-built-in-data-structures/wk6-lists-and-tuples.md"
+                                       },
+                                       {
+                                           "id":  "6f861807-b277-4ba6-943c-ade095107b74",
+                                           "title":  "Indexing and Slicing",
+                                           "tooltip":  "Week 6 - Positive and negative positions, and slice notation",
+                                           "url":  "modules/m3-built-in-data-structures/wk6-lists-and-tuples.md"
+                                       },
+                                       {
+                                           "id":  "6c22c886-ff41-4993-9f55-db8a6aa24837",
+                                           "title":  "List Methods and Mutation",
+                                           "tooltip":  "Week 6 - Adding, removing, and reordering elements in place",
+                                           "url":  "modules/m3-built-in-data-structures/wk6-lists-and-tuples.md"
+                                       },
+                                       {
+                                           "id":  "88ad139d-6195-4b3d-8e71-f47972d3bff8",
+                                           "title":  "Tuples and Immutability",
+                                           "tooltip":  "Week 6 - Fixed sequences, unpacking, and when to prefer them",
+                                           "url":  "modules/m3-built-in-data-structures/wk6-lists-and-tuples.md"
+                                       },
+                                       {
+                                           "id":  "4cdd26a0-9815-4c03-9fec-55cd488f7fb8",
+                                           "title":  "Iteration over Sequences",
+                                           "tooltip":  "Week 6 - for, enumerate, and zip",
+                                           "url":  "modules/m3-built-in-data-structures/wk6-lists-and-tuples.md"
+                                       },
+                                       {
+                                           "id":  "e077310d-9c92-4600-b3d2-b004bdc71f03",
+                                           "title":  "List Comprehensions",
+                                           "tooltip":  "Week 6 - Constructing lists from expressions and conditions",
+                                           "url":  "modules/m3-built-in-data-structures/wk6-lists-and-tuples.md"
+                                       },
+                                       {
+                                           "id":  "9261a951-f7c7-4986-ab44-a5ac61deaa08",
+                                           "title":  "Two-Dimensional Lists",
+                                           "tooltip":  "Week 6 - Nested lists as grids and matrices",
+                                           "url":  "modules/m3-built-in-data-structures/wk6-lists-and-tuples.md"
+                                       },
+                                       {
+                                           "id":  "5243b73c-97e2-405b-894a-5c9ef0aec326",
+                                           "title":  "Sorting Fundamentals",
+                                           "tooltip":  "Week 6 - sorted, sort, reverse, and stability",
+                                           "url":  "modules/m3-built-in-data-structures/wk6-lists-and-tuples.md"
+                                       },
+                                       {
+                                           "id":  "4f9283e6-2424-4782-bf77-083a2ed07c3a",
+                                           "title":  "Dictionary Fundamentals",
+                                           "tooltip":  "Week 7 - Key-value storage, lookup, and insertion order",
+                                           "url":  "modules/m3-built-in-data-structures/wk7-dictionaries-sets-and-strings.md"
+                                       },
+                                       {
+                                           "id":  "adc76416-5614-4b83-8e20-93658a48924c",
+                                           "title":  "Dictionary Methods and Iteration",
+                                           "tooltip":  "Week 7 - get, keys, values, items, and safe access patterns",
+                                           "url":  "modules/m3-built-in-data-structures/wk7-dictionaries-sets-and-strings.md"
+                                       },
+                                       {
+                                           "id":  "f06de0d4-3bb2-413d-b95e-52671e0e2f27",
+                                           "title":  "Sets and Set Operations",
+                                           "tooltip":  "Week 7 - Uniqueness, membership testing, union, intersection, difference",
+                                           "url":  "modules/m3-built-in-data-structures/wk7-dictionaries-sets-and-strings.md"
+                                       },
+                                       {
+                                           "id":  "063aa1e9-5eab-48b8-93c9-ec6d16e6f3a7",
+                                           "title":  "String Methods",
+                                           "tooltip":  "Week 7 - Searching, splitting, joining, cleaning, and case handling",
+                                           "url":  "modules/m3-built-in-data-structures/wk7-dictionaries-sets-and-strings.md"
+                                       },
+                                       {
+                                           "id":  "36d7d491-479b-4f88-8458-d16fa5136308",
+                                           "title":  "Formatted String Literals",
+                                           "tooltip":  "Week 7 - f-strings, format specifications, and alignment",
+                                           "url":  "modules/m3-built-in-data-structures/wk7-dictionaries-sets-and-strings.md"
+                                       },
+                                       {
+                                           "id":  "11314f59-f4c1-42b9-a30f-be1c121cfcec",
+                                           "title":  "Nested Data Structures",
+                                           "tooltip":  "Week 7 - Lists of dictionaries and dictionaries of lists",
+                                           "url":  "modules/m3-built-in-data-structures/wk7-dictionaries-sets-and-strings.md"
+                                       },
+                                       {
+                                           "id":  "e963238c-5721-4cda-b0aa-20a968cb33cf",
+                                           "title":  "Dictionary and Set Comprehensions",
+                                           "tooltip":  "Week 8 - Building mappings and sets in a single expression",
+                                           "url":  "modules/m3-built-in-data-structures/wk8-comprehensions-generators-and-wrangling.md"
+                                       },
+                                       {
+                                           "id":  "fce840d4-4dc2-406d-b5a2-598536325873",
+                                           "title":  "Generators and the yield Statement",
+                                           "tooltip":  "Week 8 - Producing values lazily and the memory advantage",
+                                           "url":  "modules/m3-built-in-data-structures/wk8-comprehensions-generators-and-wrangling.md"
+                                       },
+                                       {
+                                           "id":  "4d7b125a-3d65-4b87-8e89-d19295fe1897",
+                                           "title":  "Lambda Expressions",
+                                           "tooltip":  "Week 8 - Anonymous functions and their legitimate uses",
+                                           "url":  "modules/m3-built-in-data-structures/wk8-comprehensions-generators-and-wrangling.md"
+                                       },
+                                       {
+                                           "id":  "45a4cf92-11c6-4e79-9e02-8e54998f060b",
+                                           "title":  "map, filter and sorted with Keys",
+                                           "tooltip":  "Week 8 - Transforming, selecting, and ordering by a computed value",
+                                           "url":  "modules/m3-built-in-data-structures/wk8-comprehensions-generators-and-wrangling.md"
+                                       },
+                                       {
+                                           "id":  "bad3bb38-ec5f-4e71-b0a3-0abcedc44ef6",
+                                           "title":  "Data Wrangling Practice",
+                                           "tooltip":  "Week 8 - Cleaning, reshaping, and summarizing real record sets",
+                                           "url":  "modules/m3-built-in-data-structures/wk8-comprehensions-generators-and-wrangling.md"
+                                       }
+                                   ]
+                    },
+                    {
+                        "id":  "e112536e-181d-4a71-923e-7c92ba36b4e7",
+                        "title":  "M4 - Object-Oriented Programming",
+                        "description":  "Classes, inheritance, polymorphism, dunder methods, decorators, and context managers.",
+                        "url":  "modules/m4-object-oriented-programming",
+                        "prerequisites":  {
+                                              "url":  "modules/m4-object-oriented-programming/readme.md",
+                                              "title":  "Prerequisites and Learning Objectives",
+                                              "tooltip":  "Prerequisites and Learning Objectives"
+                                          },
+                        "tooltip":  "Weeks 9-10 . 8 hours . Object-Oriented Programming",
+                        "topics":  [
+                                       {
+                                           "id":  "6fb261b5-7b85-49d6-802f-1f0027cef60c",
+                                           "title":  "The Case for Object-Oriented Programming",
+                                           "tooltip":  "Week 9 - The limits of loose functions and data, and what classes solve",
+                                           "url":  "modules/m4-object-oriented-programming/wk9-oop-classes-and-objects.md"
+                                       },
+                                       {
+                                           "id":  "4d022ff0-8918-4d57-acef-f95c037a010d",
+                                           "title":  "Classes and Objects",
+                                           "tooltip":  "Week 9 - Defining a type and creating instances of it",
+                                           "url":  "modules/m4-object-oriented-programming/wk9-oop-classes-and-objects.md"
+                                       },
+                                       {
+                                           "id":  "5400fc42-e699-4dbb-9eea-fc96e2ccbd97",
+                                           "title":  "The __init__ Method and self",
+                                           "tooltip":  "Week 9 - Initializing state and the meaning of the first parameter",
+                                           "url":  "modules/m4-object-oriented-programming/wk9-oop-classes-and-objects.md"
+                                       },
+                                       {
+                                           "id":  "e2ee329b-6468-4016-aa18-dbd5b0554af3",
+                                           "title":  "Instance and Class Attributes",
+                                           "tooltip":  "Week 9 - Data belonging to one object versus data shared by all",
+                                           "url":  "modules/m4-object-oriented-programming/wk9-oop-classes-and-objects.md"
+                                       },
+                                       {
+                                           "id":  "d27ee8fd-f7e5-41eb-b9fa-fe7b60fd7279",
+                                           "title":  "Encapsulation",
+                                           "tooltip":  "Week 9 - Controlling access to internal state and the naming conventions used",
+                                           "url":  "modules/m4-object-oriented-programming/wk9-oop-classes-and-objects.md"
+                                       },
+                                       {
+                                           "id":  "df722487-6e4f-47ff-be63-ef027cdb341d",
+                                           "title":  "Inheritance",
+                                           "tooltip":  "Week 10 - Deriving a class from another and reusing its behaviour",
+                                           "url":  "modules/m4-object-oriented-programming/wk10-oop-inheritance-and-idioms.md"
+                                       },
+                                       {
+                                           "id":  "fbc20ce6-cfcd-46d1-871e-0b400f56e261",
+                                           "title":  "The super() Function",
+                                           "tooltip":  "Week 10 - Delegating to a parent implementation correctly",
+                                           "url":  "modules/m4-object-oriented-programming/wk10-oop-inheritance-and-idioms.md"
+                                       },
+                                       {
+                                           "id":  "ee49ca32-7873-42ee-8a6d-58c38a26f57c",
+                                           "title":  "Polymorphism",
+                                           "tooltip":  "Week 10 - One interface serving several concrete types",
+                                           "url":  "modules/m4-object-oriented-programming/wk10-oop-inheritance-and-idioms.md"
+                                       },
+                                       {
+                                           "id":  "d3039526-fbd8-4989-b64a-2dfc57fa3a06",
+                                           "title":  "Abstraction",
+                                           "tooltip":  "Week 10 - Defining a required interface without implementing it",
+                                           "url":  "modules/m4-object-oriented-programming/wk10-oop-inheritance-and-idioms.md"
+                                       },
+                                       {
+                                           "id":  "34c91d05-3fde-4cf5-a829-acf0926e0996",
+                                           "title":  "Dunder Methods",
+                                           "tooltip":  "Week 10 - Customizing built-in behaviour including operator overloading",
+                                           "url":  "modules/m4-object-oriented-programming/wk10-oop-inheritance-and-idioms.md"
+                                       },
+                                       {
+                                           "id":  "cc3a2916-72a5-4f6d-9226-faadde77b416",
+                                           "title":  "Decorators and Context Managers",
+                                           "tooltip":  "Week 10 - Wrapping behaviour and managing resources with with",
+                                           "url":  "modules/m4-object-oriented-programming/wk10-oop-inheritance-and-idioms.md"
+                                       }
+                                   ]
+                    },
+                    {
+                        "id":  "faae635a-ad98-437a-8df5-8e25c4470dbf",
+                        "title":  "M5 - Production-Ready Python",
+                        "description":  "Files, modules and packages, virtual environments, APIs, pandas, testing, PEP 8, the Git pull-request workflow, and AI-assisted development.",
+                        "url":  "modules/m5-production-ready-python",
+                        "prerequisites":  {
+                                              "url":  "modules/m5-production-ready-python/readme.md",
+                                              "title":  "Prerequisites and Learning Objectives",
+                                              "tooltip":  "Prerequisites and Learning Objectives"
+                                          },
+                        "tooltip":  "Weeks 11-13 . 12 hours . Production-Ready Python",
+                        "topics":  [
+                                       {
+                                           "id":  "0dfae30c-22fd-4950-9166-dcccae12c801",
+                                           "title":  "File Input and Output",
+                                           "tooltip":  "Week 11 - Reading and writing text files, modes, and the with statement",
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages.md"
+                                       },
+                                       {
+                                           "id":  "9255a7f0-2c58-4d61-af6b-c5ee30633aca",
+                                           "title":  "CSV Processing",
+                                           "tooltip":  "Week 11 - Reading and writing tabular data with the csv module",
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages.md"
+                                       },
+                                       {
+                                           "id":  "d637b3ca-c8a7-48ef-852b-6db180085a7f",
+                                           "title":  "JSON Processing",
+                                           "tooltip":  "Week 11 - Serializing and deserializing structured data",
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages.md"
+                                       },
+                                       {
+                                           "id":  "f0577561-b44b-49fb-b6d6-6486c5a4464d",
+                                           "title":  "Modules and Imports",
+                                           "tooltip":  "Week 11 - Splitting code across files and the import mechanism",
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages.md"
+                                       },
+                                       {
+                                           "id":  "74aad0ce-fb11-4cc4-8005-7ab924e96400",
+                                           "title":  "Packages",
+                                           "tooltip":  "Week 11 - Organizing modules into a package directory",
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages.md"
+                                       },
+                                       {
+                                           "id":  "750cd2f4-bdb9-4221-b3a4-fe7043497f53",
+                                           "title":  "Standard Library Tour",
+                                           "tooltip":  "Week 11 - os, datetime, math, random, and collections",
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages.md"
+                                       },
+                                       {
+                                           "id":  "858e589c-2f37-4ece-a848-5f60cc2f60fc",
+                                           "title":  "pip and Package Installation",
+                                           "tooltip":  "Week 12 - Installing, listing, pinning, and removing third-party packages",
+                                           "url":  "modules/m5-production-ready-python/wk12-libraries-virtual-envs-and-apis.md"
+                                       },
+                                       {
+                                           "id":  "9d8b6631-d91c-4991-bf93-cd6ac2d86847",
+                                           "title":  "Virtual Environments",
+                                           "tooltip":  "Week 12 - Isolating project dependencies with venv",
+                                           "url":  "modules/m5-production-ready-python/wk12-libraries-virtual-envs-and-apis.md"
+                                       },
+                                       {
+                                           "id":  "38ef29a8-0dd5-40c8-8e83-7777c56f1feb",
+                                           "title":  "Documentation Literacy",
+                                           "tooltip":  "Week 12 - Reading official documentation to answer a question independently",
+                                           "url":  "modules/m5-production-ready-python/wk12-libraries-virtual-envs-and-apis.md"
+                                       },
+                                       {
+                                           "id":  "a93e276b-0ff5-4729-9752-32a3212ff6ac",
+                                           "title":  "HTTP Requests and REST APIs",
+                                           "tooltip":  "Week 12 - Sending requests and handling JSON responses with requests",
+                                           "url":  "modules/m5-production-ready-python/wk12-libraries-virtual-envs-and-apis.md"
+                                       },
+                                       {
+                                           "id":  "f8304361-d1d8-4f63-87b8-57e3a0ec248f",
+                                           "title":  "Introduction to pandas",
+                                           "tooltip":  "Week 12 - DataFrames, selection, and basic summarization",
+                                           "url":  "modules/m5-production-ready-python/wk12-libraries-virtual-envs-and-apis.md"
+                                       },
+                                       {
+                                           "id":  "e04476e8-b7a4-4a8c-adc9-4582059392ea",
+                                           "title":  "API Errors and Rate Limits",
+                                           "tooltip":  "Week 12 - Status codes, timeouts, retries, and respectful use",
+                                           "url":  "modules/m5-production-ready-python/wk12-libraries-virtual-envs-and-apis.md"
+                                       },
+                                       {
+                                           "id":  "e91cf1dd-d623-470b-ad95-97fdfc1116a5",
+                                           "title":  "Testing with pytest",
+                                           "tooltip":  "Week 13 - Writing, organizing, and running automated tests",
+                                           "url":  "modules/m5-production-ready-python/wk13-testing-clean-code-git-and-ai-assist.md"
+                                       },
+                                       {
+                                           "id":  "a1fcd693-0686-4d58-9a44-8dd7d9cd8db0",
+                                           "title":  "Assertions and Edge Cases",
+                                           "tooltip":  "Week 13 - Choosing test cases that actually expose defects",
+                                           "url":  "modules/m5-production-ready-python/wk13-testing-clean-code-git-and-ai-assist.md"
+                                       },
+                                       {
+                                           "id":  "3497e23e-fb2e-41d2-8b45-831b2021448d",
+                                           "title":  "PEP 8 and Clean Code",
+                                           "tooltip":  "Week 13 - Style, naming, structure, and readability standards",
+                                           "url":  "modules/m5-production-ready-python/wk13-testing-clean-code-git-and-ai-assist.md"
+                                       },
+                                       {
+                                           "id":  "5d5c5187-d85d-48fa-8118-11892c1ec751",
+                                           "title":  "Logging",
+                                           "tooltip":  "Week 13 - Recording program behaviour properly instead of printing",
+                                           "url":  "modules/m5-production-ready-python/wk13-testing-clean-code-git-and-ai-assist.md"
+                                       },
+                                       {
+                                           "id":  "b14a6cb8-282a-4f7b-9e22-442f4e04b32f",
+                                           "title":  "Branching and Pull Requests",
+                                           "tooltip":  "Week 13 - Feature branches, review, and merging",
+                                           "url":  "modules/m5-production-ready-python/wk13-testing-clean-code-git-and-ai-assist.md"
+                                       },
+                                       {
+                                           "id":  "038cd7cf-f52b-44c1-8dc5-70889b9b0ee9",
+                                           "title":  "Merge Conflict Resolution",
+                                           "tooltip":  "Week 13 - Reading conflict markers and resolving them safely",
+                                           "url":  "modules/m5-production-ready-python/wk13-testing-clean-code-git-and-ai-assist.md"
+                                       },
+                                       {
+                                           "id":  "a9dbcc53-5a91-431b-90ac-9cb954591cab",
+                                           "title":  "Responsible AI-Assisted Development",
+                                           "tooltip":  "Week 13 - Verification, attribution, and the limits of generated code",
+                                           "url":  "modules/m5-production-ready-python/wk13-testing-clean-code-git-and-ai-assist.md"
+                                       }
+                                   ]
+                    },
+                    {
+                        "id":  "ce1bc753-0905-4f47-90e2-8094f832fd0c",
+                        "title":  "M6 - Capstone Project",
+                        "description":  "Build, test, document, and ship an individual Python application.",
+                        "url":  "modules/m6-capstone-project",
+                        "prerequisites":  {
+                                              "url":  "modules/m6-capstone-project/readme.md",
+                                              "title":  "Prerequisites and Learning Objectives",
+                                              "tooltip":  "Prerequisites and Learning Objectives"
+                                          },
+                        "tooltip":  "Weeks 14-15 . 8 hours . Capstone Project",
+                        "topics":  [
+                                       {
+                                           "id":  "9db93a62-8424-414b-8ae1-5d107d0a66a4",
+                                           "title":  "Project Specification",
+                                           "tooltip":  "Week 14 - Turning an idea into a scoped, testable requirement set",
+                                           "url":  "modules/m6-capstone-project/wk14-capstone-build-sprint.md"
+                                       },
+                                       {
+                                           "id":  "3ed95e09-67f8-471e-8306-3d2c31f70577",
+                                           "title":  "Project Structure and Architecture",
+                                           "tooltip":  "Week 14 - Choosing a layout and separating responsibilities",
+                                           "url":  "modules/m6-capstone-project/wk14-capstone-build-sprint.md"
+                                       },
+                                       {
+                                           "id":  "b4fc4435-68d6-418d-9c1b-f1a140efeec1",
+                                           "title":  "Failure Handling",
+                                           "tooltip":  "Week 14 - Anticipating invalid input, missing files, and network failure",
+                                           "url":  "modules/m6-capstone-project/wk14-capstone-build-sprint.md"
+                                       },
+                                       {
+                                           "id":  "d9e9fa6a-ca18-4f08-b911-ff44b94ae9c4",
+                                           "title":  "Project Documentation",
+                                           "tooltip":  "Week 14 - Writing a README that lets a stranger run the project",
+                                           "url":  "modules/m6-capstone-project/wk14-capstone-build-sprint.md"
+                                       },
+                                       {
+                                           "id":  "93c532f8-39af-4411-985c-60264c2f715a",
+                                           "title":  "Code Review",
+                                           "tooltip":  "Week 15 - Reading and critiquing code against defined standards",
+                                           "url":  "modules/m6-capstone-project/wk15-capstone-showcase-and-portfolio.md"
+                                       },
+                                       {
+                                           "id":  "50a8465f-e65e-4b4a-993c-89d8127d9e2b",
+                                           "title":  "Final Documentation",
+                                           "tooltip":  "Week 15 - Completing the README, docstrings, and usage notes",
+                                           "url":  "modules/m6-capstone-project/wk15-capstone-showcase-and-portfolio.md"
+                                       },
+                                       {
+                                           "id":  "19e9db83-c259-4158-a22c-1521a15ce5ee",
+                                           "title":  "Presentation and Demonstration",
+                                           "tooltip":  "Week 15 - Demonstrating working software to an audience",
+                                           "url":  "modules/m6-capstone-project/wk15-capstone-showcase-and-portfolio.md"
+                                       },
+                                       {
+                                           "id":  "6777ddf8-ce84-40db-8aec-17eeeb7cdd5b",
+                                           "title":  "GitHub Submission",
+                                           "tooltip":  "Week 15 - Publishing the repository and verifying the delivered state",
+                                           "url":  "modules/m6-capstone-project/wk15-capstone-showcase-and-portfolio.md"
+                                       }
+                                   ]
+                    }
+                ]
+}
