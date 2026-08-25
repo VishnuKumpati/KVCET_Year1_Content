@@ -41,7 +41,7 @@
                         "description":  "How code runs, environment, CLI, variables, types, operators, pseudocode, spec-first mindset, and an introduction to Git.",
                         "url":  "modules/m1-programming-and-computational-thinking",
                         "prerequisites":  {
-                                              "url":  "modules/m1-programming-and-computational-thinking/readme.md",
+                                              "url":  "",
                                               "title":  "Prerequisites and Learning Objectives",
                                               "tooltip":  "Prerequisites and Learning Objectives"
                                           },
@@ -145,7 +145,7 @@
                         "description":  "Conditionals, loops, functions, scope, exceptions, and debugging.",
                         "url":  "modules/m2-control-flow-and-functions",
                         "prerequisites":  {
-                                              "url":  "modules/m2-control-flow-and-functions/readme.md",
+                                              "url":  "",
                                               "title":  "Prerequisites and Learning Objectives",
                                               "tooltip":  "Prerequisites and Learning Objectives"
                                           },
@@ -261,7 +261,7 @@
                         "description":  "Lists, tuples, dictionaries, sets, strings, comprehensions, generators, and data wrangling.",
                         "url":  "modules/m3-built-in-data-structures",
                         "prerequisites":  {
-                                              "url":  "modules/m3-built-in-data-structures/readme.md",
+                                              "url":  "",
                                               "title":  "Prerequisites and Learning Objectives",
                                               "tooltip":  "Prerequisites and Learning Objectives"
                                           },
@@ -389,7 +389,7 @@
                         "description":  "Classes, inheritance, polymorphism, dunder methods, decorators, and context managers.",
                         "url":  "modules/m4-object-oriented-programming",
                         "prerequisites":  {
-                                              "url":  "modules/m4-object-oriented-programming/readme.md",
+                                              "url":  "",
                                               "title":  "Prerequisites and Learning Objectives",
                                               "tooltip":  "Prerequisites and Learning Objectives"
                                           },
@@ -469,7 +469,7 @@
                         "description":  "Files, modules and packages, virtual environments, APIs, pandas, testing, PEP 8, the Git pull-request workflow, and AI-assisted development.",
                         "url":  "modules/m5-production-ready-python",
                         "prerequisites":  {
-                                              "url":  "modules/m5-production-ready-python/readme.md",
+                                              "url":  "",
                                               "title":  "Prerequisites and Learning Objectives",
                                               "tooltip":  "Prerequisites and Learning Objectives"
                                           },
@@ -597,7 +597,7 @@
                         "description":  "Build, test, document, and ship an individual Python application.",
                         "url":  "modules/m6-capstone-project",
                         "prerequisites":  {
-                                              "url":  "modules/m6-capstone-project/readme.md",
+                                              "url":  "",
                                               "title":  "Prerequisites and Learning Objectives",
                                               "tooltip":  "Prerequisites and Learning Objectives"
                                           },
