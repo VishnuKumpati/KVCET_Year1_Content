@@ -81,9 +81,10 @@ python-study-guide.md            how to work through the material
 python-reference-materials/      supporting reference documents
 modules/
     m1-programming-and-computational-thinking/
-        readme.md                module prerequisites and objectives
-        wk1-...md                one file per week
-        wk2-...md
+        wk1-.../                 a week split across more than one file
+            1-...md
+            2-...md
+        wk2-...md                one file per week
     m2-control-flow-and-functions/
     m3-built-in-data-structures/
     m4-object-oriented-programming/
@@ -91,4 +92,4 @@ modules/
     m6-capstone-project/
 ```
 
-Each module folder holds a `readme.md` stating that module's prerequisites, objectives, and weekly breakdown, followed by one Markdown file per week.
+Each module folder holds one Markdown file per week. Where a week carries more than one file, those files sit in a folder named for the week and are numbered in reading order.

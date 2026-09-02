@@ -38,7 +38,7 @@
                     {
                         "id":  "b2afad96-2553-4d3c-b2d4-3f5a94e12e76",
                         "title":  "M1 - Programming and Computational Thinking",
-                        "description":  "How code runs, environment, CLI, variables, types, operators, pseudocode, spec-first mindset, and an introduction to Git.",
+                        "description":  "How code runs, environment, CLI, variables, types, input and output, operators, pseudocode, and the spec-first mindset.",
                         "url":  "modules/m1-programming-and-computational-thinking",
                         "prerequisites":  {
                                               "url":  "",
@@ -51,91 +51,109 @@
                                            "id":  "e6697d14-2b33-4ede-8fa9-2b2a6548a189",
                                            "title":  "Program Execution Models",
                                            "tooltip":  "Week 1 - Compilation and interpretation compared, and the consequences of each",
-                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python.md"
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python/1-introduction-to-python-and-environment-setup.md"
                                        },
                                        {
                                            "id":  "244fc850-ff02-4c33-a732-11d4937f541e",
                                            "title":  "The Python Execution Pipeline",
                                            "tooltip":  "Week 1 - Source to bytecode to the Python Virtual Machine",
-                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python.md"
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python/1-introduction-to-python-and-environment-setup.md"
                                        },
                                        {
                                            "id":  "8f9a5855-e54a-4712-88a9-5a320521bddf",
-                                           "title":  "Origin and Industry Position of Python",
-                                           "tooltip":  "Week 1 - Python\u0027s history, the Python 2 boundary, and where the language is used",
-                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python.md"
+                                           "title":  "The Role and Uses of Python",
+                                           "tooltip":  "Week 1 - Where the language is used in industry and why it is chosen",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python/1-introduction-to-python-and-environment-setup.md"
                                        },
                                        {
                                            "id":  "25ffe439-746c-4109-93a5-e1a2b803b87b",
                                            "title":  "Development Environment Setup",
                                            "tooltip":  "Week 1 - Installing Python, Visual Studio Code, and Google Colab as a fallback",
-                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python.md"
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python/1-introduction-to-python-and-environment-setup.md"
                                        },
                                        {
                                            "id":  "21fff4ce-faac-45f2-a15b-c000bd5d95be",
                                            "title":  "Command Line and Filesystem Navigation",
                                            "tooltip":  "Week 1 - Working directory, paths, and the essential shell commands",
-                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python.md"
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python/1-introduction-to-python-and-environment-setup.md"
+                                       },
+                                       {
+                                           "id":  "37a9195c-a8b4-4ce0-889e-6aa6713c0f37",
+                                           "title":  "Running Your First Program",
+                                           "tooltip":  "Week 1 - Saving a .py file and running it from the terminal and the editor",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python/1-introduction-to-python-and-environment-setup.md"
                                        },
                                        {
                                            "id":  "cd7a609b-b6f5-42a3-9af3-b3442cec002b",
-                                           "title":  "Variables and Core Data Types",
-                                           "tooltip":  "Week 1 - Assignment, naming rules, and int, float, str, bool",
-                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python.md"
+                                           "title":  "Variables, Naming Rules and Comments",
+                                           "tooltip":  "Week 1 - Assignment, identifier rules, snake_case, and commenting discipline",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python/2-variables-data-types-and-input-output.md"
+                                       },
+                                       {
+                                           "id":  "718998ab-8e0b-45d6-99cc-7edf04c4ec6a",
+                                           "title":  "Core Data Types and Type Checking",
+                                           "tooltip":  "Week 1 - int, float, str, bool, and the type() function",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python/2-variables-data-types-and-input-output.md"
+                                       },
+                                       {
+                                           "id":  "8ccb81bb-2d7c-44c9-afd3-e0e533a89ca7",
+                                           "title":  "Converting Between Types",
+                                           "tooltip":  "Week 1 - int(), float(), str(), bool(), and the conversions that fail",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python/2-variables-data-types-and-input-output.md"
                                        },
                                        {
                                            "id":  "2424fa1b-539c-4356-8ef8-7edacd5962dd",
-                                           "title":  "Input, Output and Comments",
-                                           "tooltip":  "Week 1 - print, input, f-strings, type conversion, and commenting discipline",
-                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python.md"
+                                           "title":  "Output with print and f-strings",
+                                           "tooltip":  "Week 1 - print, sep and end, f-strings, and the .2f format specification",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python/2-variables-data-types-and-input-output.md"
                                        },
                                        {
-                                           "id":  "32359f5d-7250-4e29-aa8b-631475d5f374",
-                                           "title":  "Version Control Initialization",
-                                           "tooltip":  "Week 1 - Configuring Git and creating a first repository and commit",
-                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python.md"
+                                           "id":  "f6076923-6671-4685-9597-e5af6008c834",
+                                           "title":  "Reading Input from the Keyboard",
+                                           "tooltip":  "Week 1 - input, prompts, and the fact that it always returns a string",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python/2-variables-data-types-and-input-output.md"
                                        },
                                        {
                                            "id":  "ffbe81ae-6826-4439-96bb-85bd89c66316",
                                            "title":  "Arithmetic Operators and Precedence",
-                                           "tooltip":  "Week 2 - The seven arithmetic operators and the order of evaluation",
-                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking.md"
+                                           "tooltip":  "Week 2 - The seven arithmetic operators, / against //, % and **, and the order of evaluation",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/1-operators-and-expressions.md"
                                        },
                                        {
                                            "id":  "3cc88903-ffe7-4765-b953-326d3507eaeb",
                                            "title":  "Comparison Operators",
-                                           "tooltip":  "Week 2 - Relational tests and the boolean results they produce",
-                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking.md"
+                                           "tooltip":  "Week 2 - Relational tests, chained comparisons, and comparing floats safely",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/1-operators-and-expressions.md"
                                        },
                                        {
                                            "id":  "2d43b540-b88b-4784-8d41-290689cdf279",
-                                           "title":  "Logical Operators",
-                                           "tooltip":  "Week 2 - and, or, not, and short-circuit evaluation",
-                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking.md"
+                                           "title":  "Logical Operators and Truthiness",
+                                           "tooltip":  "Week 2 - and, or, not, short-circuit evaluation, and truth value testing",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/1-operators-and-expressions.md"
                                        },
                                        {
                                            "id":  "8c7809f9-64af-4976-9f0b-d93e12e38cd2",
                                            "title":  "Type Conversion",
-                                           "tooltip":  "Week 2 - Implicit promotion and explicit conversion between types",
-                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking.md"
+                                           "tooltip":  "Week 2 - Implicit promotion, explicit conversion, and converting real input at the boundary",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/1-operators-and-expressions.md"
                                        },
                                        {
                                            "id":  "a1136ddf-9388-4f82-aa95-a12e07fbf1bc",
                                            "title":  "Problem Decomposition",
                                            "tooltip":  "Week 2 - Breaking a requirement into independently solvable steps",
-                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking.md"
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/2-computational-thinking-and-problem-specification.md"
                                        },
                                        {
                                            "id":  "d288f738-5a83-404e-b9f3-4e0e25c6060f",
                                            "title":  "Pseudocode and Flowcharts",
                                            "tooltip":  "Week 2 - Expressing an algorithm before committing it to code",
-                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking.md"
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/2-computational-thinking-and-problem-specification.md"
                                        },
                                        {
                                            "id":  "299876d6-881c-4033-9430-66d3e09b436c",
                                            "title":  "Specification-First Development",
-                                           "tooltip":  "Week 2 - Defining inputs, outputs, and edge cases before writing code",
-                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking.md"
+                                           "tooltip":  "Week 2 - Defining inputs, outputs, and rules before coding, and the golden rule as the check",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/2-computational-thinking-and-problem-specification.md"
                                        }
                                    ]
                     },
