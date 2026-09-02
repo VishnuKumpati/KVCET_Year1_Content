@@ -1,30 +1,41 @@
 # Introduction to Python and Environment Setup
 
-A Python program is a plain text file. A second program, called the **interpreter**, reads that file and carries out what it says.
+Imagine you want a computer to do something simple, such as showing a message on the screen or adding two numbers. You might expect to be able to tell it in plain English. You cannot, and that single fact is why programming languages exist.
 
----
+## Translation and the Interpreter
 
-## How a Program Reaches the Machine
+### The Need for Translation
 
-### Why Anything Has to Be Translated
+A computer works only with numbers. It adds them, compares them, and moves them from one place to another. Type *"find the average of three marks"* and nothing happens, because the machine cannot act on any part of that sentence.
 
-A computer works only with numbers. It can add them, compare them, and move them from one place to another. It does not understand English, so typing *"find the average of three marks"* achieves nothing.
+A **programming language** does two things at once. It gives you words and symbols that a person can read, each carrying one fixed meaning, and another program, called the **interpreter**, turns them into the form the machine works with. Because `print` always means the same thing and `+` always means the same thing, neither you nor the computer has to guess what a line means.
 
-A **programming language** is a small set of words and symbols, each given one fixed meaning, together with a **translator** that turns them into the numbers the machine acts on. Because `print` always means the same thing and `+` always means the same thing, nothing is left to guess. That is why a machine can follow them.
-
-Python stays close to English, so a line often explains itself:
+Python's designers also chose words taken from English, so a line usually reads close to plain English:
 
 ```python
 print("Welcome to Python")
 ```
 
-That single line is already a complete Python program. It displays `Welcome to Python` and needs nothing around it.
+**Output**
+
+```
+Welcome to Python
+```
+
+You can read that line and know what it does: show a message. You will type and run this line yourself in the last section of this chapter.
+
+Every program you write from here on works the same way:
+
+```mermaid
+flowchart LR
+    A["You write<br/>the instructions"] --> B["Python<br/>translates them"] --> C["The computer<br/>carries them out"]
+```
 
 ### Two Kinds of Translator
 
-Every language must be translated before a machine can act on it. The question is *when*, and the answer splits languages into two families.
+The middle step is where programming languages differ, and the dividing question is *when* the translation happens.
 
-A **compiler** translates the whole program in advance and hands back a new file the machine can run on its own. C and C++ work this way.
+A **compiler** does all of it in advance. It translates the whole program before anything runs and gives back a new file that the machine can run on its own. C and C++ work this way.
 
 ```mermaid
 flowchart LR
@@ -36,16 +47,13 @@ flowchart LR
 An **interpreter** translates one instruction at a time, while the program is running. **Python is an interpreted language.**
 
 ```mermaid
-flowchart TD
-    A["Your source file"] --> B["Translate line 1"]
-    B --> C["Run line 1"]
-    C --> D["Translate line 2"]
-    D --> E["Run line 2"]
-    E --> F["Translate line 3"]
-    F --> G["Run line 3"]
+flowchart LR
+    A["Your source file"] --> B["Translate<br/>one line"]
+    B --> C["Run<br/>that line"]
+    C -->|"repeat for<br/>every line"| B
 ```
 
-| | Compiled | Interpreted |
+| Aspect | Compiled | Interpreted |
 |---|---|---|
 | Translation happens | Once, before running | Line by line, while running |
 | Speed of the program | Faster | Slower |
@@ -53,30 +61,32 @@ flowchart TD
 | Needed on the machine | Nothing extra | The interpreter |
 | Examples | C, C++ | Python |
 
-### What Being Interpreted Means for You
+### Consequences of Interpretation
 
 Three consequences shape the way you work:
 
-- **A program runs the moment you save it.** There is no translation step to wait for.
-- **Python must be installed on any machine that runs your file.** Your file is a set of instructions, not a finished program.
+- **You can run a program as soon as you save it.** There is nothing to translate first.
+- **Python must be installed on any machine that runs your file.** Your file holds instructions, not something the machine can run by itself.
 - **The same file works on Windows, macOS and Linux**, provided Python is installed there.
 
 One behaviour surprises everyone once. Python reads the **whole file** and checks that it is written correctly *before* running a single line. A missing bracket on the last line therefore stops the entire file, including the correct lines above it.
 
-That gives you a diagnostic rule worth keeping from your first day:
+That gives you a rough diagnostic rule worth keeping from your first day:
 
-| What you see | What it means |
+| What you see | What it usually means |
 |---|---|
-| No output at all | Something is written wrongly — a syntax problem |
-| Output starts, then stops | The syntax is fine; the logic is wrong |
+| No output at all | Something is written wrongly, which is a syntax problem |
+| Output starts, then stops | The syntax is fine. Something went wrong while the file was running |
+
+Treat this as a first guess rather than a certainty. A file with no `print` line in it also produces no output.
 
 So a twelve-line file that prints on lines 1, 2 and 3, but is missing a closing bracket on line 12, prints **nothing at all**. Python checked the whole file first, found the fault, and refused to run any of it.
 
 ---
 
-## Why Python
+## The Case for Python
 
-### Where It Is Used
+### Fields of Use
 
 Python is not a practice language you outgrow. The same language is used for real work across many fields.
 
@@ -84,33 +94,40 @@ Python is not a practice language you outgrow. The same language is used for rea
 |---|---|
 | Data analysis | Cleaning large files of records and summarising them |
 | Artificial intelligence | Building and training models that make predictions |
-| Web development | Running the part of a website the browser never sees |
+| Web development | Running the part of a website that a visitor does not see |
 | Automation | Doing work a person would otherwise repeat by hand |
 | Testing | Checking other software automatically |
 
-### Why It Gets Chosen
+### Reasons for Its Popularity
 
-**Little has to be written around an idea.** Printing one line in Java needs a class, a method and a call; Python needs one line. Less typing means fewer places to make a mistake, which matters most while you are learning.
+**You write less code to say the same thing.** Java needs several lines of setup before it can print anything. Python needs one. Less typing means fewer places to make a mistake, which matters most while you are learning.
 
-**Most of the work is already done.** A **library** is code somebody else has written that you are free to use — NumPy for numbers, pandas for tables of data, PyTorch for artificial intelligence.
+**Ready-made code already exists for most tasks.** A **library** is code somebody else has written that you are free to use: NumPy for numbers, pandas for tables of data, PyTorch for artificial intelligence.
 
-**Somebody has already hit your problem.** Because so many people use Python, almost every difficulty you meet has been met before and written down somewhere.
+**Somebody has already faced the same problem.** Because so many people use Python, almost every problem you run into has already been solved and written about somewhere.
 
 ---
 
-## Setting Up Your Machine
+## Environment Setup
 
-### Installing Python
+### Python Installation
 
 | Platform | What to do |
 |---|---|
-| Windows | Open **python.org → Downloads**, run the installer, tick **Add python.exe to PATH** on the first screen, then **Install Now** |
+| Windows | Download the installer from **python.org → Downloads**, then follow the four steps below |
 | macOS | Download the macOS installer from the same page and run it |
-| Linux | Usually installed already — check before installing anything |
+| Linux | Usually installed already. Check before installing anything |
 
-That PATH tick is what lets you call Python by name later. It is easy to miss and awkward to notice.
+On Windows, after the download finishes:
 
-**Try it.** Open **Command Prompt** on Windows, or **Terminal** on macOS and Linux, and run:
+1. Run the installer.
+2. On the first screen, tick **Add python.exe to PATH**.
+3. Click **Install Now**.
+4. Wait for the installer to finish, then close it.
+
+**PATH** is the list of places your computer searches when you type a command. Ticking that box adds Python to the list, which is what lets you call Python by name later. The tick is easy to miss, and the problem only shows up later.
+
+**Try it.** Open **Command Prompt** on Windows, or **Terminal** on macOS and Linux. A terminal is a window where you type commands instead of clicking. Run:
 
 ```
 python --version
@@ -122,13 +139,13 @@ python --version
 Python 3.13.2
 ```
 
-On macOS and Linux the command is `python3 --version`. Your version number will differ; any version beginning with 3 runs everything in this course.
+On macOS and Linux the command is `python3 --version`. Your version number will differ. Any version numbered 3.10 or newer runs everything in this course.
 
-If the reply is `'python' is not recognized`, the PATH option was missed. Run the installer again, choose **Modify**, tick **Add python.exe to PATH**, and finish. Do not continue until this command answers — nothing later will work.
+If the reply is `'python' is not recognized`, the PATH option was missed. Run the installer again, choose **Modify**, tick **Add python.exe to PATH**, and finish. Do not continue until this command prints a version number, because nothing later will work without it.
 
 ### Visual Studio Code
 
-Python will run any plain text file, even one typed into Notepad. Notepad, though, cannot colour your code, warn you about a missing bracket, or run a file for you. A **code editor** does all three, and Visual Studio Code is the usual free choice.
+Python does not care which program you used to type the code, so even Notepad will do. Notepad, though, cannot colour your code, warn you about a missing bracket, or run a file for you. A **code editor** does all three, and Visual Studio Code is the usual free choice.
 
 1. Download it from **code.visualstudio.com** and install it.
 2. Press `Ctrl+Shift+X`, search for **Python**, and install the extension published by Microsoft.
@@ -136,11 +153,11 @@ Python will run any plain text file, even one typed into Notepad. Notepad, thoug
 
 **Watch out.** Always open the **folder**, never a single file. An editor opened on one file cannot see the rest of your work, and everything you write later assumes the folder is where you are working.
 
-### Google Colab, When Installation Is Blocked
+### Google Colab as a Fallback
 
 Many college and office computers do not allow software to be installed. If yours is one of them, open **colab.research.google.com** and sign in with a Google account. Python then runs on Google's computers and nothing is installed on your device. You type code into a box called a **cell**, press `Shift+Enter` to run it, and your work saves to Google Drive automatically.
 
-| | Local installation | Google Colab |
+| Aspect | Local installation | Google Colab |
 |---|---|---|
 | Produces `.py` files | Yes | No |
 | Command line practice | Yes | Not possible |
@@ -149,13 +166,15 @@ Many college and office computers do not allow software to be installed. If your
 
 Use Colab when installation is impossible, and set Python up properly when you can.
 
+**If you are working in Colab**, the next two sections cover the terminal and the `.py` file, neither of which Colab gives you. Read them once so that the ideas are familiar, and leave the exercises that need a terminal for later. Work through both sections properly on the first machine where you are able to install Python. You will need them from the next chapter onward.
+
 ---
 
-## Finding Your Way to a File
+## File System Navigation
 
 ### Folders, Paths and the Working Directory
 
-**The file system is the way a computer arranges everything it stores.** Files sit inside **folders**, also called **directories**, and folders sit inside other folders, which builds a tree:
+The **file system** is the way a computer arranges everything it stores. Files sit inside **folders**, also called **directories**, and folders sit inside other folders, which builds a tree:
 
 ```
 C:\
@@ -166,7 +185,9 @@ C:\
                 └── hello.py
 ```
 
-**A path is the full route from the top of that tree down to a file:**
+`hello.py` is the file you will create in the last section of this chapter. Every example from here on refers to it, so it helps to know where it will sit before you make it.
+
+A **path** is the full route from the top of that tree down to a file:
 
 ```
 C:\Users\Kavya\Documents\python-basics\hello.py
@@ -174,11 +195,11 @@ C:\Users\Kavya\Documents\python-basics\hello.py
 
 Windows separates folder names with a backslash `\`; macOS and Linux use a forward slash `/`.
 
-Now the idea that causes beginners more trouble than any other on this page. At every moment, a terminal is standing inside exactly one folder. **That folder is the current working directory.** When you ask Python to run `hello.py`, it looks in the current working directory and nowhere else. Stand somewhere else in the tree and it will not find the file, even though the file certainly exists.
+This next idea causes beginners more trouble than anything else on this page. At every moment, a terminal is standing inside exactly one folder. That folder is the **current working directory**. When you ask Python to run `hello.py`, it looks in the current working directory and nowhere else. Stand somewhere else in the tree and it will not find the file, even though the file is still there.
 
 ### The Five Commands
 
-You need a terminal for one reason: to stand in the folder that holds your `.py` file and hand that file to Python. Running a program is always those two steps, and the first is the one people skip.
+You need a terminal for one job, and that job has two steps: stand in the folder that holds your `.py` file, then give that file to Python. The first step is the one people skip.
 
 | Purpose | Windows | macOS and Linux |
 |---|---|---|
@@ -188,7 +209,7 @@ You need a terminal for one reason: to stand in the folder that holds your `.py`
 | Go back one folder | `cd ..` | `cd ..` |
 | Clear the window | `cls` | `clear` |
 
-A terminal usually opens in your home folder, so a typical walk looks like this:
+A terminal usually opens in your home folder, so a typical sequence looks like this:
 
 ```
 cd Documents
@@ -202,23 +223,21 @@ dir
 hello.py
 ```
 
-That `dir` is not decoration. It confirms two things at once: that you are standing in the right folder, and that the file is named what you think it is named.
+That `dir` has a purpose. It confirms two things at once: that you are standing in the right folder, and that the file is named what you think it is named.
 
 Two habits save a great deal of typing: type the first few letters of a folder name and press `Tab` to complete it, and press the up arrow to bring back the last command.
 
-Moving up has the same effect in reverse. From `python-basics`, one `cd ..` reaches `Documents` and a second reaches `Kavya`. A `dir` there lists `Documents` but not `hello.py`, because that file is now two levels below you — and `python hello.py` would fail, even though the file exists and you have not touched it.
+Moving up the tree works the same way. From `python-basics`, one `cd ..` reaches `Documents` and a second reaches `Kavya`. A `dir` there lists `Documents` but not `hello.py`, because that file is now two levels below you, and `python hello.py` would fail even though the file exists and you have not touched it.
 
-### When Python Cannot Find Your File
+### The File Not Found Error
 
-One message will greet you more often than any other:
-
-**Output**
+One message will appear more often than any other:
 
 ```
 can't open file 'hello.py': [Errno 2] No such file or directory
 ```
 
-Nine times out of ten the file is exactly where you left it and the terminal is standing in a different folder — Python looked in the current working directory and found nothing. The fix is always the same three steps:
+Nine times out of ten the file is exactly where you left it and the terminal is standing in a different folder. Python looked in the current working directory and found nothing. The fix is always the same three steps:
 
 1. Run `dir` or `ls`.
 2. Look for `hello.py` in the list.
@@ -228,22 +247,22 @@ Nine times out of ten the file is exactly where you left it and the terminal is 
 
 ## Your First Program
 
-### Write and Save It
+### The File and Its Location
 
 1. Open Notepad, or a new file in Visual Studio Code.
 2. Type this line exactly:
 
-```python
-print("Welcome to Python")
-```
+    ```python
+    print("Welcome to Python")
+    ```
 
 3. Save it inside a new folder named `python-basics` in your **Documents** folder, with the file name `hello.py`.
 
-**Watch out.** In Notepad, change **Save as type** from *Text Documents* to **All Files** before saving. Otherwise Notepad quietly saves the file as `hello.py.txt`, and Python will never find it. A `dir` that shows `hello.py.txt` instead of `hello.py` is this mistake, which is why the listing is worth reading.
+**Watch out.** In Notepad, change **Save as type** from *Text Documents* to **All Files** before saving. Otherwise Notepad quietly saves the file as `hello.py.txt`, and Python will never find it. If `dir` shows `hello.py.txt`, this is what happened, which is why the listing is worth reading.
 
-### Run It
+### The Run Command
 
-Walk to the folder, then hand the file over. On macOS and Linux, use a forward slash and `python3`.
+Move into the folder, then give the file to Python. On macOS and Linux, use a forward slash and `python3`.
 
 ```
 cd Documents\python-basics
@@ -256,21 +275,21 @@ python hello.py
 Welcome to Python
 ```
 
-**The second command has two parts.** `python` starts the interpreter; `hello.py` names the file to work on. The file name means nothing to Python itself, so `first.py` would behave identically.
+The second command has two parts. `python` starts the interpreter; `hello.py` names the file to work on. Python does not care what you call the file, so `first.py` would work the same way.
 
-### What That Line Actually Does
+### Anatomy of the print Line
 
-`print` is a **function** — ready-made code that performs one job when you call it by name.
+`print` is a **function**, which is ready-made code that performs one job when you call it by name.
 
 | Part of `print("Welcome to Python")` | What it is for |
 |---|---|
 | `print` | The name of the function being called |
-| `(` `)` | The brackets are how you call it |
-| `"` `"` | The quotation marks make the words text, so Python displays them instead of trying to understand them |
+| `(` `)` | The brackets tell Python to run the function, and they hold whatever you want printed |
+| `"` `"` | The quotation marks make the words text, so Python displays them instead of treating them as code |
 
 Brackets are required even when there is nothing inside them, so `print()` prints a blank line.
 
-Given several values separated by commas, `print` displays them in order with a single space between each:
+Given several values separated by commas, `print` displays them in order with a single space between them:
 
 ```python
 print("Total:", 240, "Average:", 80)
@@ -282,13 +301,13 @@ print("Total:", 240, "Average:", 80)
 Total: 240 Average: 80
 ```
 
-The numbers needed no quotation marks — `print` handles text and numbers alike.
+The numbers needed no quotation marks. `print` handles text and numbers alike.
 
 ---
 
 ## Practice
 
-Work through these four at the machine, in order, keeping every file inside the `python-basics` folder.
+Work through these four exercises at the machine, in order, keeping every file inside the `python-basics` folder.
 
 **1. Confirm the installation.** Run `python --version` and write down the version you were given. If the command is not recognised, fix the PATH before going further.
 
@@ -298,7 +317,7 @@ Work through these four at the machine, in order, keeping every file inside the 
 
 **4. Write a three-line program.** Create `about_me.py` that prints your name, your college, and your course on three separate lines. Run it from the terminal.
 
-**Expected output**
+**Example output**, using your own details:
 
 ```
 Kavya Menon
