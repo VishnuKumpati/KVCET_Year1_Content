@@ -6,13 +6,22 @@ A program that prints one fixed line does the same thing every time it runs. Thi
 
 ## Variables
 
+A program needs to remember information while it runs: a name that was typed in, a mark, a total. A **variable** gives that information a name, so the program can use it again later.
+
 ### Storing a Value
 
-A **variable** is a name that holds a value, so the program can use that value again later. Write the name, an equals sign, and the value:
+Write the name, an equals sign, and the value:
 
 ```python
 student_name = "Kavya"
 marks = 88
+```
+
+Picture each line as a name pointing at a value:
+
+```
+student_name → "Kavya"
+marks        → 88
 ```
 
 From that point on, `student_name` stands for the text `Kavya` and `marks` for the number 88, anywhere in the program.
@@ -57,12 +66,11 @@ print(b)
 10
 ```
 
-Line 2 gave `b` the value 10. Line 3 attached `a` to a different value, 25, which does not change the 10 that `b` is holding.
+Line 2 gave `b` the value 10. Line 3 attached `a` to a different value, which does not change the 10 that `b` is holding:
 
-```mermaid
-flowchart LR
-    a["a"] -->|"line 3 attached a here"| v25["25"]
-    b["b"] -->|"line 2 attached b here"| v10["10"]
+```
+a → 25
+b → 10
 ```
 
 ### Naming a Variable
@@ -75,7 +83,7 @@ The name of a variable is called an **identifier**. Three rules are enforced by 
 | Cannot begin with a digit | `marks2` | `2marks` |
 | Python's own keywords are reserved | `class_name` | `class` |
 
-A fourth point is not something Python rejects, but it catches people just as often: capitals and small letters are different, so `Total` and `total` are two separate names. Python may suggest the name you meant, but the message still calls your name undefined, so the real cause is easy to miss:
+A fourth point is not rejected by Python but catches people just as often: capitals and small letters are different, so `Total` and `total` are two separate names.
 
 ```python
 total = 100
@@ -88,9 +96,9 @@ print(Total)
 NameError: name 'Total' is not defined. Did you mean: 'total'?
 ```
 
-When a name you are certain exists is reported as undefined, check its capitals first.
+Python suggests the name you meant, but the message still calls your name undefined. When a name you are certain exists is reported as undefined, check its capitals first.
 
-You can list Python's reserved keywords at any time, though there is nothing to memorise. An editor colours them differently, and using one by mistake fails immediately:
+There is nothing to memorise about keywords, since an editor colours them differently, but the full list is available at any time:
 
 ```python
 import keyword
@@ -105,7 +113,7 @@ Three further points are **conventions**, not rules. Python will not object if y
 | The name states what it holds | `average` | `a`, `x1` |
 | Never reuse a name Python already uses | `total` | `print`, `input`, `type` |
 
-The last convention needs one word of explanation, because it looks like the third rule above but behaves differently. `class` is a keyword, so Python refuses it outright. `print` is a built-in name, so Python accepts `print = 5` without complaint, and only the consequences tell you something is wrong. Writing `print = 5` removes your ability to print for the rest of that program, and the error it eventually causes will look nothing like its cause.
+The last convention looks like the third rule above but behaves differently. `class` is a keyword, so Python refuses it outright. `print` is a built-in name, so Python accepts `print = 5` without complaint, and printing simply stops working for the rest of that program.
 
 ### Comments
 
@@ -132,7 +140,7 @@ Python has no symbol for a multi-line comment, so start each line with `#`. Putt
 
 ### The Role of the Data Type
 
-Every value belongs to a category. The **data type** of a value is the category it belongs to. Python reads the type to decide what an operator is allowed to do, so the same symbol can mean two different things:
+An **operator** is a symbol that combines values into a new value, such as `+`, `-`, `*` and `/`. What an operator does depends on the type of the values it is given, so the same symbol can mean two different things:
 
 ```python
 print(5 + 3)
@@ -146,7 +154,9 @@ print("5" + "3")
 53
 ```
 
-The first `+` added two numbers. The second joined two pieces of text, because for text, `+` means join. Python did not guess. It read the types and chose the matching meaning of `+`.
+The first `+` added two numbers. The second joined two pieces of text, because for text, `+` means join. Chapter 3 covers the operators in full.
+
+Every value belongs to a category, and the **data type** of a value is the category it belongs to. That is what Python read in order to choose between those two meanings of `+`.
 
 ### The Four Core Types
 
@@ -157,14 +167,14 @@ The first `+` added two numbers. The second joined two pieces of text, because f
 | `str` | Text, inside quotation marks | `"Anitha"`, `'Chennai'` |
 | `bool` | `True` or `False`, nothing else | `True` |
 
-**`int`: whole numbers.** There is no limit on how large an integer can be, and even a two-hundred-digit result is worked out exactly, which is unusual among programming languages.
+**`int`: whole numbers.** There is no limit on how large an integer can be.
 
 ```python
 roll_number = 24
 temperature = -5
 ```
 
-**`float`: numbers with a decimal point.** The name is short for *floating point*, which describes how the value is stored. Floats are held in a fixed binary form, and many decimal values cannot be stored exactly in it:
+**`float`: numbers with a decimal point.** Decimal numbers are stored using floating-point representation, so some decimal values cannot be represented exactly. That is why you may sometimes see a result like this:
 
 ```python
 print(0.1 + 0.2)
@@ -176,7 +186,7 @@ print(0.1 + 0.2)
 0.30000000000000004
 ```
 
-This is not a fault in Python. Every major language behaves the same way, because `0.1` in binary repeats endlessly, as one-third does in decimal, and must be cut off somewhere. To control how many decimal places you get, use `round`, which takes the value and the number of places you want:
+To control how many decimal places you get, use `round`, which takes the value and the number of places you want:
 
 ```python
 print(round(0.1 + 0.2, 2))
@@ -225,9 +235,7 @@ print(type(True))
 
 `class` is Python's general word for a kind of thing, so read `<class 'int'>` as *this is an integer*.
 
-Notice what you have never had to do: state in advance what type a variable will hold. Many languages require it, and the variable can then hold nothing else for the rest of the program. Python is **dynamically typed**: the type belongs to the value, not to the name, and is worked out while the program runs. A name is only a label. Attach it to `88` and it labels an integer; attach it to `"Kavya"` and it labels a string.
-
-`type()` is most useful as a debugging tool. When a program gives a wrong answer or refuses to run, printing the types involved is usually the fastest route to the cause.
+You never have to state in advance what type a variable will hold. Python is **dynamically typed**: the type belongs to the value, not to the name, so the same name can hold an integer on one line and a string on the next.
 
 ```python
 value = 10
@@ -243,7 +251,7 @@ print(type(value))
 <class 'str'>
 ```
 
-The same name reported two different types, four lines apart. The name never had a type; the values did.
+`type()` is most useful as a debugging tool. When a program gives a wrong answer or refuses to run, printing the types involved is usually the fastest route to the cause.
 
 ---
 
@@ -367,7 +375,7 @@ Student: Kavya Marks: 88
 
 ### Controlling the Separator and the Ending
 
-`sep` changes what goes *between* the values; `end` changes what goes *after* the last one. By default `sep` is a single space and `end` is a newline, which moves output to the next line, and that is why the next `print` starts on a new line.
+`sep` changes what goes *between* the values; `end` changes what goes *after* the last one. By default `sep` is a single space and `end` is a newline, which is why the next `print` starts on a new line.
 
 ```python
 print("2026", "09", "01", sep="-")
@@ -450,7 +458,7 @@ Percentage: 86.33
 86.33333
 ```
 
-The formatting changes the display only. The variable itself is untouched, as the second line proves.
+The formatting changes the display only; the variable itself is unchanged.
 
 ---
 
@@ -494,9 +502,9 @@ Second number: 20
 1020
 ```
 
-No error appeared. Python was asked to join two pieces of text and did exactly that. A mistake that produces a wrong answer *silently* is far harder to find than one that stops the program.
+No error appeared. Python was asked to join two pieces of text and did exactly that, and a wrong answer with no error is harder to find than one that stops the program.
 
-The digits typed do not make the value a number, and this two-line check proves it:
+The digits typed do not make the value a number:
 
 ```python
 marks = input("Marks: ")
@@ -512,7 +520,7 @@ Marks: 88
 
 ### Converting at the Boundary
 
-The **boundary** is the point where a value enters your program, which is the `input` line itself. The cure is to convert the value the moment it arrives, by wrapping the whole `input` inside `int` or `float`:
+The **boundary** is the point where a value enters your program, which is the `input` line itself. Convert the value the moment it arrives, by wrapping the whole `input` inside `int` or `float`:
 
 ```python
 first = int(input("First number: "))
@@ -570,7 +578,16 @@ Physics     : 76.5
 Chemistry   : 91.0
 ```
 
-Ten lines, and nearly every technique above is in them: named variables, a conversion chosen per value, `print()` for a blank line, f-strings for layout, and `:.1f` so that `88` and `76.5` line up as `88.0` and `76.5`.
+Ten lines, using a conversion chosen per value, `print()` for a blank line, and `:.1f` so that `88` and `76.5` line up as `88.0` and `76.5`.
+
+---
+
+## Recap
+
+- Variables give values names.
+- Data types tell Python what kind of value it is.
+- Conversion functions change a value from one type into another.
+- `input()` brings information into the program; `print()` sends it to the screen.
 
 ---
 
