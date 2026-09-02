@@ -9,13 +9,15 @@ Four tools turn a request like that into something codeable, and they are used i
 - **Pseudocode** writes each step in structured English.
 - A **flowchart** draws the same steps, so that branches are visible.
 
-That one request is the worked example throughout. The chapter ends with the finished Python program, which uses nothing beyond chapters 1 to 3.
+That one request is the worked example throughout.
 
 ---
 
 ## Specification
 
-A **specification** states what a program must do before any of it is written: its inputs, its outputs, and the rules that connect them. It comes first, because a problem cannot be broken into steps until it has been fully defined.
+A **specification** states what a program must do before any of it is written: its inputs, its outputs, and the rules that connect them.
+
+It comes first for two reasons. A problem cannot be broken into steps until it has been defined, and most requests arrive with a decision still missing. *"Which students can sit the examination"* does not say whether the 40 mark threshold applies to every subject or only to the average. Written into a specification, that decision can be settled with the person who asked before any code exists. Left unwritten, it gets decided by accident, somewhere in the middle of a program.
 
 ### The Four Sections
 
@@ -26,36 +28,7 @@ A **specification** states what a program must do before any of it is written: i
 | Outputs | Every value produced, with the format it is printed in |
 | Rules | How each output is derived, and what happens for every input that is not ordinary |
 
-### The Eligibility Specification
-
-**Purpose.** Report a student's total and average across three subjects, and whether the student may sit the examination.
-
-**Inputs**
-
-| Name | Type | Valid range | Source |
-|---|---|---|---|
-| `maths` | `float` | 0 to 100 | Keyboard |
-| `physics` | `float` | 0 to 100 | Keyboard |
-| `chemistry` | `float` | 0 to 100 | Keyboard |
-| `attendance` | `float` | 0 to 100 | Keyboard |
-
-**Outputs**
-
-| Name | Type | Printed as |
-|---|---|---|
-| `total` | `float` | `Total    : 255.50` |
-| `average` | `float` | `Average  : 85.17` |
-| `eligible` | `bool` | `Eligible : True` |
-
-**Rules**
-
-- `total` is the sum of the three marks.
-- `average` is `total / 3`, displayed to two decimal places.
-- `eligible` is `True` when **every** mark is 40 or above **and** `attendance` is 75 or above.
-- A mark or attendance value outside 0 to 100 is invalid: the program reports the problem and stops.
-- Input that is not a number is invalid: the program reports the problem and stops.
-
-The third rule settles something the original request left open. The 40 threshold applies to every mark, not to the average. Written down, that decision can be checked with the teacher before any code exists.
+The Rules section is the one that gets left incomplete. Deriving the average is easy to write down; saying what happens when a mark arrives as `150`, as `-10`, as `abc`, or as nothing at all is the work.
 
 ### The Completeness Check
 
@@ -67,7 +40,7 @@ A person reading a specification fills gaps from common sense without noticing. 
 
 > Can I name an input for which this specification does not state an output?
 
-Applied to the specification above **before** its last two rules were added:
+Applied to a specification for the eligibility request that covers only the ordinary case:
 
 | Input | Does the specification answer it? |
 |---|---|
@@ -78,62 +51,7 @@ Applied to the specification above **before** its last two rules were added:
 | 88, 76.5, 91, **120** | No. Attendance above 100 was not covered |
 | 88, 76.5, 91, *(blank)* | No. Pressing Enter without typing was not covered |
 
-Each hole becomes a rule, which is where the last two rules of the specification came from. Two holes remain even now: attendance divided by zero classes held, and how many decimal places an input may carry, given that `39.999 >= 40` is `False`. The question is asked repeatedly for that reason, not once.
-
-### The Cost of a Missing Rule
-
-A missing rule shows up in Python in one of two ways.
-
-**The program stops.** Non-numeric input reaches `float()` and raises an error:
-
-```python
-maths = float(input("Mathematics: "))
-```
-
-**Error**
-
-```
-ValueError: could not convert string to float: 'abc'
-```
-
-Pressing Enter without typing anything produces the same error with an empty string in the message.
-
-**The program does not stop.** An out-of-range mark is a perfectly valid `float`, so every calculation runs and every result is wrong:
-
-```python
-total = 88 + 76.5 + 150
-average = total / 3
-eligible = 88 >= 40 and 76.5 >= 40 and 150 >= 40 and 82 >= 75
-print(f"Average  : {average:.2f}")
-print(f"Eligible : {eligible}")
-```
-
-**Output**
-
-```
-Average  : 104.83
-Eligible : True
-```
-
-An average of 104.83 out of 100, and an eligible student, from a single mark that should have been rejected. Nothing objected, because nothing in the program was ever told that 150 is impossible. Of the two failures, the `ValueError` is the more useful one, since it names the problem and the line.
-
-Neither invalid-input rule can be coded yet, because rejecting an input needs a conditional, which is the next chapter. The specification records the rule now; the code follows.
-
-### The Test Table
-
-A specification is finished when its test table can be filled in before the program exists: one row per case, with the expected answer written out.
-
-| `maths` | `physics` | `chemistry` | `attendance` | `average` | `eligible` |
-|---|---|---|---|---|---|
-| 88 | 76.5 | 91 | 82 | 85.17 | `True` |
-| 88 | 76.5 | 91 | 60 | 85.17 | `False` |
-| 88 | 35 | 91 | 90 | 71.33 | `False` |
-| 40 | 40 | 40 | 75 | 40.00 | `True` |
-| 0 | 0 | 0 | 100 | 0.00 | `False` |
-
-Row 4 sits exactly on both thresholds. It is the row that catches a program written with `>` where the specification says `>=`, because with `>` that row would produce `False`.
-
-A row you cannot fill in means the specification still has a hole.
+Each hole becomes a rule. Two of them survive even a careful first pass: attendance divided by zero classes held, and how many decimal places an input may carry, given that `39.999 >= 40` is `False`. The question is asked repeatedly for that reason, not once.
 
 ---
 
@@ -158,10 +76,10 @@ The test is mechanical: one sentence, one verb, and something that could be writ
 |---|---|---|
 | Read the attendance percentage | Yes | One verb, one value, testable by itself |
 | Add the three marks | Yes | One calculation with an answer you can check by hand |
-| Work out eligibility | Yes | Rule 3 of the specification states the exact test |
+| Work out eligibility | Yes | The specification states the exact test: every mark 40 or above, and attendance 75 or above |
 | Handle the student record | No | No single verb, and no way to tell when it is finished |
 
-The third row is the reason a specification comes first. Without rule 3, "work out eligibility" would hide a decision nobody had made, and the step could not be coded or tested.
+The third row is the reason a specification comes first. Without that rule written down, "work out eligibility" would hide a decision nobody had made, and the step could be neither coded nor tested.
 
 ### Input, Processing and Output
 
@@ -286,7 +204,7 @@ flowchart TD
     E --> F
 ```
 
-There are now two ways through this program. Running it once and seeing *Pass* leaves the other path untested, which is why a test table needs a row for each branch.
+There are now two ways through this program. Running it once and seeing *Pass* leaves the other path untested, so a test needs a case for each branch.
 
 ### Two Rules to Check
 
@@ -295,109 +213,6 @@ There are now two ways through this program. Running it once and seeing *Pass* l
 **Every path must reach End.** Trace each branch. A path that stops in mid-air, or loops back with no way out, is a fault caught before any code is written.
 
 A common faulty diagram runs Start → Read `mark` → `mark >= 40 ?` → Yes → Print Pass → End, with no arrow leaving the `No` side. Nothing is defined for a mark of 35, so that student has no path through the program. The missing arrow is a missing rule, found with a pen.
-
----
-
-## From Specification to Program
-
-Every line of the pseudocode maps onto Python that uses nothing beyond chapters 1 to 3:
-
-```python
-maths = float(input("Mathematics: "))
-physics = float(input("Physics: "))
-chemistry = float(input("Chemistry: "))
-attendance = float(input("Attendance (%): "))
-
-total = maths + physics + chemistry
-average = total / 3
-eligible = maths >= 40 and physics >= 40 and chemistry >= 40 and attendance >= 75
-
-print(f"Total    : {total:.2f}")
-print(f"Average  : {average:.2f}")
-print(f"Eligible : {eligible}")
-```
-
-**Output**
-
-```
-Mathematics: 88
-Physics: 76.5
-Chemistry: 91
-Attendance (%): 82
-Total    : 255.50
-Average  : 85.17
-Eligible : True
-```
-
-That is row 1 of the test table. Run the program four more times with rows 2 to 5 and compare each result against the table. The two invalid-input rules are not in this program, because rejecting an input needs a conditional.
-
----
-
-## The Working Order
-
-```mermaid
-flowchart TD
-    A["Specification<br/>inputs, outputs, rules"] --> B["Completeness check<br/>name an input it cannot answer"]
-    B -- "hole found" --> A
-    B -- "complete" --> C["Decomposition<br/>break into steps"]
-    C --> D["Pseudocode or flowchart<br/>express the algorithm"]
-    D --> E["Code"]
-    E --> F["Test against the specification's table"]
-    F -- "a row fails" --> E
-```
-
-The loop on the left is the cheapest one in the diagram. Every stage to its right costs more to repeat.
-
----
-
-## Practice
-
-The first three ask for a specification, pseudocode and a flowchart **before** any code. Write them in a file beside the program and keep them; they are as much the deliverable as the code.
-
-**1. Rectangle report.** A program reads a length and a breadth and reports the area and the perimeter to two decimal places. Write the four-section specification, the test table, the pseudocode and the flowchart. Then write the program and check it against every row of the table.
-
-**Hint.** The Rules section is where the work is. Both inputs are measured, so `float`. Apply the completeness check before coding: what should happen for a breadth of 0, for a negative length, and for the word `wide`? The table needs a row for each.
-
-**2. Bill splitter.** A program reads a bill in whole rupees and a number of people, and reports each share and the remainder that cannot be divided.
-
-**Hint.** Three rules decide this, and none of them is the division: what happens when the number of people is zero, what happens when the bill is smaller than the number of people, and what happens when somebody types `2470.50`. Answer all three in writing first.
-
-**3. Grade calculator.** A program reads three marks and reports the average and a grade: 90 and above is A, 75 to 89 is B, 40 to 74 is C, below 40 is F. Write the specification and draw the flowchart, then stop. The code needs conditionals, and this flowchart is what it will be built from.
-
-**Hint.** Three diamonds, chained, with the `No` exit of each feeding the next. Check the boundaries as you draw: a mark of exactly 75 must land in B and nowhere else, and all four paths have to reach End.
-
-**4. Finding the holes.** Apply the completeness check to the specification below and list every input it fails to answer for. Find at least four, then rewrite it so that none remain.
-
-> **Purpose.** Convert a temperature from Celsius to Fahrenheit.
-> **Inputs.** `celsius`, a number, from the keyboard.
-> **Outputs.** The temperature in Fahrenheit, to two decimal places.
-> **Rules.** `fahrenheit = celsius * 9 / 5 + 32`.
-
-**Hint.** Start with input that is not a number, then input that is blank. Then ask what "a number" is allowed to mean, given that nothing can be colder than -273.15. Then read the Outputs section again: it never states what the printed line looks like.
-
-**5. Reading a flowchart.** Write the pseudocode for the diagram below, then the Python.
-
-```mermaid
-flowchart TD
-    A([Start]) --> B[/Read number/]
-    B --> C["last_digit = number % 10"]
-    C --> D["is_even = number % 2 == 0"]
-    D --> E[/Print last_digit and is_even/]
-    E --> F([End])
-```
-
-**Hint.** Four lines of pseudocode between `START` and `END`, and one Python line for each. There is no diamond, so there is no `IF`. The second rectangle stores the answer to a comparison rather than branching on it.
-
----
-
-## Readiness Check
-
-- You can state the test for a step being small enough to code, and apply it to a step somebody hands you.
-- You have written pseudocode that is shorter than the program it describes.
-- You can look at a flowchart and say whether every path reaches End.
-- You have written a four-section specification whose Rules section covers at least one input that is not ordinary.
-- You applied the completeness check to your own specification and it produced a hole you had missed.
-- Your test table was written before the program, not after it.
 
 ---
 
