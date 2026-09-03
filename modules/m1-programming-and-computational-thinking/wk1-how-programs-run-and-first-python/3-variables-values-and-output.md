@@ -51,7 +51,7 @@ A variable name can use letters, digits and the underscore sign `_`.
 - Capital letters matter. `Age` and `age` are two different variables.
 - Good names describe what they hold. `total_marks` tells you far more than `t` does.
 
-## Kinds of Values
+## Data Types
 
 Every value belongs to a kind, called a **data type**. Four types cover almost everything you will use at first.
 
