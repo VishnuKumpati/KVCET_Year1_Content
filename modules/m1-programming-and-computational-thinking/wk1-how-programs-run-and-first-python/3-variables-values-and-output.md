@@ -42,7 +42,7 @@ print(age)
 
 The variable holds only its latest value.
 
-## Rules for Names
+## Naming Convention
 
 A variable name can use letters, digits and the underscore sign `_`.
 
