@@ -114,46 +114,70 @@
                                            "url":  "modules/m1-programming-and-computational-thinking/wk1-how-programs-run-and-first-python/3-variables-values-and-output.md"
                                        },
                                        {
-                                           "id":  "ffbe81ae-6826-4439-96bb-85bd89c66316",
-                                           "title":  "Arithmetic Operators and Precedence",
-                                           "tooltip":  "Week 2 - The seven arithmetic operators, / against //, % and **, and the order of evaluation",
-                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/2-arithmetic-operators.md"
-                                       },
-                                       {
-                                           "id":  "3cc88903-ffe7-4765-b953-326d3507eaeb",
-                                           "title":  "Comparison Operators",
-                                           "tooltip":  "Week 2 - Relational tests, chained comparisons, and comparing floats safely",
-                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/3-comparison-operators.md"
-                                       },
-                                       {
-                                           "id":  "2d43b540-b88b-4784-8d41-290689cdf279",
-                                           "title":  "Logical Operators and Truthiness",
-                                           "tooltip":  "Week 2 - and, or, not, short-circuit evaluation, and truth value testing",
-                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/4-logical-operators.md"
-                                       },
-                                       {
                                            "id":  "8c7809f9-64af-4976-9f0b-d93e12e38cd2",
                                            "title":  "Type Conversion",
                                            "tooltip":  "Week 2 - Implicit promotion, explicit conversion, and converting real input at the boundary",
                                            "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/1-type-conversion.md"
                                        },
                                        {
+                                           "id":  "9a30b490-a98c-4c48-ae24-1367965914a1",
+                                           "title":  "Operators, Operands and Expressions",
+                                           "tooltip":  "Week 2 - Operands, unary and binary operators, evaluation, conditions, and the seven categories",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/2-operators-operands-and-expressions.md"
+                                       },
+                                       {
+                                           "id":  "ffbe81ae-6826-4439-96bb-85bd89c66316",
+                                           "title":  "Arithmetic Operators and Precedence",
+                                           "tooltip":  "Week 2 - The seven arithmetic operators, / against //, % and **, and the order of evaluation",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/3-arithmetic-operators.md"
+                                       },
+                                       {
+                                           "id":  "3cc88903-ffe7-4765-b953-326d3507eaeb",
+                                           "title":  "Comparison Operators",
+                                           "tooltip":  "Week 2 - Relational tests, chained comparisons, and comparing floats safely",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/4-comparison-operators.md"
+                                       },
+                                       {
+                                           "id":  "2d43b540-b88b-4784-8d41-290689cdf279",
+                                           "title":  "Logical Operators and Truthiness",
+                                           "tooltip":  "Week 2 - and, or, not, short-circuit evaluation, and truth value testing",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/5-logical-operators.md"
+                                       },
+                                       {
+                                           "id":  "04856b29-e0dc-4796-bef0-18accd6d43b3",
+                                           "title":  "Assignment Operators",
+                                           "tooltip":  "Week 2 - Assignment, the seven compound operators, and the type change /= introduces",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/6-assignment-operators.md"
+                                       },
+                                       {
+                                           "id":  "8ff2ce94-1b56-4dd4-ad99-e7c7da0cace4",
+                                           "title":  "Membership Operators",
+                                           "tooltip":  "Week 2 - in and not in, searching a sequence, and case sensitivity",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/7-membership-operators.md"
+                                       },
+                                       {
+                                           "id":  "59089bd9-a5ce-4761-af99-4d0e2bbcc108",
+                                           "title":  "Bitwise Operators",
+                                           "tooltip":  "Week 2 - Bits and place values, AND, OR, XOR, NOT, and the two shift operators",
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/8-bitwise-operators.md"
+                                       },
+                                       {
                                            "id":  "a1136ddf-9388-4f82-aa95-a12e07fbf1bc",
                                            "title":  "Problem Decomposition",
                                            "tooltip":  "Week 2 - Breaking a requirement into independently solvable steps",
-                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/5-decomposition-pseudocode-and-flowcharts.md"
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/9-decomposition-pseudocode-and-flowcharts.md"
                                        },
                                        {
                                            "id":  "d288f738-5a83-404e-b9f3-4e0e25c6060f",
                                            "title":  "Pseudocode and Flowcharts",
                                            "tooltip":  "Week 2 - Expressing an algorithm before committing it to code",
-                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/5-decomposition-pseudocode-and-flowcharts.md"
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/9-decomposition-pseudocode-and-flowcharts.md"
                                        },
                                        {
                                            "id":  "299876d6-881c-4033-9430-66d3e09b436c",
                                            "title":  "Specification-First Development",
                                            "tooltip":  "Week 2 - Defining inputs, outputs, and rules before coding, and the golden rule as the check",
-                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/5-decomposition-pseudocode-and-flowcharts.md"
+                                           "url":  "modules/m1-programming-and-computational-thinking/wk2-operators-and-computational-thinking/9-decomposition-pseudocode-and-flowcharts.md"
                                        }
                                    ]
                     },
