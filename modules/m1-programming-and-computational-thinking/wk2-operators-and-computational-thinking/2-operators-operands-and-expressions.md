@@ -65,9 +65,9 @@ print(5 + 3 * 2)
 
 ```mermaid
 flowchart TD
-    A["5 + 3 * 2"] --> B["The multiplication is done first, giving 5 + 6"]
-    B --> C["The addition is done next, giving 11"]
-    C --> D["One value is left, so evaluation is finished"]
+    A["5 + 3 * 2"] --> B["The multiplication\n is done first,\n giving 5 + 6"]
+    B --> C["The addition is done next,\n giving 11"]
+    C --> D["One value is left, \nso evaluation is finished"]
 ```
 
 Notice that the multiplication went first, even though it appears second. When one expression holds several operators, the order is not left to right. It is fixed by a set of rules called **operator precedence**, and those rules are covered later, once the operators themselves are familiar.
