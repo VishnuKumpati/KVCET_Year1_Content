@@ -71,6 +71,60 @@ Here `marks` is an `int`, `average` is a `float`, `student` is a `str`, and `pas
 
 Quotation marks are what make a value text. So `12` is a number, but `"12"` is text. They look alike on the screen and behave differently inside a program.
 
+## Checking a Data Type
+
+You do not have to work out a type by looking at it. The `type` command tells you, and it is used like `print`, with the value inside the brackets:
+
+```python
+marks = 87
+print(type(marks))
+```
+
+**Output:**
+
+```
+<class 'int'>
+```
+
+The answer looks strange at first. `class` is the word Python uses for a kind of value, so read the whole thing as "this is an `int`". The part inside the quotation marks is the type name, and that is the part you care about.
+
+It works on any value:
+
+```python
+average = 72.5
+student = "Meera"
+passed = True
+print(type(average))
+print(type(student))
+print(type(passed))
+```
+
+**Output:**
+
+```
+<class 'float'>
+<class 'str'>
+<class 'bool'>
+```
+
+The command earns its keep on values that look like one type but are another:
+
+```python
+first = 12
+second = "12"
+print(type(first))
+print(type(second))
+```
+
+**Output:**
+
+```
+<class 'int'>
+<class 'str'>
+```
+
+Both show as `12` when printed, and `type` is what tells them apart. Whenever a program behaves in a way you cannot explain, print the type of the value first. It is the fastest way to find the cause.
+
 ## Showing Values on the Screen
 
 The `print` command puts something on the screen. Text goes inside quotation marks, and a variable name goes without them:
@@ -130,6 +184,22 @@ flowchart TD
 
 One point matters here. Whatever `input` collects is always text, even when the person types digits. So a typed `12` arrives as the text `"12"`, not the number `12`.
 
+You can prove this to yourself now:
+
+```python
+age = input("Age: ")
+print(type(age))
+```
+
+**Output:**
+
+```
+Age: 12
+<class 'str'>
+```
+
+The person typed digits, and the type still came back as `str`.
+
 ## Comments in Code
 
 A **comment** is a line of writing meant for people, not for Python. It starts with a `#`, and Python ignores everything after that sign on the line.
@@ -154,10 +224,6 @@ Comments are used to say why a line exists, not what it does. `age = 12` already
 
 ## Further Reading
 
-- **Variables** — https://www.w3schools.com/python/python_variables.asp
-- **Data types** — https://www.w3schools.com/python/python_datatypes.asp
-- **User input** — https://www.w3schools.com/python/python_user_input.asp
-
-Each page has a Try it Yourself button, so you can change the example and run it in the browser.
+- **Variables, numbers, strings and booleans** — https://www.pythontutorial.net/python-basics/
 
 You now know how to hold a value, show it, and ask for one. But a typed `12` is still text, so the program cannot yet add it or compare it. Next, you will turn text into numbers and put those numbers to work.
