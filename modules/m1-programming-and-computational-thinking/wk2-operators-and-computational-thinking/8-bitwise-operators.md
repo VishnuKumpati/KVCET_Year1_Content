@@ -210,4 +210,4 @@ Three of the symbols return later, on a data type called a set, where `&`, `|` a
 
 - **Bitwise operators explained** — https://realpython.com/python-bitwise-operators/
 
-Every operator in the table has now been covered. Next, you will plan a program before writing it, by breaking a problem into steps and drawing those steps out.
+Every category in the table has now been covered, apart from the identity operators, which wait until objects have been introduced. Next, you will plan a program before writing it, by breaking a problem into steps and drawing those steps out.

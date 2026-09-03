@@ -160,4 +160,4 @@ The other six compound operators are arithmetic only, so they do not apply to st
 - **All operator categories with examples** — https://www.geeksforgeeks.org/python/python-operators/
 - **Python operators reference** — https://www.programiz.com/python-programming/operators
 
-You now know all four of the operator categories used in everyday programs. Next, you will plan a program before writing it, by breaking a problem into steps and drawing those steps out.
+You now know all four of the operator categories used in everyday programs. Next, you will check whether a value is present inside another, which takes one operator rather than a comparison for every possibility.

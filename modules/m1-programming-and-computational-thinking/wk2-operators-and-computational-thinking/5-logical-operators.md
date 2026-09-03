@@ -230,4 +230,4 @@ Read each side of an `and` or an `or` on its own. If a side cannot stand alone a
 - **The three operators with truth tables** — https://www.pythontutorial.net/python-basics/python-logical-operators/
 - **Python operators reference** — https://www.programiz.com/python-programming/operators
 
-You can now build one Boolean result out of several. Next, you will plan a program before writing it, by breaking a problem into steps and drawing those steps out.
+You can now build one Boolean result out of several. Next, you will look at the operators that store a value in a variable, including the seven that change a value based on what it already holds.

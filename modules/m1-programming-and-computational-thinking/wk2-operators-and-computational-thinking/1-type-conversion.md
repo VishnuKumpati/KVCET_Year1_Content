@@ -153,4 +153,4 @@ This matters in real programs. If your program expects a number and the person t
 - **Type conversion, with worked examples** — https://www.programiz.com/python-programming/type-conversion-and-casting
 - **Official reference for `int()`, `float()` and `str()`** — https://docs.python.org/3/library/functions.html
 
-Your program can now hold real numbers instead of strings. Next, you will do more than add them, using the full set of arithmetic operators.
+Your program can now hold real numbers instead of strings. Next, you will settle the words that describe how Python works on them, before meeting the operators themselves.
