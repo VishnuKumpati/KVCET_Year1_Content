@@ -14,9 +14,9 @@ A person cannot write a full program in 1s and 0s. It would take far too long, a
 
 ```mermaid
 flowchart TD
-    A["You write your instructions in Python"] --> B["A translator changes them into machine language"]
-    B --> C["The computer reads the 1s and 0s"]
-    C --> D["The work is done and the result appears"]
+    A["You write your instructions\n in Python"] --> B["A translator changes them\n into machine language"]
+    B --> C["The computer reads the \n1s and 0s"]
+    C --> D["The work is done and \nthe result appears"]
 ```
 
 ## Compilers and Interpreters
@@ -27,15 +27,15 @@ A **compiler** translates first and runs later. It takes the full program, conve
 
 ```mermaid
 flowchart TD
-    A["Line 1, line 2 and line 3 are taken together"] --> B["All three lines are converted"]
-    B --> C["The program now starts running"]
+    A["Line 1, line 2 and line 3\n are taken together"] --> B["All three lines are \nconverted"]
+    B --> C["The program now starts \nrunning"]
 ```
 
 An **interpreter** does both together. It takes the first line, converts it, and runs it straight away. Then it moves to the second line and does the same. It carries on like this to the end of the program.
 
 ```mermaid
 flowchart TD
-    A["Line 1 is converted and run"] --> B["Line 2 is converted and run"]
+    A["Line 1 is converted \nand run"] --> B["Line 2 is converted and run"]
     B --> C["Line 3 is converted and run"]
 ```
 
