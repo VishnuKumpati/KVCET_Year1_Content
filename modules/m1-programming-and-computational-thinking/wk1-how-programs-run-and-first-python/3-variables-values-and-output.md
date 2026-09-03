@@ -123,9 +123,9 @@ Welcome, Arjun
 
 ```mermaid
 flowchart TD
-    A["The program shows the question on the screen"] --> B["The person types an answer and presses Enter"]
-    B --> C["The answer is stored in the variable"]
-    C --> D["The program uses that variable in print"]
+    A["The program shows the \nquestion on the screen"] --> B["The person types an answer\n and presses Enter"]
+    B --> C["The answer is stored \nin the variable"]
+    C --> D["The program uses that\n variable in print"]
 ```
 
 One point matters here. Whatever `input` collects is always text, even when the person types digits. So a typed `12` arrives as the text `"12"`, not the number `12`.
