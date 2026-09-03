@@ -35,8 +35,8 @@ False
 
 ```mermaid
 flowchart TD
-    A["A value on the left, an operator, a value on the right"] --> B["Python checks whether the statement holds"]
-    B --> C["The answer comes back as True or False"]
+    A["A value on the left, an\n operator, \n a value on the right"] --> B["Python checks whether  \nthe statement holds"]
+    B --> C["The answer comes back as \n True or False"]
 ```
 
 The answer can be stored in a variable, like any other value:
