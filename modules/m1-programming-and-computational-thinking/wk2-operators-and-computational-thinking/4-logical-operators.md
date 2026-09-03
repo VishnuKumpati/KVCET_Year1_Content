@@ -26,9 +26,9 @@ Python did not read that line as one long question. It worked out each side sepa
 
 ```mermaid
 flowchart TD
-    A["marks > 35 and attendance > 75"] --> B["Left side: 87 > 35 gives True"]
-    B --> C["Right side: 90 > 75 gives True"]
-    C --> D["Both sides are True, so the student gets the prize"]
+    A["marks > 35 \nand \nattendance > 75"] --> B["Left side: \n87 > 35 gives True"]
+    B --> C["Right side: \n90 > 75 gives True"]
+    C --> D["Both sides are True, \nso the student gets\n the prize"]
 ```
 
 Now change the attendance and run the same line again:
