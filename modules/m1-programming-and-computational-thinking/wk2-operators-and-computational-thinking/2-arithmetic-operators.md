@@ -149,9 +149,9 @@ The three operators were used in the order of the list, not the order they appea
 
 ```mermaid
 flowchart TD
-    A["2 + 3 * 2 ** 2"] --> B["Power first: 2 ** 2 gives 4, leaving 2 + 3 * 4"]
-    B --> C["Multiplication next: 3 * 4 gives 12, leaving 2 + 12"]
-    C --> D["Addition last: the answer is 14"]
+    A["2 + 3 * 2 ** 2"] --> B["Power first: \n 2 ** 2 gives 4, leaving 2 + 3 * 4"]
+    B --> C["Multiplication next: \n 3 * 4 gives 12,  \nleaving 2 + 12"]
+    C --> D["Addition last: \n the answer is 14"]
 ```
 
 Brackets sit at the top of the list, so anything inside them is done before everything else. Adding a pair to the same line changes the answer:
