@@ -117,9 +117,9 @@ Two brackets sitting inside each other look confusing at first. Read them from t
 
 ```mermaid
 flowchart TD
-    A["The person types 12 and presses Enter"] --> B["input hands back the text 12"]
-    B --> C["int changes that text into the number 12"]
-    C --> D["The number is stored in the variable"]
+    A["The person types 12 and \npresses Enter"] --> B["input hands back the \n text 12"]
+    B --> C["int changes that text into \n the number 12"]
+    C --> D["The number is stored in  \nthe variable"]
 ```
 
 The inner command runs first, then the outer one works on its result. Use `float()` in place of `int()` when the answer may have a decimal point, such as a price or a percentage.
