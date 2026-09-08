@@ -1,6 +1,6 @@
 # Arithmetic Operators
 
-You now know what an operator and an operand are. This topic covers the first category of them, the **arithmetic operators**, which perform calculations on numbers.
+An **arithmetic operator** performs a calculation on numbers and returns a number.
 
 Python has seven. Four behave exactly as they do in mathematics. The other three need a closer look.
 

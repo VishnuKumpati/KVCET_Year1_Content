@@ -1,6 +1,6 @@
 # Assignment Operators
 
-This is the fourth category of operators. An **assignment operator** stores a value in a variable. You have used one since your first program, and Python has seven more that combine an operation with the storing.
+An **assignment operator** stores a value in a variable. The plain `=` does nothing but store, and Python has seven more that combine an operation with the storing.
 
 ## The Eight Assignment Operators
 

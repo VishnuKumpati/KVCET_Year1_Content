@@ -1,6 +1,6 @@
 # Comparison Operators
 
-This is the second category of operators. A **comparison operator**, also called a relational operator, compares two operands and returns a **Boolean** value: either `True` or `False`. The result is never a number.
+A **comparison operator**, also called a relational operator, compares two operands and returns a **Boolean** value: either `True` or `False`. The result is never a number.
 
 That makes these operators the tools that build **conditions**, since a condition is simply an expression whose value is `True` or `False`.
 

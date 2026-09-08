@@ -120,13 +120,11 @@ Python groups its operators by the kind of work they do. There are seven categor
 | Bitwise | `&` `\|` `^` `~` `<<` `>>` | work on the individual bits of a number |
 | Identity | `is` `is not` | check whether two names refer to the same object |
 
-The first six categories are covered in the topics that follow, in the order listed above.
-
-Identity operators are the exception, and they come later. They deal with **objects**, which is how Python stores values in memory, and that has not been covered yet. Without it, `is` and `is not` cannot be shown doing anything that `==` does not already do. They return once objects have been introduced.
+Identity operators are the exception, and they are not covered yet. They deal with **objects**, which is how Python stores values in memory. Without that idea, `is` and `is not` cannot be shown doing anything that `==` does not already do, so they wait until objects have been introduced.
 
 ## Further Reading
 
 - **All seven categories with examples** — https://www.geeksforgeeks.org/python/python-operators/
 - **Python operators reference** — https://www.programiz.com/python-programming/operators
 
-You now have the vocabulary that the next three topics rest on: operator, operand, expression, evaluation and condition. Next, you will use the first group of them, and start calculating with numbers.
+You now have the vocabulary that the rest of the operator work rests on: operator, operand, expression, evaluation and condition. Next, you will put operators to work calculating with numbers.

@@ -1,12 +1,12 @@
 # Bitwise Operators
 
-This is the last category in the operator table. A **bitwise operator** works on a number one binary digit at a time, rather than on the number as a whole.
+A **bitwise operator** works on a number one binary digit at a time, rather than on the number as a whole.
 
 A single binary digit is called a **bit**. Python has six bitwise operators.
 
 ## Bits and Place Values
 
-The first topic explained that a computer stores everything using two signals, written as 1 and 0. A whole number is stored as a row of bits, and each position in that row stands for a value, doubling from right to left.
+A computer stores everything using two signals, written as 1 and 0. A whole number is stored as a row of bits, and each position in that row stands for a value, doubling from right to left.
 
 | Place value | 4 | 2 | 1 |
 |---|---|---|---|

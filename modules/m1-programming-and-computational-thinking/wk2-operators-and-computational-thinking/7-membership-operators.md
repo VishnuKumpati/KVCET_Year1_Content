@@ -1,6 +1,6 @@
 # Membership Operators
 
-This is the fifth category of operators. A **membership operator** checks whether a value is present inside a **sequence**, which is any value made up of smaller parts in order. It returns a Boolean.
+A **membership operator** checks whether a value is present inside a **sequence**, which is any value made up of smaller parts in order. It returns a Boolean.
 
 Python has two: `in` and `not in`. Both are keywords written as words in lower case.
 

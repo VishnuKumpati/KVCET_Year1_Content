@@ -1,6 +1,6 @@
 # Logical Operators
 
-This is the third category of operators. A comparison expression produces one Boolean value. Real programs often need several of them combined into one. A **logical operator**, also called a Boolean operator, takes Boolean operands and returns a single Boolean value.
+A comparison expression produces one Boolean value. Real programs often need several of them combined into one. A **logical operator**, also called a Boolean operator, takes Boolean operands and returns a single Boolean value.
 
 Python has three: `and`, `or` and `not`. They are keywords written as words in lower case, not as symbols.
 
