@@ -157,6 +157,219 @@ Marks: 87
 
 Python leaves one space where each comma sits.
 
+A `print` with nothing inside the brackets prints an empty line, which is how you space out output:
+
+```python
+print("Marks")
+print()
+print("Attendance")
+```
+
+**Output:**
+
+```
+Marks
+
+Attendance
+```
+
+## Choosing the Separator
+
+The space Python puts at each comma is a setting called `sep`, and you can change it to anything you like:
+
+```python
+print("2026", "09", "08", sep="-")
+print("total", "87", sep=": ")
+print("a", "b", "c", sep="")
+```
+
+**Output:**
+
+```
+2026-09-08
+total: 87
+abc
+```
+
+`sep=""` joins the values with nothing between them. `sep` applies between values only, never before the first or after the last.
+
+## Ending a Line Differently
+
+Each `print` ends by moving to a new line. That ending is a setting called `end`, and changing it keeps the next `print` on the same line:
+
+```python
+print("Loading", end="")
+print("...", end="")
+print("done")
+```
+
+**Output:**
+
+```
+Loading...done
+```
+
+This is what you use when several `print` commands need to build one line of output together.
+
+## Escape Sequences
+
+Some characters cannot be typed directly inside quotation marks. An **escape sequence** is a backslash `\` followed by a letter, and it stands for one such character.
+
+- `\n` — a new line
+- `\t` — a tab, useful for lining up columns
+- `\"` — a quotation mark that does not end the text
+- `\\` — a single backslash
+
+```python
+print("Name\tMarks")
+print("Arjun\t87")
+print("Line one\nLine two")
+print("She said \"yes\"")
+```
+
+**Output:**
+
+```
+Name	Marks
+Arjun	87
+Line one
+Line two
+She said "yes"
+```
+
+One `print` can therefore produce several lines, because `\n` inside the text starts a new line wherever it sits.
+
+## Joining Text with +
+
+The `+` sign joins two pieces of text into one:
+
+```python
+first = "Arjun"
+last = "Kumar"
+print("Name: " + first + " " + last)
+```
+
+**Output:**
+
+```
+Name: Arjun Kumar
+```
+
+Nothing is inserted for you here, so every space you want must be written into the text. And `+` joins text to text only. Putting a number on one side of it fails:
+
+```python
+marks = 87
+print("Marks: " + marks)
+```
+
+**Output:**
+
+```
+TypeError: can only concatenate str (not "int") to str
+```
+
+Python will not guess whether you meant to join text or add numbers, so it stops instead.
+
+## Formatted Strings
+
+Writing the values into the sentence directly is easier to read than joining pieces. Put an `f` immediately before the opening quotation mark, and then any variable name inside `{ }` is replaced by its value:
+
+```python
+name = "Arjun"
+marks = 87
+print(f"{name} scored {marks} marks")
+```
+
+**Output:**
+
+```
+Arjun scored 87 marks
+```
+
+Such a piece of text is called an **f-string**, short for formatted string. The `f` is what activates the braces. Without it, the braces are printed as they are:
+
+```python
+name = "Arjun"
+print("{name} is here")
+```
+
+**Output:**
+
+```
+{name} is here
+```
+
+The braces can hold a calculation as well as a name:
+
+```python
+marks = 87
+total = 100
+print(f"Percentage: {marks / total * 100}")
+```
+
+**Output:**
+
+```
+Percentage: 87.0
+```
+
+f-strings are the way output is written in modern Python. Use them unless you have a reason not to.
+
+## Controlling Decimal Places
+
+A division often produces a long decimal that nobody wants to read:
+
+```python
+print(f"Average: {245 / 3}")
+```
+
+**Output:**
+
+```
+Average: 81.66666666666667
+```
+
+Inside the braces, a colon followed by `.2f` rounds the value to two decimal places:
+
+```python
+print(f"Average: {245 / 3:.2f}")
+```
+
+**Output:**
+
+```
+Average: 81.67
+```
+
+Read `.2f` as "two decimal places, fixed". The digit is the count you want, so `.3f` gives three and `.0f` gives none:
+
+```python
+price = 49.5
+print(f"{price:.0f}")
+print(f"{price:.3f}")
+```
+
+**Output:**
+
+```
+50
+49.500
+```
+
+The rounding affects the printed text only. The variable still holds its full value.
+
+## The Ways to Print, Side by Side
+
+| Way | Looks like | Use it when |
+| --- | --- | --- |
+| Values with commas | `print("Marks:", marks)` | A quick line with a space between values |
+| `sep` | `print(a, b, sep="-")` | You want a separator other than a space |
+| `end` | `print(a, end="")` | Several prints must share one line |
+| Escape sequence | `print("A\tB")` | You need a tab, a new line, or a quotation mark |
+| Joining with `+` | `print("Name: " + name)` | Both pieces are already text |
+| f-string | `print(f"{name}: {marks}")` | Almost always, and for any real sentence |
+| Format specification | `print(f"{value:.2f}")` | A number needs a fixed number of decimals |
+
 ## Taking a Value from the User
 
 So far every value has been fixed inside the program. The `input` command lets the program ask instead.
