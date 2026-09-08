@@ -196,14 +196,14 @@
                                        {
                                            "id":  "e686a25f-9032-4992-9b14-dd5b604c22f6",
                                            "title":  "Conditional Statements",
-                                           "tooltip":  "Week 3 - if, elif, and else, and the role of indentation",
-                                           "url":  "modules/m2-control-flow-and-functions/wk3-decisions-conditionals.md"
+                                           "tooltip":  "Week 3 - if, elif, and else, indentation, and why the order of conditions matters",
+                                           "url":  "modules/m2-control-flow-and-functions/wk3-decisions-conditionals/1-conditional-statements.md"
                                        },
                                        {
                                            "id":  "e438357f-7f21-4075-bfc8-b4f2df5c9721",
                                            "title":  "Nested Conditions",
                                            "tooltip":  "Week 3 - Decisions inside decisions, and when to flatten them",
-                                           "url":  "modules/m2-control-flow-and-functions/wk3-decisions-conditionals.md"
+                                           "url":  "modules/m2-control-flow-and-functions/wk3-decisions-conditionals/2-nested-conditions.md"
                                        },
                                        {
                                            "id":  "dcdcfed4-df14-4f91-91ce-8b8b81a5571e",
