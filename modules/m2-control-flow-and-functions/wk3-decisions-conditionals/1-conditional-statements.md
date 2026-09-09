@@ -1,8 +1,8 @@
 # Conditional Statements
 
-Every condition you have written so far only produced a value. `marks >= 35` returned `True` or `False`, and the program carried on regardless. A **conditional statement** uses that value to decide which lines of code run and which are skipped.
+Every condition you have written so far only produced a value. `marks >= 35` returned `True` or `False`, and the program carried on regardless. A **conditional statement** uses that result to decide which lines of code run and which are skipped.
 
-This is the flowchart diamond from the last topic, finally written in Python.
+The `if` does not create the condition or work out a new kind of value. It simply tells Python to act on the result of the condition.
 
 ## The if Statement
 
@@ -20,11 +20,20 @@ if marks >= 35:
 Pass
 ```
 
-Three things make up that statement:
+Read that the way Python does. The condition is evaluated first, and its value decides the rest:
+
+```mermaid
+flowchart LR
+    A["marks >= 35"] --> B["87 >= 35"]
+    B --> C["True"]
+    C --> D["The block runs"]
+```
+
+Three things make up the statement:
 
 - the keyword `if`, followed by a condition
 - a colon `:` at the end of the line
-- one or more indented lines below it, which run only if the condition is `True`
+- one or more indented statements below it, which run only when the condition is `True`
 
 Change the mark and the indented line is skipped entirely:
 
@@ -52,7 +61,7 @@ flowchart TD
 
 ## Blocks and Indentation
 
-The indented lines under an `if` are called a **block**. A block can hold as many lines as you need, as long as every line is indented by the same amount:
+The indented statements under an `if` are called a **block**. A block can hold as many statements as you need, as long as every one of them is indented by the same amount:
 
 ```python
 marks = 87
@@ -88,7 +97,7 @@ IndentationError: expected an indented block after 'if' statement on line 2
 
 `IndentationError` is the name Python gives this error, and the message names the line that needed a block.
 
-Use four spaces for one level of indentation. That is the accepted amount across Python, and every editor can be set to insert it when you press Tab.
+Use four spaces for one level of indentation. This is the standard Python convention and is what the Python community recommends. Python itself does not demand exactly four. What matters is that statements belonging to the same block use the same indentation level. Four spaces is simply the amount everyone agrees on, and most code editors can be set to insert it when you press Tab.
 
 ## The else Clause
 
@@ -110,7 +119,7 @@ Fail
 
 The condition was `False`, so the `if` block was skipped and the `else` block ran instead.
 
-Exactly one of the two blocks always runs. Never both, never neither.
+In an `if`/`else` statement, exactly one of the two blocks runs. Never both, never neither.
 
 ```mermaid
 flowchart TD
@@ -126,7 +135,13 @@ The `else` keyword takes no condition of its own. It simply catches everything t
 
 Two paths are often not enough. A mark might deserve a grade rather than a pass or a fail, and that needs several conditions tested in turn.
 
-The `elif` clause does this. The name is short for "else if", and you can use as many as you need:
+The `elif` clause does this. The name is short for "else if", and you can use as many as you need. That gives three keywords, each with one job:
+
+| Keyword | What it does |
+| --- | --- |
+| `if` | Starts the decision and tests the first condition |
+| `elif` | Tests another condition, but only if every condition above it was `False` |
+| `else` | Runs when none of the conditions above it were `True`, and tests nothing itself |
 
 ```python
 marks = 72
@@ -150,21 +165,82 @@ Python worked down the chain and stopped at the first condition that was `True`:
 
 ```mermaid
 flowchart TD
-    A{"marks >= 90"} -->|False| B{"marks >= 60"}
-    A -->|True| C[\"Distinction"\]
-    B -->|True| D[\"First class"\]
-    B -->|False| E["Keep checking<br>the rest of the chain"]
+    A{"marks >= 90"} -->|True| A1[\"Print Distinction"\]
+    A -->|False| B{"marks >= 60"}
+    B -->|True| B1[\"Print First class"\]
+    B -->|False| C{"marks >= 35"}
+    C -->|True| C1[\"Print Pass"\]
+    C -->|False| D1[\"Print Fail"\]
+    A1 --> E(["End"])
+    B1 --> E
+    C1 --> E
+    D1 --> E
 ```
 
-`72 >= 90` was `False`, so Python moved on. `72 >= 60` was `True`, so that block ran and the whole chain ended there. The remaining `elif` and the `else` were never even tested, although `72 >= 35` is also `True`.
+`72 >= 90` was `False`, so Python moved on. `72 >= 60` was `True`, so that block ran and the whole chain ended there. Follow the diagram and you leave it at `First class`, never reaching the two diamonds below. The remaining `elif` and the `else` were never even tested, although `72 >= 35` is also `True`.
 
 That is the rule to hold on to. Only the first matching block runs, and everything below it is skipped.
 
-Two points on how a chain is built. The `if` must come first, and there can be only one. The `else` must come last, and it is optional. Leave it out and a mark matching nothing at all simply produces no output.
+Three rules govern how a chain is built.
+
+- The `if` comes first, and a chain has exactly one.
+- Any number of `elif` clauses may follow it.
+- The `else` is optional and must come last. Leave it out and a mark that matches nothing produces no output at all, exactly as a lone `if` does.
+
+## Independent if Statements
+
+An `if`/`elif`/`else` chain runs at most one block. Separate `if` statements are not a chain, and Python tests each one on its own, so more than one of them can run:
+
+```python
+marks = 95
+
+if marks >= 35:
+    print("Pass")
+
+if marks >= 90:
+    print("Distinction")
+```
+
+**Output:**
+
+```
+Pass
+Distinction
+```
+
+Both conditions were `True`, so both blocks ran. Nothing joins the two statements, so the result of the first has no bearing on whether the second is tested.
+
+Now the same two conditions, in the same order, joined into a chain by one word:
+
+```python
+marks = 95
+
+if marks >= 35:
+    print("Pass")
+elif marks >= 90:
+    print("Distinction")
+```
+
+**Output:**
+
+```
+Pass
+```
+
+One line instead of two. The `elif` made the second condition depend on the first, so `95 >= 35` matched, the chain ended, and `95 >= 90` was never tested.
+
+| Form | How Python treats it |
+| --- | --- |
+| Separate `if` statements | Every condition is tested, and every matching block runs |
+| One `if` with `elif` | Conditions are tested from the top, and the first match ends the chain |
+
+So the number of blocks that run is decided by how the statements are written, not by how many conditions happen to be `True`.
 
 ## Order of Conditions
 
-Because only the first match runs, the order of the conditions decides the result. Put them in the wrong order and the program runs perfectly while giving the wrong answer:
+The conditions in a chain do not have to be mutually exclusive. Several of them can be `True` at the same time, and Python makes no attempt to find the best match. It takes the first condition that is `True` and skips the rest.
+
+So the order of the conditions can change the result. Put them in the wrong order and the program runs perfectly while giving the wrong answer:
 
 ```python
 marks = 95
@@ -198,11 +274,18 @@ elif marks >= 35:
 Distinction
 ```
 
-The rule that follows is short. When conditions overlap, put the narrowest one first and work outwards. Grades run from the highest mark down, ages from the oldest band down, prices from the largest discount down.
+The rule that follows is short. When conditions overlap, put the more specific condition first and the more general condition later:
+
+```
+marks >= 90     ← the more specific condition, so it goes first
+marks >= 35     ← the more general condition, so it goes after
+```
+
+`marks >= 90` is the more specific of the two because fewer marks satisfy it. Every mark that passes it also passes `marks >= 35`, so testing the general one first would leave the specific one unreachable. Grades therefore run from the highest mark down, ages from the oldest band down, prices from the largest discount down.
 
 ## Further Reading
 
 - **if, elif and else with worked examples** — https://www.programiz.com/python-programming/if-elif-else
 - **Official Python guide to control flow** — https://docs.python.org/3/tutorial/controlflow.html
 
-Every condition here has been a single comparison. Next, you will put logical operators inside an `if`, so that one branch can test several things at once.
+Every condition here has been a single comparison. Next, you will place one conditional statement inside another, so that a second decision depends on the answer to the first.

@@ -1,6 +1,6 @@
 # Nested Conditions
 
-A conditional statement written inside another conditional statement is called a **nested condition**. The inner `if` is then reached only when the outer condition is `True`, which lets a program ask a second question that depends on the answer to the first.
+A conditional statement written inside another conditional statement is called a **nested condition**. The inner condition is reached only when Python enters the block that contains it. For an inner `if` inside an outer `if`, the outer condition must therefore be `True` before the inner condition is tested.
 
 ## Levels of Indentation
 
@@ -24,7 +24,17 @@ Eligible for the prize
 
 The outer condition was `True`, so its block ran. Inside that block, the inner condition was tested and also came out `True`.
 
-Each level adds four more spaces. The indentation is what tells Python which block a line belongs to, so counting levels is how you read nested code:
+The important idea is that the outer condition controls whether Python ever reaches the inner condition:
+
+```
+marks >= 35 ?
+      ↓ True
+attendance >= 75 ?
+```
+
+The attendance check is not made independently. Python reaches it only after the marks condition is `True`.
+
+Use four spaces for each level of indentation. A nested block is indented one level further than the block containing it, and that indentation is what tells Python which block a line belongs to, so counting levels is how you read nested code:
 
 ```mermaid
 flowchart TD
@@ -36,7 +46,7 @@ flowchart TD
     E --> B
 ```
 
-The inner condition is only ever reached through the outer one. Fail the exam and the attendance is never looked at:
+Fail the exam and the attendance is never looked at:
 
 ```python
 marks = 20
@@ -74,12 +84,12 @@ Eligible for the prize
 
 So which form is right? It depends on whether the outer condition needs its own outcome.
 
-Use `and` when the two tests together lead to one result. There is nothing to say about the marks on their own, so one condition is clearer.
+Use `and` when several conditions together determine one outcome. Here, there is no separate action after checking the marks, so one `if` with `and` is clearer.
 
-Use nesting when the outer condition has something to do or say by itself:
+Use nesting when the first condition leads to its own action or decision, and another decision has to be made inside that path:
 
 ```python
-marks = 20
+marks = 32
 if marks >= 35:
     print("Passed the exam")
 else:
@@ -95,11 +105,40 @@ Failed the exam
 You may sit the retest
 ```
 
-Here the outer `if` reports the result and the nested `if` adds something that only makes sense after a fail. This cannot be flattened into a single `and`, because two separate decisions are being made.
+Here the outer `if` reports the result and the nested `if` adds something that only makes sense after a fail. A single `and` would not express the same behaviour, because the program needs to handle the first decision and then make another decision inside that path.
+
+## Grouping Conditions with Parentheses
+
+A condition can contain both `and` and `or`. Python evaluates `and` before `or`, which can change the result if you are not careful. Use parentheses when you want to make the intended grouping explicit:
+
+```python
+student_class = 9
+attendance = 40
+if (student_class == 9 or student_class == 10) and attendance > 75:
+    print("May join the trip")
+else:
+    print("Not in the trip group")
+```
+
+**Output:**
+
+```
+Not in the trip group
+```
+
+The parentheses make Python evaluate the `or` expression first. The student must be in class 9 or 10, and then must also have attendance above 75 percent:
+
+```
+(class 9 OR class 10) AND attendance > 75
+```
+
+Without them, Python would read the condition as "class 9, or class 10 with good attendance". Class 9 would match on its own, the attendance would never be checked, and a student with 40 percent would be told to join the trip.
+
+When both `and` and `or` appear in the same condition, use parentheses to make the intended grouping explicit.
 
 ## Nesting Inside else
 
-The example above nests inside an `else` rather than an `if`. Any block can hold a nested condition, and `else` blocks often do, because that is where the special cases collect.
+An earlier example nested inside an `else` rather than an `if`. An `else` block is a block like any other, so it can contain another `if` when the program needs to make a further decision.
 
 Both blocks may nest at once:
 
@@ -122,11 +161,11 @@ Passed
 With distinction
 ```
 
-Read this by indentation, not by order. The `if` and the `else` are at the outer level. Each holds a `print` and a nested `if` at the inner level.
+Read this by indentation, not by order. The `if` and the `else` are at the outer level. Each holds a `print` and a nested `if` at the inner level. The second inner `if` belongs to the `else` because it is indented inside that block.
 
 ## Depth and Readability
 
-Nesting works to any depth, but reading it stops working long before Python does:
+Python allows nesting to any depth, but deep nesting can make code harder for humans to read:
 
 ```python
 marks = 87
@@ -144,7 +183,9 @@ if marks >= 35:
 Eligible for the prize
 ```
 
-Three levels deep, and the single line of real work is sixteen spaces from the margin. Nothing here needs separate outcomes, so `and` says it better:
+`fees_paid` already holds a Boolean value, either `True` or `False`, so Python can use the variable directly as a condition. There is nothing left to compare it against.
+
+Three levels deep, the actual work is already buried inside several layers of indentation. Nothing here needs separate outcomes, so `and` says it better:
 
 ```python
 marks = 87
@@ -160,10 +201,10 @@ if marks >= 35 and attendance >= 75 and fees_paid:
 Eligible for the prize
 ```
 
-Two levels of nesting are usually fine. At three, look for a way to flatten it. Joining conditions with `and` is the simplest way, and functions will give you another.
+Deep nesting can make code harder to read. When you find yourself several levels in, check whether the logic can be simplified. Combining conditions with `and` is one way to flatten simple cases.
 
 ## Further Reading
 
 - **Official Python guide to control flow** — https://docs.python.org/3/tutorial/controlflow.html
 
-Nesting decides which conditions get tested at all. Next, you will see what Python does when a condition is not `True` or `False` but a number, a piece of text, or nothing at all.
+A conditional statement decides whether a block runs. Next, you will learn how to repeat a block of code, which lets a program work through a whole class of students rather than one.
