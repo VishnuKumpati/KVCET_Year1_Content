@@ -1,4 +1,4 @@
-# Repeating Work with `for` Loops
+# The `for` Loop
 
 Suppose a class has fifty students and every one of them needs a welcome message. Written out by hand, the program starts like this:
 
@@ -12,17 +12,27 @@ Forty-seven more lines follow. Every line is the same instruction with one numbe
 
 A **loop** solves this. It lets you write the instruction once and tell Python to repeat it.
 
-## The for Loop
+## Syntax of a for Loop
 
-A `for` loop can walk through a **sequence** one item at a time. You have already seen one common sequence: a string, where the characters appear in order.
+A `for` loop walks through a **sequence** one item at a time, running its block once for each item. You have already seen one common sequence: a string, where the characters appear in order.
 
-The word `"cat"` is a string of three characters:
+Every `for` loop is written in the same form:
 
 ```
-"cat"   →   c   a   t
+for variable in sequence:
+    statements
 ```
 
-A loop can visit those characters one by one:
+Four parts make it up:
+
+- the keyword `for`
+- a **loop variable**, which holds one item at a time
+- the keyword `in`, followed by the sequence to walk through
+- a colon `:`, then an indented block
+
+The colon and the indented block work exactly as they did in an `if` statement. The difference is what controls the block. An `if` decides whether the block runs. A `for` decides how many times it runs.
+
+Here is that form filled in. The word `"cat"` is a string of three characters, so the loop runs three times:
 
 ```python
 for letter in "cat":
@@ -37,7 +47,7 @@ a
 t
 ```
 
-One `print` statement produced three lines. Python ran the block once for each character:
+One `print` statement produced three lines. Before each run of the block, Python put the next character into `letter`:
 
 ```
 letter = "c"   →   run the block
@@ -46,14 +56,7 @@ letter = "t"   →   run the block
 no more characters   →   loop ends
 ```
 
-Four parts make up the statement:
-
-- the keyword `for`
-- a **loop variable**, here `letter`, which holds one item at a time
-- the keyword `in`, followed by the sequence to walk through
-- a colon `:`, then an indented block
-
-Each pass through the block is called an **iteration**. The loop above ran three iterations, one for each character.
+Each pass through the block is called an **iteration**. This loop ran three iterations, one for each character.
 
 ```mermaid
 flowchart TD
@@ -64,32 +67,6 @@ flowchart TD
 ```
 
 The loop stops on its own when Python reaches the end of the sequence. You do not have to write a separate condition to tell it when to stop.
-
-## Comparison with the if Statement
-
-The shape of a `for` loop is already familiar:
-
-```python
-marks = 87
-if marks >= 35:
-    print("Pass")
-```
-
-```python
-for letter in "Hi":
-    print(letter)
-```
-
-**Output:**
-
-```
-H
-i
-```
-
-Both end their first line with a colon. Both own an indented block. Everything you learned about blocks and indentation applies here unchanged.
-
-The difference is what controls the block. An `if` decides whether the block runs. A `for` decides how many times it runs.
 
 ## The Loop Variable
 
@@ -116,7 +93,7 @@ You will often see `i` used as a loop variable in other people's code. It is sho
 
 ## The range Function
 
-Looping over a word covers sequences. The welcome-message problem needs something else: a loop that runs a set number of times.
+A string is one kind of sequence. The welcome-message problem needs something else: a loop that runs a set number of times.
 
 The `range()` function produces a sequence of numbers for exactly this purpose:
 

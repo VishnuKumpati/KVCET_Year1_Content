@@ -1,12 +1,38 @@
-# Repeating Work with `while` Loops
+# The `while` Loop
 
 A `for` loop works through a sequence one item at a time. It stops when there are no more items to process.
 
 Some problems are not like that. Suppose a program asks for a password and must keep asking until the right one is typed. The person might get it right on the first attempt, or the fourth, or the tenth. There is no sequence to walk through.
 
-## The while Loop
+## Syntax of a while Loop
 
-A `while` loop repeats its block as long as a condition remains `True`.
+A `while` loop is a statement that repeats a block for as long as its condition evaluates to `True`. The condition is tested before every iteration, and the loop ends at the first test that returns `False`.
+
+Every `while` loop is written in the same form:
+
+```
+while condition:
+    statements
+```
+
+Two parts make it up:
+
+- the keyword `while`, followed by a condition
+- a colon `:`, then an indented block
+
+That is the same shape as an `if` statement. The difference is what happens after the block finishes. An `if` moves on. A `while` goes back and tests the condition again:
+
+```mermaid
+flowchart TD
+    A["Check the condition"] --> B{"Is it True?"}
+    B -->|Yes| C["Run the<br>indented block"]
+    C --> A
+    B -->|No| D(["Loop ends"])
+```
+
+That single arrow going back is the whole idea. `if` checks once. `while` checks again after every iteration.
+
+Here is that form filled in:
 
 ```python
 count = 1
@@ -23,24 +49,7 @@ while count <= 3:
 3
 ```
 
-The parts are the same shape as an `if`:
-
-- the keyword `while`, followed by a condition
-- a colon `:`, then an indented block
-
-The difference is what happens after the block finishes. An `if` moves on. A `while` goes back and tests the condition again:
-
-```mermaid
-flowchart TD
-    A["Check the condition"] --> B{"Is it True?"}
-    B -->|Yes| C["Run the<br>indented block"]
-    C --> A
-    B -->|No| D(["Loop ends"])
-```
-
-That single arrow going back is the whole idea. `if` checks once. `while` checks again after every iteration.
-
-Follow the loop above value by value:
+Follow it value by value:
 
 ```
 count = 1   →   1 <= 3 is True    →   print 1, count becomes 2
@@ -76,31 +85,48 @@ Each iteration replaces `password` with whatever was typed. When the typed value
 
 Nothing in this program says how many attempts to allow, because nothing needs to. The condition decides.
 
-## Zero, One or Many Iterations
+Because the condition is tested before the first iteration, a `while` loop may run many times, once, or not at all. A condition that is already `False` skips the block entirely.
 
-A `while` loop tests its condition **before** each iteration, including the first. If the condition is already `False`, the block never runs at all:
+## Updating the Condition
+
+A `while` loop evaluates the same condition on every iteration. For the loop to end, at least one statement in the block must change a value that the condition depends on.
+
+In the password loop, that job belongs to one line:
 
 ```python
-count = 10
-while count < 5:
-    print(count)
+password = input("Enter password: ")
+```
+
+The condition tests `password`, and this line replaces `password` on every iteration. Each pass gives the condition a new value to judge, and the loop ends as soon as the typed value matches.
+
+The updated value does not have to come from the person. It can be worked out inside the loop:
+
+```python
+total = 0
+number = 1
+while total < 10:
+    total += number
+    number += 1
+print("Total:", total)
 ```
 
 **Output:**
 
 ```
-
+Total: 10
 ```
 
-Nothing printed. `10 < 5` was `False` on the very first test, so Python skipped the block and moved past the loop.
+The condition tests `total`, and `total += number` raises it on every iteration. The loop added 1, then 2, then 3, then 4, reaching 10 and stopping there. Nobody typed anything.
 
-This is worth knowing. A `while` loop can run many times, once, or not at all, and which of those happens is decided by the condition, not by the loop.
+A **counter** is a variable that records how many iterations have run, updated by a fixed amount on each pass. `count += 1` in the first example is a counter, and so is `number += 1` here. The password loop has no counter at all, which shows that counting is one way to move a condition towards `False` and not a requirement of the statement.
 
-## Updating the Condition
+Before running any `while` loop, check two things. Can the condition become `False`, and does something in the block move it in that direction?
 
-A `while` loop keeps going as long as its condition is `True`. So something inside the block has to change, or the condition can never become `False`.
+## Infinite Loops
 
-Here is the earlier loop with one line removed:
+An **infinite loop** is a loop whose condition never becomes `False`, so it repeats without end. In a `while` loop this happens when no statement in the block changes any value the condition depends on. Every test then evaluates the same expression against the same values and returns the same result.
+
+Here is the counting loop with one line removed:
 
 ```python
 count = 1
@@ -129,7 +155,7 @@ Nothing changes `count`, so every test asks the same question and receives the s
 1 <= 3 is True
 ```
 
-A loop that can never end is called an **infinite loop**. It is not an error, so Python reports nothing. The program simply never finishes.
+It is not an error, so Python reports nothing. The program simply never finishes.
 
 To stop one, press **Ctrl+C** in the terminal. That interrupts the running program and returns you to the command line.
 
@@ -150,12 +176,6 @@ while count <= 3:
 3
 ```
 
-`count += 1` changes the value that controls this particular loop. In other `while` loops, a different variable or event may change the condition. The password loop above has no counter at all, and what ends it is the person typing the right word.
-
-A variable used this way, to keep track of how many iterations have run, is called a **counter**.
-
-Before running any `while` loop, check two things. Can the condition become `False`, and does something in the block move it in that direction?
-
 ## Choosing Between for and while
 
 Both loops repeat a block, and either can often be made to do the job. The question is which one fits the problem.
@@ -173,4 +193,4 @@ Treat this as a guideline rather than a rule. Where both would work, pick the on
 
 - **Official Python guide to control flow** — https://docs.python.org/3/tutorial/controlflow.html
 
-Both loops so far have run their blocks from start to finish. Next, you will learn how to leave a loop early, skip a single iteration, and place one loop inside another.
+Both loop statements are now in place. Next, you will use them to work through a grid, where every row has several positions across it.
