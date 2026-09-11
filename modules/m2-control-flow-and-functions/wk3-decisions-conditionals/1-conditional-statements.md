@@ -177,70 +177,17 @@ flowchart TD
     D1 --> E
 ```
 
-`72 >= 90` was `False`, so Python moved on. `72 >= 60` was `True`, so that block ran and the whole chain ended there. Follow the diagram and you leave it at `First class`, never reaching the two diamonds below. The remaining `elif` and the `else` were never even tested, although `72 >= 35` is also `True`.
+`72 >= 90` was `False`, so Python moved to the next condition. `72 >= 60` was `True`, so that block ran and the chain ended there. The remaining `elif` and the `else` were never tested, even though `72 >= 35` is also `True`.
 
-That is the rule to hold on to. Only the first matching block runs, and everything below it is skipped.
+Only the first matching block runs. Everything below it is skipped.
 
-Three rules govern how a chain is built.
+A chain is built to three rules:
 
-- The `if` comes first, and a chain has exactly one.
+- The `if` comes first, and there is exactly one.
 - Any number of `elif` clauses may follow it.
-- The `else` is optional and must come last. Leave it out and a mark that matches nothing produces no output at all, exactly as a lone `if` does.
+- The `else` is optional and must come last.
 
-## Independent if Statements
-
-An `if`/`elif`/`else` chain runs at most one block. Separate `if` statements are not a chain, and Python tests each one on its own, so more than one of them can run:
-
-```python
-marks = 95
-
-if marks >= 35:
-    print("Pass")
-
-if marks >= 90:
-    print("Distinction")
-```
-
-**Output:**
-
-```
-Pass
-Distinction
-```
-
-Both conditions were `True`, so both blocks ran. Nothing joins the two statements, so the result of the first has no bearing on whether the second is tested.
-
-Now the same two conditions, in the same order, joined into a chain by one word:
-
-```python
-marks = 95
-
-if marks >= 35:
-    print("Pass")
-elif marks >= 90:
-    print("Distinction")
-```
-
-**Output:**
-
-```
-Pass
-```
-
-One line instead of two. The `elif` made the second condition depend on the first, so `95 >= 35` matched, the chain ended, and `95 >= 90` was never tested.
-
-| Form | How Python treats it |
-| --- | --- |
-| Separate `if` statements | Every condition is tested, and every matching block runs |
-| One `if` with `elif` | Conditions are tested from the top, and the first match ends the chain |
-
-So the number of blocks that run is decided by how the statements are written, not by how many conditions happen to be `True`.
-
-## Order of Conditions
-
-The conditions in a chain do not have to be mutually exclusive. Several of them can be `True` at the same time, and Python makes no attempt to find the best match. It takes the first condition that is `True` and skips the rest.
-
-So the order of the conditions can change the result. Put them in the wrong order and the program runs perfectly while giving the wrong answer:
+Since only the first match runs, the order of the conditions matters:
 
 ```python
 marks = 95
@@ -256,9 +203,9 @@ elif marks >= 90:
 Pass
 ```
 
-A mark of 95 deserves a distinction. It got `Pass`, because `95 >= 35` was tested first and matched. The `elif` below it never had a chance to run.
+A mark of 95 deserves a distinction. It matched `marks >= 35` first, the chain ended there, and the `elif` below was never tested. Python reported no error, because the code is valid. Only the order is wrong.
 
-Python reported no error here, and that is what makes this dangerous. The code is valid. Only the logic is wrong.
+Swapping the two conditions fixes it:
 
 ```python
 marks = 95
@@ -274,14 +221,7 @@ elif marks >= 35:
 Distinction
 ```
 
-The rule that follows is short. When conditions overlap, put the more specific condition first and the more general condition later:
-
-```
-marks >= 90     ← the more specific condition, so it goes first
-marks >= 35     ← the more general condition, so it goes after
-```
-
-`marks >= 90` is the more specific of the two because fewer marks satisfy it. Every mark that passes it also passes `marks >= 35`, so testing the general one first would leave the specific one unreachable. Grades therefore run from the highest mark down, ages from the oldest band down, prices from the largest discount down.
+Put the more specific condition first. `marks >= 90` is the more specific of the two, because fewer marks satisfy it. Every mark that passes it also passes `marks >= 35`, so testing the general condition first leaves the specific one unreachable.
 
 ## Further Reading
 
