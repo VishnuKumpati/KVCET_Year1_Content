@@ -1,4 +1,4 @@
-# Loop Controls
+# Control Statements
 
 A `for` loop ends when its sequence runs out, and a `while` loop ends when its condition becomes `False`. Two statements override that stopping point from inside the block. `break` ends a loop early, and `continue` skips the rest of one iteration.
 
@@ -169,4 +169,4 @@ Seat `1` is missing from every row, and every row still appears. The inner loop 
 
 - **Official Python guide to control flow** — https://docs.python.org/3/tutorial/controlflow.html
 
-You can now start a loop, end it early, skip an iteration, and nest one inside another. Next, you will use two loops together to print shapes on the screen.
+You can now start a loop, end it early, skip an iteration, and nest one inside another. Next, you will use two loops together to print patterns on the screen.

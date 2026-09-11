@@ -1,8 +1,8 @@
-# Star Patterns
+# Patterns Using Loops
 
 Conditions decide whether a block runs. Loops decide how many times it runs. A nested loop puts one loop inside another, so the inner loop runs completely for every iteration of the outer loop.
 
-Printing shapes is a clear way to practise this relationship. A shape has rows going down and characters going across, so the outer loop controls the rows and the inner loop controls the characters in each row. If the outer loop runs the wrong number of times, the shape has the wrong number of rows. If the inner loop runs the wrong number of times, the rows have the wrong width.
+Printing patterns is a clear way to practise this relationship. A pattern has rows going down and characters going across, so the outer loop controls the rows and the inner loop controls the characters in each row. If the outer loop runs the wrong number of times, the pattern has the wrong number of rows. If the inner loop runs the wrong number of times, the rows have the wrong width.
 
 Because the result appears directly on the screen, you can see how changing either loop changes the shape.
 
@@ -246,6 +246,79 @@ for row in range(rows - 1, 0, -1):
 ```
 
 The second loop starts at `rows - 1`, not at `rows`. Starting at `rows` would print the widest row a second time and split the diamond across its middle.
+
+## The Counting Triangle
+
+Nothing so far has depended on the character being a star. Print a number instead and the same skeleton produces a number pattern.
+
+This one counts across each row, from `1` up to the row number:
+
+```python
+for row in range(1, 5):
+    for number in range(1, row + 1):
+        print(number, end="")
+    print()
+```
+
+**Output:**
+
+```
+1
+12
+123
+1234
+```
+
+| `row` | Values the inner loop produces | Row printed |
+| --- | --- | --- |
+| 1 | 1 | `1` |
+| 2 | 1, 2 | `12` |
+| 3 | 1, 2, 3 | `123` |
+| 4 | 1, 2, 3, 4 | `1234` |
+
+The shape is the right-angled triangle, and one line differs. `print("*", end="")` became `print(number, end="")`, so what appears on the screen is the **inner** loop variable. It changes with every character, which is why the digits climb across the row.
+
+`range(1, row + 1)` counts from `1` rather than `0`, so the first row reads `1` and not `0`.
+
+## The Repeated Row Number
+
+The same triangle again, printing a different variable:
+
+```python
+for row in range(1, 5):
+    for number in range(row):
+        print(row, end="")
+    print()
+```
+
+**Output:**
+
+```
+1
+22
+333
+4444
+```
+
+| `row` | Inner loop runs | Row printed |
+| --- | --- | --- |
+| 1 | 1 time | `1` |
+| 2 | 2 times | `22` |
+| 3 | 3 times | `333` |
+| 4 | 4 times | `4444` |
+
+Here `print(row, end="")` prints the **outer** loop variable. It holds the same value for the whole of one row and changes only when the outer loop moves on, which is why every character in a row is identical.
+
+The inner loop variable is named `number` in both programs, but this one never prints it. It exists only to count the characters, exactly as `star` did in the star patterns.
+
+So the two patterns differ in one respect only:
+
+| Pattern | Value printed | Result |
+| --- | --- | --- |
+| Counting triangle | `number`, the inner loop variable | changes within a row |
+| Repeated row number | `row`, the outer loop variable | constant within a row |
+
+Both run their inner loop `row` times, so both produce the same triangular shape.
 
 ## Reading Any Pattern
 

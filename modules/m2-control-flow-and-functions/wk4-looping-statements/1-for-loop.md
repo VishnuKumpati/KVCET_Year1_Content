@@ -1,4 +1,4 @@
-# The `for` Loop
+# For Loop
 
 Suppose a class has fifty students and every one of them needs a welcome message. Written out by hand, the program starts like this:
 

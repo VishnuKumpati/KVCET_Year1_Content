@@ -1,4 +1,4 @@
-# The `while` Loop
+# While Loop
 
 A `for` loop works through a sequence one item at a time. It stops when there are no more items to process.
 
