@@ -334,10 +334,10 @@
                                            "url":  "modules/m3-built-in-data-structures/wk6-lists-and-tuples/4-iteration.md"
                                        },
                                        {
-                                           "id":  "88ad139d-6195-4b3d-8e71-f47972d3bff8",
-                                           "title":  "Tuples",
-                                           "tooltip":  "Week 6 - Immutability, packing and unpacking, and returning several values",
-                                           "url":  "modules/m3-built-in-data-structures/wk6-lists-and-tuples/5-tuples.md"
+                                           "id":  "5243b73c-97e2-405b-894a-5c9ef0aec326",
+                                           "title":  "Sorting Basics",
+                                           "tooltip":  "Week 6 - sort against sorted, reverse, and mixed types",
+                                           "url":  "modules/m3-built-in-data-structures/wk6-lists-and-tuples/5-sorting-basics.md"
                                        },
                                        {
                                            "id":  "9261a951-f7c7-4986-ab44-a5ac61deaa08",
@@ -346,10 +346,10 @@
                                            "url":  "modules/m3-built-in-data-structures/wk6-lists-and-tuples/6-2d-lists.md"
                                        },
                                        {
-                                           "id":  "5243b73c-97e2-405b-894a-5c9ef0aec326",
-                                           "title":  "Sorting Basics",
-                                           "tooltip":  "Week 6 - sort against sorted, reverse, and mixed types",
-                                           "url":  "modules/m3-built-in-data-structures/wk6-lists-and-tuples/7-sorting-basics.md"
+                                           "id":  "88ad139d-6195-4b3d-8e71-f47972d3bff8",
+                                           "title":  "Tuples",
+                                           "tooltip":  "Week 6 - Immutability, packing and unpacking, and returning several values",
+                                           "url":  "modules/m3-built-in-data-structures/wk6-lists-and-tuples/7-tuples.md"
                                        },
                                        {
                                            "id":  "a763a38e-53c2-4e72-9669-5a879e6ae5e5",
