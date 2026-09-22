@@ -95,92 +95,26 @@ Meera
 
 ## datetime
 
-Dates and times are harder than they look, and this module handles the hard parts.
-
-```python
-from datetime import date, datetime, timedelta
-
-day = date(2026, 9, 16)
-print(day)
-print(day.year, day.month, day.day)
-print(day.strftime("%A %d %B %Y"))
-```
-
-**Output:**
-
-```
-2026-09-16
-2026 9 16
-Wednesday 16 September 2026
-```
-
-`strftime()` formats a date as a string, using codes for each part:
-
-| Code | Means |
-| --- | --- |
-| `%Y` | four-digit year |
-| `%m` | month as a number |
-| `%B` | month name |
-| `%d` | day of the month |
-| `%A` | weekday name |
-| `%H`, `%M`, `%S` | hours, minutes, seconds |
-
-```python
-from datetime import datetime
-
-moment = datetime(2026, 9, 16, 14, 30, 5)
-print(moment)
-print(moment.strftime("%d/%m/%Y"))
-```
-
-**Output:**
-
-```
-2026-09-16 14:30:05
-16/09/2026
-```
-
-`strptime()` goes the other way, parsing a string using the same codes:
-
-```python
-from datetime import datetime
-
-parsed = datetime.strptime("16-09-2026", "%d-%m-%Y")
-print(parsed)
-```
-
-**Output:**
-
-```
-2026-09-16 00:00:00
-```
-
-The two names are easy to confuse. **`strftime` formats; `strptime` parses.**
-
-`timedelta` is a span of time, and dates support arithmetic:
+Real date and time values, which compare, sort and add correctly where strings do not:
 
 ```python
 from datetime import date, timedelta
 
 day = date(2026, 9, 16)
+print(day.strftime("%A %d %B %Y"))
 print(day + timedelta(days=30))
-
-gap = date(2026, 12, 25) - day
-print(gap.days)
-print(day < date(2026, 12, 25))
+print((date(2026, 12, 25) - day).days)
 ```
 
 **Output:**
 
 ```
+Wednesday 16 September 2026
 2026-10-16
 100
-True
 ```
 
-Subtracting two dates gives a `timedelta`; adding one to a date gives a date. Month lengths and leap years are handled for you, which is the whole reason not to do this arithmetic by hand.
-
-`date.today()` and `datetime.now()` give the current moment. They are not used in the examples here because their output would differ every run.
+Month lengths and leap years are handled for you, which is the whole reason not to do this arithmetic by hand. The module is large enough to deserve its own treatment, and gets one.
 
 ## collections
 
@@ -379,7 +313,7 @@ too many spaces
 True
 ```
 
-Regular expressions are a language of their own and are worth learning later. The rule for now: if `split()`, `replace()`, `startswith()` and `in` can do the job, use them — they are far easier to read.
+The rule that keeps patterns useful rather than unreadable: if `split()`, `replace()`, `startswith()` and `in` can do the job, use them instead.
 
 ## Worth Knowing Exists
 
@@ -413,4 +347,4 @@ Three habits find what you need.
 - **The Python standard library** — https://docs.python.org/3/library/
 - **The module index** — https://docs.python.org/3/py-modindex.html
 
-`math`, `random`, `datetime`, `collections` and the rest cover an enormous amount of ordinary work with no installation. That completes what Python provides on its own — next, adding what it does not.
+`math`, `random`, `datetime`, `collections` and the rest cover an enormous amount of ordinary work with no installation. Next, the one of them that repays a closer look.

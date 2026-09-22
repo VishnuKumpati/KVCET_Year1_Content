@@ -1,4 +1,4 @@
-# Dictionary Methods and CRUD
+# Dictionary Methods
 
 Four operations cover almost everything done to stored data: **create**, **read**, **update** and **delete**. The initials give the name **CRUD**, and the term is used throughout software, from a dictionary in memory to a database serving millions of records.
 

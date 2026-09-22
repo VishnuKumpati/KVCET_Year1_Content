@@ -1,4 +1,4 @@
-# Sets and Set Operations
+# Sets
 
 A list keeps order and allows duplicates. A dictionary looks values up by key. A **set** gives up both order and duplicates, and in exchange answers two questions very well: is this value present, and what do two collections have in common.
 

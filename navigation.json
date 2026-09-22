@@ -272,28 +272,34 @@
                                            "url":  "modules/m2-control-flow-and-functions/wk5-functions-errors-and-debugging/3-the-return-statement.md"
                                        },
                                        {
+                                           "id":  "3f0a1d64-9c2b-4e57-9a13-6d5c84f0b2a7",
+                                           "title":  "Type Hints",
+                                           "tooltip":  "Week 5 - Annotating parameters, returns and variables, and what a checker does with them",
+                                           "url":  "modules/m2-control-flow-and-functions/wk5-functions-errors-and-debugging/4-type-hints.md"
+                                       },
+                                       {
                                            "id":  "000d4fae-35d8-49b1-a170-9179e08bdb74",
                                            "title":  "Variable Scope",
                                            "tooltip":  "Week 5 - Local and global names, and the global keyword",
-                                           "url":  "modules/m2-control-flow-and-functions/wk5-functions-errors-and-debugging/4-variable-scope.md"
+                                           "url":  "modules/m2-control-flow-and-functions/wk5-functions-errors-and-debugging/5-variable-scope.md"
                                        },
                                        {
                                            "id":  "e7246f64-2c58-4737-8ef7-29c0e17b7e85",
                                            "title":  "Errors and Tracebacks",
                                            "tooltip":  "Week 5 - Reading a traceback, and syntax errors against runtime errors",
-                                           "url":  "modules/m2-control-flow-and-functions/wk5-functions-errors-and-debugging/5-errors-and-tracebacks.md"
+                                           "url":  "modules/m2-control-flow-and-functions/wk5-functions-errors-and-debugging/6-errors-and-tracebacks.md"
                                        },
                                        {
                                            "id":  "08349dfb-9d49-482c-bb04-1c66a9ef0911",
                                            "title":  "Exception Handling",
                                            "tooltip":  "Week 5 - try, except, else, and finally",
-                                           "url":  "modules/m2-control-flow-and-functions/wk5-functions-errors-and-debugging/6-exception-handling.md"
+                                           "url":  "modules/m2-control-flow-and-functions/wk5-functions-errors-and-debugging/7-exception-handling.md"
                                        },
                                        {
                                            "id":  "71170b38-0b05-4c87-ab8f-8713fddbbb7c",
                                            "title":  "Debugging",
                                            "tooltip":  "Week 5 - Printing values, checking types, and narrowing by halves",
-                                           "url":  "modules/m2-control-flow-and-functions/wk5-functions-errors-and-debugging/7-debugging.md"
+                                           "url":  "modules/m2-control-flow-and-functions/wk5-functions-errors-and-debugging/8-debugging.md"
                                        }
                                    ]
                     },
@@ -364,40 +370,46 @@
                                            "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/2-string-methods.md"
                                        },
                                        {
+                                           "id":  "b8e4c017-5a96-42d3-8f71-2c0ab6d95e84",
+                                           "title":  "Regular Expressions",
+                                           "tooltip":  "Week 7 - Patterns, search, fullmatch, findall, groups, sub and split",
+                                           "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/3-regular-expressions.md"
+                                       },
+                                       {
                                            "id":  "36d7d491-479b-4f88-8458-d16fa5136308",
                                            "title":  "Formatted String Literals",
                                            "tooltip":  "Week 7 - f-strings, number formats, width and alignment",
-                                           "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/3-f-strings.md"
+                                           "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/4-f-strings.md"
                                        },
                                        {
                                            "id":  "4f9283e6-2424-4782-bf77-083a2ed07c3a",
                                            "title":  "Dictionaries",
                                            "tooltip":  "Week 7 - Keys and values, KeyError, get, and what may be a key",
-                                           "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/4-dictionaries.md"
+                                           "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/5-dictionaries.md"
                                        },
                                        {
                                            "id":  "adc76416-5614-4b83-8e20-93658a48924c",
-                                           "title":  "Dictionary Methods and CRUD",
+                                           "title":  "Dictionary Methods",
                                            "tooltip":  "Week 7 - Create, read, update, delete, keys, values, items, and setdefault",
-                                           "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/5-dictionary-methods-and-crud.md"
+                                           "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/6-dictionary-methods.md"
                                        },
                                        {
                                            "id":  "df7b68a9-4d72-4351-8b59-f2987e552200",
                                            "title":  "Dictionary Iteration",
                                            "tooltip":  "Week 7 - Looping over keys, values and items, and sorting by each",
-                                           "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/6-dictionary-iteration.md"
+                                           "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/7-dictionary-iteration.md"
                                        },
                                        {
                                            "id":  "f06de0d4-3bb2-413d-b95e-52671e0e2f27",
-                                           "title":  "Sets and Set Operations",
+                                           "title":  "Sets",
                                            "tooltip":  "Week 7 - Uniqueness, membership, union, intersection and difference",
-                                           "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/7-sets-and-set-operations.md"
+                                           "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/8-sets.md"
                                        },
                                        {
                                            "id":  "11314f59-f4c1-42b9-a30f-be1c121cfcec",
                                            "title":  "Nested Data Structures",
                                            "tooltip":  "Week 7 - Lists of dictionaries, dictionaries of lists, and reading them",
-                                           "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/8-nested-data-structures.md"
+                                           "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/9-nested-data-structures.md"
                                        },
                                        {
                                            "id":  "e077310d-9c92-4600-b3d2-b004bdc71f03",
@@ -624,6 +636,12 @@
                                            "title":  "The Standard Library",
                                            "tooltip":  "Week 11 - math, random, datetime, collections and what else exists",
                                            "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/7-the-standard-library.md"
+                                       },
+                                       {
+                                           "id":  "c4a71e58-30b6-4a92-8d05-71f9be3c6a1d",
+                                           "title":  "Dates and Times",
+                                           "tooltip":  "Week 11 - date, datetime, timedelta, strftime and strptime, and sorting by date",
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/8-dates-and-times.md"
                                        },
                                        {
                                            "id":  "9d8b6631-d91c-4991-bf93-cd6ac2d86847",

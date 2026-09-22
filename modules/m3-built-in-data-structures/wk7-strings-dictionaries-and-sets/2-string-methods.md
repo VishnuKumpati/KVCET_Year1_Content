@@ -396,4 +396,4 @@ Only `split()` returns a list and only the tests return booleans. Everything els
 - **Official string method reference** — https://docs.python.org/3/library/stdtypes.html#string-methods
 - **String methods with worked examples** — https://www.programiz.com/python-programming/methods/string
 
-These methods clean, search and reshape text. Next, you will build text for display, replacing the comma-separated `print()` calls used so far.
+These methods clean, search and reshape text you can spell out in full. Next, searching for text you can only describe by its shape.
