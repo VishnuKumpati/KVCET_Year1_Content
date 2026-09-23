@@ -1,10 +1,12 @@
 # Parameters and Arguments
 
-A function is useful when it can work with different values. Empty brackets give it nothing to work with, so it does the same thing on every call.
+A function often needs to be told what to work with, and the brackets are where it is told. When the brackets are empty, every call to the function does exactly the same thing. When a name is written inside them, each call can give the function a different value to work with.
 
-A **parameter** is a name written inside the brackets of a function definition. It stands for a value the function expects to be given.
-
-An **argument** is the actual value given to the function when it is called.
+> **A parameter is a variable named inside the brackets of a function definition, standing for a value the function expects to be given.**
+>
+> **An argument is the actual value supplied to the function when it is called.**
+>
+> The parameter belongs to the definition and the argument belongs to the call. When the function runs, each parameter receives the value of its argument.
 
 ## Syntax of a Parameter
 
@@ -96,7 +98,9 @@ Two parameters, two arguments at each call. `name` took the first argument and `
 
 ## Positional Arguments
 
-Arguments given in this way are called **positional arguments**, because position decides which parameter receives which value. The first argument goes to the first parameter, the second to the second, and so on.
+Arguments given in this way are called positional arguments.
+
+> **A positional argument is an argument matched to a parameter by its position in the call.** The first argument is assigned to the first parameter, the second to the second, and so on, so the arguments must be written in the same order as the parameters.
 
 ```python
 def check_result(name, marks):
@@ -176,7 +180,9 @@ Here, Python raises a `TypeError` because the number of arguments in the call do
 
 ## Keyword Arguments
 
-A **keyword argument** names the parameter it is meant for, using `=` at the call:
+> **A keyword argument is an argument passed by naming its parameter explicitly, in the form `parameter=value`.** Because each argument names the parameter it is meant for, keyword arguments may be written in any order.
+
+At the call it looks like this:
 
 ```python
 def check_result(name, marks):
@@ -252,9 +258,9 @@ Use "Welcome" if the caller does not provide a value for message.
 
 The first call passed one argument, so `name` received `"Asha"` and `message` used its default value `"Welcome"`. The second call supplied a value for `message`, so that value replaced the default.
 
-A **default parameter value** is used only when no argument is supplied for that parameter.
+> **A default parameter value is a value given to a parameter in the function definition, used when the caller supplies no argument for that parameter.** It makes that argument optional, and every parameter carrying a default must be written after the parameters that have none.
 
-Parameters with defaults must come after those without:
+Break that ordering rule and Python refuses the definition:
 
 ```python
 def greet(message="Welcome", name):

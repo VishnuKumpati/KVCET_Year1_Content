@@ -9,7 +9,7 @@ def add(first, second):
 
 Nothing in that definition tells a reader what kind of values `first` and `second` are expected to receive. If they are numbers, `+` performs addition. If they are strings, `+` joins them together. The function definition does not tell us which behaviour was intended.
 
-A **type hint** is a note written in the definition stating the data type a parameter or return value is expected to have.
+> **A type hint is an annotation written in a function definition, stating the data type a parameter or a return value is expected to have.** Python does not enforce a hint while the program runs. It exists for people reading the code, for code editors, and for separate type-checking tools.
 
 ## Syntax of a Type Hint
 

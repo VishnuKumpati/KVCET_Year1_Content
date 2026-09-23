@@ -42,7 +42,7 @@ The function printed the result instead of handing it over. Printing puts a valu
 
 ## Syntax of the return Statement
 
-The `return` statement sends a value back to the line that called the function.
+> **The `return` statement sends a value from a function back to the line that called it, and ends the function immediately.** The value that comes back can be stored in a variable, printed, or used in any expression. A function that finishes without executing a `return` gives back `None`.
 
 ```
 def function_name(parameters):
@@ -212,7 +212,7 @@ An `else` is not needed in this example because `return` already ends the functi
 
 If a function reaches the end without executing a `return` statement, Python automatically returns `None`.
 
-**`None`** is a special Python value that represents the absence of a value. It is written with a capital `N` and no quotation marks.
+> **`None` is a special Python value representing the absence of a value.** It is written with a capital `N` and no quotation marks, and its data type is `NoneType`. It is what Python gives back when there is no value to give.
 
 ```python
 def show(marks):
@@ -235,7 +235,7 @@ The function printed `87`. It had no `return` statement, so the call gave back `
 
 This explains the `None` that appeared at the start of this topic. A function that reaches the end without returning a value returns `None`.
 
-## The Bare return Statement
+## The Simple return Statement
 
 `return` can be written on its own, with no value after it. The function ends at once and returns `None`.
 

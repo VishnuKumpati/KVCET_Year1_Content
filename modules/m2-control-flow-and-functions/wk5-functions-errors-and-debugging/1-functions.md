@@ -1,6 +1,6 @@
 # Functions
 
-Every program so far has been one list of statements, read from top to bottom. When the same work is needed twice, it has to be typed twice.
+Every program so far has been a single list of statements, read from top to bottom. When the same work is needed twice, it has to be typed out twice.
 
 Here is a program that checks whether two students have passed:
 
@@ -29,7 +29,7 @@ Fail
 
 The same five lines appear twice. For thirty students they would appear thirty times. Changing the pass mark from 35 to 40 would mean editing thirty copies, and one missed copy would leave the program using two different pass marks.
 
-A **function** is a named block of code that performs a task. It is written once and runs whenever its name is used.
+> **A function is a named, reusable block of code that performs a single, specific task.** It is defined once and executed each time its name is called. A function can accept input values through its parameters and can send a result back to the caller, which allows the same logic to be used many times without being written again.
 
 ## Built-in and User-Defined Functions
 
@@ -47,23 +47,23 @@ Age: 12
 12
 ```
 
-Each has a name, and writing that name with brackets ran the code stored under it. You never wrote the steps inside `int()`.
+Each of them has a name, and writing that name followed by brackets runs the code behind that name. You have never had to write the steps inside `int()` yourself.
 
-These are **built-in functions**. They come with Python, already written.
-
-A **user-defined function** is one you write yourself. Once defined, it works the same way: write the name, add brackets, and the code runs.
+> **A built-in function is a function that Python provides as part of the language, available without being written or imported.** `print()`, `input()`, `int()` and `range()` are built-in functions.
+>
+> **A user-defined function is a function written by the programmer using the `def` keyword.** Once defined, it is called exactly as a built-in function is: write the name, add brackets, and the code runs.
 
 ## Syntax of a User-Defined Function
 
-A function is defined with the `def` keyword. The rules are these:
+A function is defined with the `def` keyword, and the rules for writing that definition are these:
 
 - The first line starts with `def`, followed by the function name.
-- The name follows the same rules as a variable name, so `lower_case` with underscores.
+- The name follows the same rules as a variable name, which means lower case with underscores.
 - Brackets `()` come after the name.
 - The line ends with a colon `:`.
-- The statements belonging to the function are indented below it, by four spaces.
+- The statements belonging to the function are indented below it by four spaces.
 
-The shape is always this:
+The shape of a definition is always this:
 
 ```
 def function_name():
@@ -85,9 +85,9 @@ def print_result():
 
 ```
 
-Nothing was printed. There is a `print` statement in the code, and it produced no output.
+Nothing was printed. The code contains a `print` statement, and yet it produced no output.
 
-Python read the body and stored it under the name `print_result`. That is all a definition does.
+Python read the body and attached it to the name `print_result`. That is all a definition does.
 
 ## Definition and Call
 
@@ -98,7 +98,7 @@ Two separate things are needed to get output from a function, and they are easy 
 | Definition | `def print_result():` with an indented body | Stores the body under a name. Runs nothing. |
 | Call | `print_result()` | Runs the stored body now. |
 
-A definition is written once. A call can be written as many times as needed. The definition ends with a colon and owns an indented block. The call is a plain statement with no colon and no block.
+A definition is written once, while a call can be written as many times as needed. The definition ends with a colon and has an indented block below it, whereas the call is a plain statement with no colon and no block.
 
 Writing a definition and expecting output is the most common mistake in this topic.
 
@@ -132,7 +132,7 @@ flowchart TD
     C --> D["Python returns to the<br>line after the call"]
 ```
 
-The call is not indented, so it is not part of the body. The body says what to do, and the call says do it now.
+The call is not indented, so it is not part of the body. The body states what is to be done, and the call is what makes it happen.
 
 ## Calling a Function Several Times
 
@@ -153,9 +153,9 @@ Pass
 Pass
 ```
 
-One `print` statement, two lines of output. The body ran in full, then again in full.
+One `print` statement produced two lines of output, because the body ran in full and then ran in full again.
 
-Now the program from the start of this topic, written as a function:
+Here is the program from the start of this topic, written as a function:
 
 ```python
 def check_result():
@@ -178,7 +178,7 @@ Marks: 20
 Fail
 ```
 
-Same output as before, different code. The five lines are written once and used twice. The pass mark appears in one place, so changing `35` to `40` changes every call.
+The output is the same as before, but the code is not. The five lines are written once and used twice, and the pass mark appears in one place only, so changing `35` to `40` changes every call.
 
 A function can also be called inside a loop:
 
@@ -205,7 +205,7 @@ Marks: 45
 Pass
 ```
 
-Three iterations, three full runs of the body. Thirty students needs `range(30)` and nothing else changes.
+Three iterations produced three full runs of the body. Thirty students would need `range(30)`, and nothing else in the program would change.
 
 ## Defining Before Calling
 
@@ -250,9 +250,9 @@ print_result()
 Pass mark is 35
 ```
 
-`pass_mark` was created inside the body and used on the next line, exactly as a variable behaves anywhere else.
+`pass_mark` was created inside the body and used on the next line, behaving exactly as a variable does anywhere else in a program.
 
-One thing is different. A variable created inside a function exists only while that function is running. Once the call ends, the name is gone:
+There is one difference. A variable created inside a function exists only while that function is running, and once the call ends, the name is gone:
 
 ```python
 def print_result():
@@ -272,7 +272,7 @@ NameError: name 'pass_mark' is not defined
 
 The function printed its line and finished. The `print` after it failed, because `pass_mark` no longer existed.
 
-This is useful rather than limiting. A function can name its variables freely without clashing with names used elsewhere in the program. The rules behind it are covered in the topic on variable scope.
+This is a benefit rather than a limitation, because a function can name its variables freely without clashing with names used elsewhere in the program. The rules behind it are covered in the topic on variable scope.
 
 ## The pass Statement
 
@@ -314,7 +314,9 @@ This is useful while a program is being built. `check_result` can be defined wit
 
 ## Docstrings
 
-A **docstring** is a string written as the first statement of a function body, stating what the function does. It is written in triple quotes:
+> **A docstring is a string written as the first statement inside a function, documenting what that function does.** It is enclosed in triple quotes, and Python stores it in the function's `__doc__` attribute, so it can be read while the program runs.
+
+It is written like this:
 
 ```python
 def check_result():
@@ -334,9 +336,9 @@ print(check_result.__doc__)
 Ask for a mark and print whether it is a pass.
 ```
 
-Nothing called the function here, so no mark was asked for. The docstring was read straight from the function, because Python stores it under the name `__doc__`. Typing `help(check_result)` displays the same text.
+Nothing called the function here, so no mark was asked for. The docstring was read straight from the function, because Python keeps it in the function's `__doc__` attribute. Typing `help(check_result)` displays the same text.
 
-A docstring is not a comment, and the two differ in two ways. Python discards a comment and keeps a docstring, which is why a docstring can be read by a program or a tool. And a comment explains a line to whoever edits the function, while a docstring tells whoever calls it what it does, so they never need to read the body.
+A docstring is not a comment, and the two differ in two ways. First, Python discards a comment but keeps a docstring, which is why a docstring can be read by a program or a tool. Second, a comment explains a line to whoever edits the function, whereas a docstring tells whoever calls it what it does, so that they never need to read the body.
 
 Write the first line as one short statement beginning with a verb. For a longer description, leave a blank line after that line and continue below it.
 
@@ -345,6 +347,4 @@ Write the first line as one short statement beginning with a verb. For a longer 
 - **Functions with worked examples** — https://www.programiz.com/python-programming/function
 - **Official Python guide to defining functions** — https://docs.python.org/3/tutorial/controlflow.html
 
-So far the brackets after a function name have always been empty.
-
-Next, you will learn what goes inside them, so the same function can work with different values each time it is called.
+So far the brackets after a function name have always been empty. Next, you will learn what goes inside them, so that the same function can work with a different value each time it is called.
