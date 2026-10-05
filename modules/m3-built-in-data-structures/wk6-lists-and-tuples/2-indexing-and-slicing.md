@@ -1,71 +1,58 @@
 # Indexing and Slicing
 
-A list keeps its values in order, so each value has a position. That position is called its **index**, and it is how you reach one value out of the many.
+A list keeps its elements in order, and each element has a position in that order. A program can use that position to access a particular element.
 
-## Position Numbering
+> **An index is the position of an element in a list.** Indexing is the use of that position to read or change a single element. Slicing is the use of a range of positions to take several elements at once.
 
-Positions are numbered from `0`, not from `1`:
+## Index Numbering
+
+The positions in a list start at `0`, not at `1`. The first element is at index `0`, the second at index `1`, and so on.
 
 ```
- letters:    "a"    "b"    "c"    "d"    "e"
- index:       0      1      2      3      4
+marks     =   [ 87 , 72 , 95 ]
+index         [  0 ,  1 ,  2 ]
 ```
 
-The reason is that an index is a **distance from the start**, not a count. The first item is zero steps from the start, the second is one step, and so on. Counting this way is what makes the arithmetic in the rest of this topic work out evenly.
+A list of three elements therefore has indexes `0`, `1` and `2`. For a non-empty list, the last index is one less than its length.
 
-The consequence to remember: a list of five items has indexes `0` to `4`. The last index is always `len(items) - 1`.
+## Accessing an Element
 
-## Reading One Item
+An element is read by writing its index inside square brackets after the list name.
 
-Write the index in square brackets after the list name:
+**Syntax**
+
+```
+list_name[index]
+```
+
+**Example**
 
 ```python
-letters = ["a", "b", "c", "d", "e"]
-print(letters[0])
-print(letters[3])
+marks = [87, 72, 95]
+print(marks[0])
+print(marks[1])
+print(marks[2])
 ```
 
 **Output:**
 
 ```
-a
-d
+87
+72
+95
 ```
 
-`letters[0]` is a single value, not a list, so it prints without brackets. It can be used anywhere a value can be used:
+Each index gives access to one element. `marks[0]` gave `87`, the first element, because numbering begins at zero.
+
+## Index Out of Range
+
+An index that does not exist in the list causes an error.
+
+**Example**
 
 ```python
-marks = [78, 91, 64]
-total = marks[0] + marks[1] + marks[2]
-print("Total:", total)
-```
-
-**Output:**
-
-```
-Total: 233
-```
-
-The last item is at `len(items) - 1`, which is a common thing to need:
-
-```python
-marks = [78, 91, 64]
-print(marks[len(marks) - 1])
-```
-
-**Output:**
-
-```
-64
-```
-
-## IndexError
-
-Asking for a position that does not exist is an error:
-
-```python
-letters = ["a", "b", "c"]
-print(letters[3])
+marks = [87, 72, 95]
+print(marks[3])
 ```
 
 **Output:**
@@ -74,180 +61,226 @@ print(letters[3])
 IndexError: list index out of range
 ```
 
-This list has three items, so its valid indexes are `0`, `1` and `2`. Index `3` would be the fourth item, and there isn't one.
+The list has three elements, so its highest index is `2`. Index `3` would be the fourth element, and there is none.
 
-`IndexError` is one of the most common errors in list code, and it almost always means the same thing: a position was calculated as if counting from `1`, or a loop ran one iteration too many.
+When a program tries to access an index that does not exist, Python raises an `IndexError`.
 
 ## Negative Indexing
 
-Counting from the end is also allowed, using negative numbers:
+Counting from the end is often more convenient than counting from the start. A negative index does this, with `-1` for the last element.
 
 ```
- letters:    "a"    "b"    "c"    "d"    "e"
- index:       0      1      2      3      4
- negative:   -5     -4     -3     -2     -1
+marks     =   [ 87 , 72 , 95 ]
+index         [  0 ,  1 ,  2 ]
+negative      [ -3 , -2 , -1 ]
 ```
+
+**Example**
 
 ```python
-letters = ["a", "b", "c", "d", "e"]
-print(letters[-1])
-print(letters[-2])
+marks = [87, 72, 95]
+print(marks[-1])
+print(marks[-2])
+print(marks[-3])
 ```
 
 **Output:**
 
 ```
-e
-d
+95
+72
+87
 ```
 
-`-1` is the last item, `-2` is the one before it. There is no `-0`, because `0` already means the first item.
+`marks[-1]` gives the last element without needing to know the length of the list.
 
-Negative indexing is why `marks[-1]` is preferred over `marks[len(marks) - 1]`. Both give the last item, and the first is shorter and harder to get wrong.
+## Changing an Element
 
-## Changing One Item
+An index on the left of an `=` replaces the element at that position.
 
-An index can be assigned to, which replaces the value at that position:
+**Syntax**
+
+```
+list_name[index] = new_value
+```
+
+**Example**
 
 ```python
-marks = [78, 91, 64]
-marks[1] = 95
+marks = [87, 72, 95]
+marks[1] = 80
 print(marks)
 ```
 
 **Output:**
 
 ```
-[78, 95, 64]
+[87, 80, 95]
 ```
 
-The list is the same list, with one value replaced. Its length has not changed, and the other items were untouched.
+The element at index `1` changed from `72` to `80`. The list still has three elements, and the other two are untouched.
 
-This works with negative indexes too:
+## Slicing a List
+
+A slice takes a range of elements and returns them as a new list. The range is written as a start index and a stop index, separated by a colon.
+
+**Syntax**
+
+```
+list_name[start:stop]
+```
+
+**Example**
 
 ```python
-marks = [78, 91, 64]
-marks[-1] = 70
-print(marks)
+marks = [87, 72, 95, 60, 48]
+print(marks[1:4])
 ```
 
 **Output:**
 
 ```
-[78, 91, 70]
+[72, 95, 60]
 ```
 
-Assigning to a position that does not exist raises `IndexError` for the same reason reading it does. Assignment replaces an item; it cannot create one.
+The slice began at index `1` and stopped before index `4`. It returned the elements at indexes `1`, `2` and `3`.
 
-## Slicing
+The stop index is not included, just like the stop value in `range()`. `marks[1:4]` therefore gives three elements, not four.
 
-An index takes one item. A **slice** takes a range of items, and gives back a new list:
+## Omitting the Start or Stop
+
+The start or stop can be left out. Python then uses the beginning or the end of the list.
+
+**Example**
 
 ```python
-letters = ["a", "b", "c", "d", "e"]
-print(letters[1:4])
+marks = [87, 72, 95, 60, 48]
+print(marks[:3])
+print(marks[2:])
+print(marks[:])
 ```
 
 **Output:**
 
 ```
-['b', 'c', 'd']
+[87, 72, 95]
+[95, 60, 48]
+[87, 72, 95, 60, 48]
 ```
 
-The form is `[start:stop]`. The slice begins at `start` and ends **before** `stop`, so the item at `stop` is not included. That is the same rule `range()` follows, and for the same reason: `stop - start` is then the number of items taken. Here `4 - 1` is `3`, and three items came back.
-
-A slice always produces a list, even a slice of one item:
-
-```python
-letters = ["a", "b", "c", "d", "e"]
-print(letters[2:3])
-print(letters[2])
-```
-
-**Output:**
-
-```
-['c']
-c
-```
-
-Unlike an index, a slice does not raise an error when it runs past the end. It simply stops at the end of the list:
-
-```python
-letters = ["a", "b", "c", "d", "e"]
-print(letters[3:99])
-```
-
-**Output:**
-
-```
-['d', 'e']
-```
-
-## The Three Shorthand Forms
-
-Either side of the colon may be left out, and Python fills in the obvious value:
-
-```python
-letters = ["a", "b", "c", "d", "e"]
-print(letters[:3])
-print(letters[2:])
-print(letters[:])
-```
-
-**Output:**
-
-```
-['a', 'b', 'c']
-['c', 'd', 'e']
-['a', 'b', 'c', 'd', 'e']
-```
-
-| Form | Meaning |
-| --- | --- |
-| `items[:n]` | from the start up to but not including `n` |
-| `items[n:]` | from `n` to the end |
-| `items[:]` | every item, as a new list |
-
-The first two split a list at a chosen point. The third looks pointless, since it appears to give back the same list, but it is the standard way to make a **copy** of a list.
+`marks[:3]` started at the beginning and stopped before index `3`. `marks[2:]` started at index `2` and ran to the end. `marks[:]` left out both and returned every element.
 
 ## Slicing with a Step
 
-A third number sets the step, exactly as it does in `range()`:
+A third value sets the step, which is how far the slice moves each time.
+
+**Syntax**
+
+```
+list_name[start:stop:step]
+```
+
+**Example**
 
 ```python
-letters = ["a", "b", "c", "d", "e"]
-print(letters[0:5:2])
-print(letters[::2])
+marks = [87, 72, 95, 60, 48]
+print(marks[::2])
 ```
 
 **Output:**
 
 ```
-['a', 'c', 'e']
-['a', 'c', 'e']
+[87, 95, 48]
 ```
 
-The slice took every second item. With `start` and `stop` left out, `[::2]` reads as "every second item of the whole list".
+The slice moved through the list in steps of `2`, so it selected every other element.
 
-A negative step walks backwards, which reverses the list:
+A negative step moves through the list backwards. `marks[::-1]` therefore returns the elements in reverse order.
+
+**Example**
 
 ```python
-letters = ["a", "b", "c", "d", "e"]
-print(letters[::-1])
+marks = [87, 72, 95]
+print(marks[::-1])
 ```
 
 **Output:**
 
 ```
-['e', 'd', 'c', 'b', 'a']
+[95, 72, 87]
 ```
 
-`[::-1]` is worth recognising on sight. It appears constantly in real code and it always means the same thing: the whole sequence, reversed, as a new list.
+## Slices Beyond the End of the List
+
+An index out of range raises `IndexError`, but a slice out of range does not.
+
+**Example**
+
+```python
+marks = [87, 72, 95]
+print(marks[1:10])
+print(marks[5:8])
+```
+
+**Output:**
+
+```
+[72, 95]
+[]
+```
+
+The first slice went up to index `10`, but only the elements that existed were returned. The second asked for elements that do not exist at all and received an empty list.
+
+A slice simply returns the elements that exist in the requested range. It does not raise an error when the range goes past the end.
+
+## Indexing vs Slicing
+
+The two look similar but produce different results.
+
+**Example**
+
+```python
+marks = [87, 72, 95]
+print(type(marks[0]))
+print(type(marks[0:1]))
+```
+
+**Output:**
+
+```
+<class 'int'>
+<class 'list'>
+```
+
+Indexing gives one element, so the type here is `int`. Slicing gives a list, even when that list contains only one element.
+
+A slice also leaves the original list unchanged.
+
+**Example**
+
+```python
+marks = [87, 72, 95, 60]
+part = marks[1:3]
+print(part)
+print(marks)
+```
+
+**Output:**
+
+```
+[72, 95]
+[87, 72, 95, 60]
+```
+
+`part` is a new list containing those two elements. `marks` still holds all four.
+
+
 
 ## Further Reading
 
-- **Official Python guide to data structures** — https://docs.python.org/3/tutorial/datastructures.html
-- **List slicing explained** — https://www.geeksforgeeks.org/python/python-list-slicing/
+- 📎 **Indexing and slicing with worked examples** — https://www.programiz.com/python-programming/list
+- 📎 **Official Python guide to lists** — https://docs.python.org/3/tutorial/datastructures.html
 
-Indexing reaches one item and slicing reaches a range of them. Next, you will change the list itself: adding items, removing them, and dealing with what that means.
+You can now access one element or a range of elements, and replace a single element with a new value. But a list can also grow and shrink after it is created.
+
+Next, you will learn the methods that add and remove elements, and what it means for a list to be changeable.

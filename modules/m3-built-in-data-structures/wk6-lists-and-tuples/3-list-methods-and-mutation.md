@@ -1,100 +1,165 @@
 # List Methods and Mutation
 
-Assigning to `marks[1]` changed the list without creating a new one. That property has a name.
+A list created with three elements does not have to stay that way. Elements can be added, removed and replaced at any point while the program runs.
 
-A value is **mutable** if it can be changed in place, and **immutable** if it cannot. A list is mutable. Every type met so far — `int`, `float`, `str`, `bool` — is immutable, so this is the first type whose contents can genuinely be altered.
+> **Mutability means a value can be changed after it is created.** A list is mutable, so adding or removing an element changes the existing list rather than producing a new one.
 
-The distinction matters more than it first appears, and the second half of this topic shows why. First, the methods that do the changing.
+Integers, floats, strings and Booleans cannot be changed after they are created. Operations that appear to change them create a new value instead.
 
-## Adding Items
+So, what does changing a list actually look like? The most common change is adding an element.
 
-Three methods add to a list, and they differ in where and how much.
+## Adding an Element to the End
 
-`append()` adds one item at the end:
+The `append()` method adds one element to the end of a list.
+
+**Syntax**
+
+```
+list_name.append(element)
+```
+
+**Example**
 
 ```python
-items = ["a", "b"]
-items.append("c")
-print(items)
+marks = [87, 72]
+marks.append(95)
+print(marks)
 ```
 
 **Output:**
 
 ```
-['a', 'b', 'c']
+[87, 72, 95]
 ```
 
-`insert()` adds one item at a chosen position, pushing everything after it along:
+## Adding an Element at a Position
+
+The `insert()` method adds an element at a chosen index. Every element from that position onwards moves one place to the right.
+
+**Syntax**
+
+```
+list_name.insert(index, element)
+```
+
+**Example**
 
 ```python
-items = ["a", "b", "c"]
-items.insert(1, "x")
-print(items)
+marks = [87, 72, 95]
+marks.insert(1, 80)
+print(marks)
 ```
 
 **Output:**
 
 ```
-['a', 'x', 'b', 'c']
+[87, 80, 72, 95]
 ```
 
-`insert()` takes the index first and the value second. The new item ends up *at* that index.
+`80` went in at index `1`. The elements that were at `1` and `2` are now at `2` and `3`, so the list grew by one.
 
-`extend()` adds every item from another list:
+## Adding Several Elements
+
+The `extend()` method adds every element of another list to the end.
+
+**Syntax**
+
+```
+list_name.extend(other_list)
+```
+
+**Example**
 
 ```python
-items = ["a", "b"]
-items.extend(["c", "d"])
-print(items)
+marks = [87, 72]
+marks.extend([95, 60])
+print(marks)
+print(len(marks))
 ```
 
 **Output:**
 
 ```
-['a', 'b', 'c', 'd']
+[87, 72, 95, 60]
+4
 ```
 
-The difference between `extend()` and `append()` is easy to miss and easy to see:
+The length is `4`, because `extend()` added two separate elements.
+
+## append() and extend() Compared
+
+Both add to the end of a list, and they treat the value differently.
+
+**Example**
 
 ```python
-items = ["a", "b"]
-items.append(["c", "d"])
-print(items)
-print(len(items))
+first = [87, 72]
+first.append([95, 60])
+print(first)
+
+second = [87, 72]
+second.extend([95, 60])
+print(second)
 ```
 
 **Output:**
 
 ```
-['a', 'b', ['c', 'd']]
-3
+[87, 72, [95, 60]]
+[87, 72, 95, 60]
 ```
 
-`append()` added one item, and that item happens to be a list. `extend()` would have added two items. Use `extend()` to join lists and `append()` to add a single value.
+`append()` added the whole list as one element, which is why the output shows square brackets inside the outer ones. `extend()` added the elements of that list one by one.
 
-## Removing Items
+## Removing an Element by Value
 
-Three ways remove, and they differ in what you have to know.
+The `remove()` method deletes the first element that matches the value given.
 
-`remove()` removes by **value**, taking out the first match:
+**Syntax**
+
+```
+list_name.remove(value)
+```
+
+**Example**
 
 ```python
-items = ["a", "b", "c", "b"]
-items.remove("b")
-print(items)
+marks = [87, 72, 95]
+marks.remove(72)
+print(marks)
 ```
 
 **Output:**
 
 ```
-['a', 'c', 'b']
+[87, 95]
 ```
 
-Only the first `"b"` went. A value that is not present is an error:
+When the value appears more than once, only the first occurrence is removed.
+
+**Example**
 
 ```python
-items = ["a", "b"]
-items.remove("z")
+marks = [87, 72, 87]
+marks.remove(87)
+print(marks)
+```
+
+**Output:**
+
+```
+[72, 87]
+```
+
+The `87` at index `0` was removed. The one at the end is still there.
+
+If the value is not in the list, Python raises a `ValueError`.
+
+**Example**
+
+```python
+marks = [87, 72, 95]
+marks.remove(60)
 ```
 
 **Output:**
@@ -103,75 +168,95 @@ items.remove("z")
 ValueError: list.remove(x): x not in list
 ```
 
-`pop()` removes by **position**, and hands the removed value back:
+## Removing an Element by Position
+
+The `pop()` method removes the element at a given index and returns it.
+
+**Syntax**
+
+```
+list_name.pop(index)
+```
+
+**Example**
 
 ```python
-items = ["a", "b", "c"]
-last = items.pop()
+marks = [87, 72, 95]
+removed = marks.pop(1)
+print(removed)
+print(marks)
+```
+
+**Output:**
+
+```
+72
+[87, 95]
+```
+
+`pop()` differs from `remove()` in two ways. It takes a position rather than a value, and it gives back the element it removed, so the value can still be used.
+
+Called with no index at all, `pop()` removes the last element.
+
+**Example**
+
+```python
+marks = [87, 72, 95]
+last = marks.pop()
 print(last)
-print(items)
+print(marks)
 ```
 
 **Output:**
 
 ```
-c
-['a', 'b']
+95
+[87, 72]
 ```
 
-With no index, `pop()` takes the last item. With an index, it takes that one:
+## Deleting an Element with del
+
+The `del` statement removes the element at a given index. Unlike `pop()`, it returns nothing.
+
+**Syntax**
+
+```
+del list_name[index]
+```
+
+**Example**
 
 ```python
-items = ["a", "b", "c"]
-first = items.pop(0)
-print(first)
-print(items)
+marks = [87, 72, 95]
+del marks[0]
+print(marks)
 ```
 
 **Output:**
 
 ```
-a
-['b', 'c']
+[72, 95]
 ```
 
-`pop()` is the right choice when you need the value as well as its removal.
+`del` is a statement, not a method, so it is written before the list rather than after a dot.
 
-`del` is a statement rather than a method, and it deletes without returning anything:
+## Emptying a List
+
+The `clear()` method removes every element, leaving an empty list.
+
+**Syntax**
+
+```
+list_name.clear()
+```
+
+**Example**
 
 ```python
-items = ["a", "b", "c"]
-del items[1]
-print(items)
-```
-
-**Output:**
-
-```
-['a', 'c']
-```
-
-`del` can also delete a slice, which removes several items at once:
-
-```python
-items = ["a", "b", "c", "d", "e"]
-del items[1:3]
-print(items)
-```
-
-**Output:**
-
-```
-['a', 'd', 'e']
-```
-
-`clear()` empties the list completely:
-
-```python
-items = ["a", "b", "c"]
-items.clear()
-print(items)
-print(len(items))
+marks = [87, 72, 95]
+marks.clear()
+print(marks)
+print(len(marks))
 ```
 
 **Output:**
@@ -181,164 +266,101 @@ print(len(items))
 0
 ```
 
-The list still exists after `clear()`. It simply has nothing in it.
+The variable still holds a list. That list now has no elements.
 
-## Finding and Counting
+## Finding and Counting Elements
 
-`index()` reports the position of the first matching value:
+Two methods report on the contents of a list without changing it. `index()` gives the position of the first matching element, and `count()` gives the number of matching elements.
+
+**Syntax**
+
+```
+list_name.index(value)
+list_name.count(value)
+```
+
+**Example**
 
 ```python
-names = ["Anita", "Ravi", "Meera"]
-print(names.index("Ravi"))
+marks = [87, 72, 87]
+print(marks.index(87))
+print(marks.count(87))
 ```
 
 **Output:**
 
 ```
-1
-```
-
-Like `remove()`, it raises `ValueError` if the value is absent, so test with `in` first when the value might be missing.
-
-`count()` reports how many times a value appears, and returns `0` rather than an error when it appears not at all:
-
-```python
-votes = ["yes", "no", "yes", "yes"]
-print(votes.count("yes"))
-print(votes.count("maybe"))
-```
-
-**Output:**
-
-```
-3
 0
+2
 ```
 
-## Summary of the Methods
+`index()` returned `0`, the position of the first `87`. `count()` returned `2`, because the value appears twice.
 
-| Method | Does | Returns |
-| --- | --- | --- |
-| `append(value)` | adds one item at the end | nothing |
-| `insert(index, value)` | adds one item at `index` | nothing |
-| `extend(other)` | adds every item of `other` | nothing |
-| `remove(value)` | removes the first match | nothing |
-| `pop()` | removes the last item | the removed item |
-| `pop(index)` | removes the item at `index` | the removed item |
-| `clear()` | removes every item | nothing |
-| `index(value)` | finds the first match | its position |
-| `count(value)` | counts the matches | the count |
+If the value is not in the list, `index()` raises a `ValueError`.
 
-Every method in the top half changes the list and returns nothing. Only `pop()`, `index()` and `count()` give you a value back.
+## List Assignment and Shared Lists
 
-## Two Names, One List
+Mutability has a consequence worth understanding. Assigning a list to a second variable does not make a second list. Both names refer to the same list, so a change made through one name is visible through the other.
 
-Here is the consequence of mutability.
-
-Assignment does not copy a list. It gives the same list a second name:
+**Example**
 
 ```python
-first = [1, 2, 3]
+first = [87, 72]
 second = first
-second.append(4)
-print(second)
+second.append(95)
 print(first)
+print(second)
 ```
 
 **Output:**
 
 ```
-[1, 2, 3, 4]
-[1, 2, 3, 4]
+[87, 72, 95]
+[87, 72, 95]
 ```
 
-Only `second` was appended to, and `first` changed as well. It has to, because there is only one list:
+Only `second` was changed, and `first` shows the change as well. There is one list here, with two names pointing at it.
+
+## Copying a List
+
+The `copy()` method makes a separate list with the same elements. Changing one then leaves the other alone.
+
+**Syntax**
 
 ```
- first  ─┐
-         ├──▶  [1, 2, 3, 4]
- second ─┘
+list_name.copy()
 ```
 
-This never happened with numbers. `b = a` followed by `b = b + 1` leaves `a` alone, because `b + 1` builds a new number and rebinds the name. `second.append(4)` does not build anything new; it reaches into the existing list and changes it, and every name pointing at that list sees the change.
-
-## is Against ==
-
-Two questions can be asked about two lists, and they have different answers.
-
-`==` asks whether the contents match. `is` asks whether they are the same object:
+**Example**
 
 ```python
-first = [1, 2, 3]
-second = [1, 2, 3]
-print(first == second)
-print(first is second)
-```
-
-**Output:**
-
-```
-True
-False
-```
-
-Same contents, two separate lists. Changing one would not touch the other.
-
-Now with an assignment instead:
-
-```python
-first = [1, 2, 3]
-second = first
-print(first == second)
-print(first is second)
-```
-
-**Output:**
-
-```
-True
-True
-```
-
-Same contents, and one single list under two names. Changing it through either name changes what the other sees.
-
-Use `==` to compare values, which is almost always what you want. `is` answers a question about identity, and its one everyday use is `if value is None`.
-
-## Copying a List Properly
-
-To get a genuine second list, copy it. Three ways do the same job:
-
-```python
-first = [1, 2, 3]
+first = [87, 72]
 second = first.copy()
-third = first[:]
-fourth = list(first)
-
-second.append(4)
+second.append(95)
 print(first)
 print(second)
-print(first is second)
 ```
 
 **Output:**
 
 ```
-[1, 2, 3]
-[1, 2, 3, 4]
-False
+[87, 72]
+[87, 72, 95]
 ```
 
-`first` is untouched, because `second` is now a different list that started with the same contents.
+There are two lists now. `second` grew and `first` did not.
 
-## Passing a List to a Function
+## Changing a List Inside a Function
 
-The same rule applies when a list is passed into a function. The parameter becomes another name for the caller's list, so changes made inside are visible outside:
+When a list is passed to a function, the function receives access to the same list. Any change it makes is visible to the caller.
+
+**Example**
 
 ```python
 def add_bonus(scores):
-    scores.append(10)
+    scores.append(100)
 
-marks = [78, 91]
+marks = [87, 72]
 add_bonus(marks)
 print(marks)
 ```
@@ -346,37 +368,36 @@ print(marks)
 **Output:**
 
 ```
-[78, 91, 10]
+[87, 72, 100]
 ```
 
-The function returned nothing, and `marks` changed anyway. Nothing was copied on the way in.
+The function returned nothing, and `marks` changed anyway. This is the same behaviour as two names for one list, with the parameter acting as the second name.
 
-This is useful when it is intended and a genuine bug when it is not. If a function should leave its argument alone, copy inside it and return the new list:
+If a function should leave the caller's list unchanged, it can work on a copy.
 
-```python
-def with_bonus(scores):
-    updated = scores.copy()
-    updated.append(10)
-    return updated
+## Summary
 
-marks = [78, 91]
-result = with_bonus(marks)
-print(marks)
-print(result)
-```
+The key points about list methods and mutation:
 
-**Output:**
-
-```
-[78, 91]
-[78, 91, 10]
-```
-
-Decide which of the two a function is doing, and let its name say so. A name like `add_bonus` suggests it changes something; a name like `with_bonus` suggests it hands back something new.
+- A list is mutable, which means it can be changed after it is created.
+- `append()` adds one element to the end of a list.
+- `insert()` adds an element at a chosen index and moves the later elements along.
+- `extend()` adds every element of another list to the end.
+- `append()` adds a list as one element, while `extend()` adds its elements separately.
+- `remove()` deletes the first element matching a value, and raises a `ValueError` if the value is absent.
+- `pop()` removes the element at an index and returns it, or removes the last element if no index is given.
+- `del` removes the element at an index and returns nothing.
+- `clear()` removes every element, leaving an empty list.
+- `index()` gives the position of the first matching element, and `count()` gives how many match.
+- Assigning a list to another variable creates a second name for the same list, not a second list.
+- `copy()` creates a separate list with the same elements.
+- A list passed to a function can be changed by that function.
 
 ## Further Reading
 
-- **Official Python guide to data structures** — https://docs.python.org/3/tutorial/datastructures.html
-- **Mutable and immutable objects** — https://realpython.com/python-mutable-vs-immutable-types/
+- 📎 **List methods with worked examples** — https://www.programiz.com/python-programming/methods/list
+- 📎 **Official Python guide to lists** — https://docs.python.org/3/tutorial/datastructures.html
 
-You can now build a list, change it, and reason about who else sees those changes. Next, you will walk through a list one item at a time.
+A list can now be built, read, changed and emptied. But so far, the examples have added, removed or changed elements one operation at a time.
+
+Next, you will learn how to work through every element of a list in turn.

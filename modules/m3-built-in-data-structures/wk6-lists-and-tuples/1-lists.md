@@ -1,196 +1,253 @@
 # Lists
 
-Three test marks need storing:
+So far, each variable has held one value at a time. An `int` can hold one whole number, and a `str` can hold one piece of text. A list lets one variable hold many values together.
 
-```python
-mark_one = 78
-mark_two = 91
-mark_three = 64
-```
-
-Three values, three names. A class of forty needs forty names, and every calculation has to mention each one by hand. Worse, the number of names has to be decided while the program is being written, so the same program cannot handle a class of thirty-nine.
-
-A **list** solves this. It is one name holding many values, kept in order.
+> **A list is an ordered collection of values stored in a single variable.** Each value in a list is called an element. A list can hold any number of elements, and those elements may be of any data type.
 
 ## Creating a List
 
-A list is written as values separated by commas, inside square brackets:
+A list is written with square brackets, and its elements are separated by commas.
+
+**Example**
 
 ```python
-marks = [78, 91, 64]
+marks = [87, 72, 95]
 print(marks)
 ```
 
 **Output:**
 
 ```
-[78, 91, 64]
+[87, 72, 95]
 ```
 
-One name now holds all three values.
+One variable now holds three values. The output shows the values inside square brackets, separated by commas.
 
-Printing a list shows the brackets and the commas exactly as they were typed. That is how Python displays a list, and it is a quick way to see the whole thing at once.
+## Finding the Length of a List
 
-The values are held **in order**. `78` is first because it was written first, and that order does not change on its own.
+Once a list exists, the next thing a program usually needs is how many elements it holds. The `len()` function returns that number.
 
-## What a List Can Hold
+**Syntax**
 
-A list can hold values of any type:
-
-```python
-names = ["Anita", "Ravi", "Meera"]
-prices = [19.99, 5.50, 120.00]
-answers = [True, False, True]
+```
+len(list_name)
 ```
 
-The values do not have to be the same type as each other. A single list can mix them:
+**Example**
 
 ```python
-record = ["Anita", 21, 88.5, True]
-print(record)
+marks = [87, 72, 95]
+print(len(marks))
 ```
 
 **Output:**
 
 ```
-['Anita', 21, 88.5, True]
+3
 ```
 
-Notice that the string appears in quotes here. Printing a list prints each value the way you would type it in code, so strings keep their quotes. Printing a string on its own does not show them.
+`len()` is a built-in function, like `print()` and `int()`.
 
-Mixing types is allowed, but a list is usually clearest when every item means the same kind of thing: all marks, all names, all prices.
+## Lists of Strings
 
-## The Empty List
+The examples so far have used numbers, but lists can also hold strings. Strings go inside the brackets in the same way.
 
-A list can start with nothing in it:
+**Example**
 
 ```python
-scores = []
-print(scores)
+names = ["Asha", "Ravi", "Meera"]
+print(names)
+```
+
+**Output:**
+
+```
+['Asha', 'Ravi', 'Meera']
+```
+
+Python shows strings inside a list with quotation marks. This tells you the elements are strings.
+
+## Lists with Mixed Data Types
+
+The elements of a list do not have to be the same type. Integers, floating-point numbers, strings and Booleans can appear together in the same list.
+
+**Example**
+
+```python
+student = ["Asha", 87, 92.5, True]
+print(student)
+```
+
+**Output:**
+
+```
+['Asha', 87, 92.5, True]
+```
+
+Each element keeps its own type. In practice a list usually holds values of one type, such as a list of marks or a list of names.
+
+## The list Data Type
+
+The elements have their own types, and the list itself also has a type: `list`. It is a built-in data type in Python, alongside `int`, `float`, `str` and `bool`.
+
+**Example**
+
+```python
+marks = [87, 72, 95]
+print(type(marks))
+```
+
+**Output:**
+
+```
+<class 'list'>
+```
+
+## Order of Elements
+
+A list is ordered, which means its elements stay in the order you put them in unless the program changes that order.
+
+**Example**
+
+```python
+marks = [95, 72, 87]
+print(marks)
+```
+
+**Output:**
+
+```
+[95, 72, 87]
+```
+
+The highest mark was written first, so it stays first. The order is yours to decide.
+
+## Duplicate Elements
+
+The same value may appear in a list more than once.
+
+**Example**
+
+```python
+marks = [87, 72, 87]
+print(marks)
+print(len(marks))
+```
+
+**Output:**
+
+```
+[87, 72, 87]
+3
+```
+
+The value `87` appears twice, and the length is `3`. Each occurrence is a separate element, so both are counted.
+
+## Lists of Zero and One Element
+
+A list can contain zero elements, one element, or many elements.
+
+**Example**
+
+```python
+marks = []
+print(marks)
+print(len(marks))
+
+marks = [87]
+print(marks)
+print(len(marks))
 ```
 
 **Output:**
 
 ```
 []
-```
-
-An empty list is not an error and it is not `None`. It is a real list that happens to contain no values, which is exactly what you want before a program has collected anything.
-
-## Counting the Items
-
-The `len()` function reports how many items a list holds:
-
-```python
-marks = [78, 91, 64]
-print(len(marks))
-
-scores = []
-print(len(scores))
-```
-
-**Output:**
-
-```
-3
 0
+[87]
+1
 ```
 
-`len()` counts items, not characters. A list of three names has a length of `3` no matter how long the names are:
+An empty list is useful when the values will be added later. A list with one element is still a list because the value is inside square brackets. Without the brackets, `marks = 87` would create an integer.
+
+## Adding an Element to a List
+
+The `append()` method adds one element to the end of a list.
+
+**Syntax**
+
+```
+list_name.append(element)
+```
+
+**Example**
 
 ```python
-names = ["Anita", "Ravi", "Meera"]
-print(len(names))
+marks = [87, 72]
+marks.append(95)
+print(marks)
 ```
 
 **Output:**
 
 ```
-3
+[87, 72, 95]
 ```
 
-## Adding an Item with append
+The list had two elements and now has three. `append()` changes the existing list rather than creating a new one.
 
-The `append()` method adds one value to the end of a list:
+> **A method is an operation provided by a value and called using a dot after that value.** `marks.append(95)` calls the `append()` method on the list stored in `marks`.
 
-```python
-scores = []
-scores.append(78)
-scores.append(91)
-print(scores)
-print(len(scores))
-```
-
-**Output:**
-
-```
-[78, 91]
-2
-```
-
-Two points matter here.
-
-`append()` adds exactly one item, and always at the end. The list keeps its existing order and grows by one.
-
-`append()` changes the list itself. It does not produce a new list, and it does not need assigning to anything. Writing `scores = scores.append(78)` is a common early mistake and it destroys the list, because `append()` hands back nothing:
-
-```python
-scores = [78, 91]
-result = scores.append(64)
-print(result)
-```
-
-**Output:**
-
-```
-None
-```
-
-Call it on its own line and let it do its work.
+`len(marks)` calls a function and gives it the list as an argument. `marks.append(95)` calls a method that belongs to the list.
 
 ## Building a List in a Loop
 
-Together, the empty list and `append()` let a program build up a list as it goes:
+An empty list and `append()` let a loop keep every value it reads. A loop processes one value at a time, and the loop variable holds only the current value. Appending each value to a list keeps them all.
+
+**Example**
 
 ```python
-squares = []
-for number in range(1, 6):
-    squares.append(number * number)
-print(squares)
+marks = []
+for student in range(3):
+    mark = int(input("Marks: "))
+    marks.append(mark)
+
+print(marks)
+print("Students recorded:", len(marks))
 ```
 
 **Output:**
 
 ```
-[1, 4, 9, 16, 25]
+Marks: 87
+Marks: 72
+Marks: 95
+[87, 72, 95]
+Students recorded: 3
 ```
 
-The list started empty and gained one item per iteration. This is the standard shape for collecting results: create an empty list before the loop, append inside it, use the finished list after it.
+`mark` was replaced on every iteration. The list kept each value as it arrived, so all three are present when the loop ends.
 
-The same shape collects input:
+## Summary
 
-```python
-names = []
-for count in range(3):
-    name = input("Enter a name: ")
-    names.append(name)
-print(names)
-print("Names collected:", len(names))
-```
+The key points about lists:
 
-**Output:**
-
-```
-Enter a name: Anita
-Enter a name: Ravi
-Enter a name: Meera
-['Anita', 'Ravi', 'Meera']
-Names collected: 3
-```
+- A list is an ordered collection of values stored in a single variable.
+- Each value in a list is called an element.
+- A list is written with square brackets, and the elements are separated by commas.
+- `list` is a built-in data type, alongside `int`, `float`, `str` and `bool`.
+- The elements of a list may be of any data type, and a single list may mix types.
+- The elements stay in the order they were written unless the program changes that order.
+- The same value can appear more than once, and each occurrence counts as a separate element.
+- A list may hold zero elements, one element, or any number.
+- `len()` returns the number of elements in a list.
+- `append()` adds one element to the end of a list and changes the existing list.
 
 ## Further Reading
 
-- **Official Python guide to data structures** — https://docs.python.org/3/tutorial/datastructures.html
-- **Lists with worked examples** — https://www.programiz.com/python-programming/list
+- 📎 **Lists with worked examples** — https://www.programiz.com/python-programming/list
+- 📎 **Official Python guide to lists** — https://docs.python.org/3/tutorial/datastructures.html
 
-A list holds many values under one name and keeps them in order. Next, you will reach into that order and pull out a single value.
+A list holds many values, but you know only how to store them so far. How do you get one particular value—the first, last, or one in the middle?
+
+Next, you will learn how to access individual elements using their position.
