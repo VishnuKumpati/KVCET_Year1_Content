@@ -200,6 +200,7 @@ The list had two elements and now has three. `append()` changes the existing lis
 
 `len(marks)` calls a function and gives it the list as an argument. `marks.append(95)` calls a method that belongs to the list.
 
+A list has several other methods for adding and removing elements. They are covered in detail in a later topic.
 ## Building a List in a Loop
 
 An empty list and `append()` let a loop keep every value it reads. A loop processes one value at a time, and the loop variable holds only the current value. Appending each value to a list keeps them all.

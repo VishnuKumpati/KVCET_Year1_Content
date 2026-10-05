@@ -67,7 +67,7 @@ When a program tries to access an index that does not exist, Python raises an `I
 
 ## Negative Indexing
 
-Counting from the end is often more convenient than counting from the start. A negative index does this, with `-1` for the last element.
+An index can also be negative. A negative index counts from the end of the list, with `-1` for the last element, so the last element can be reached without knowing the length.
 
 ```
 marks     =   [ 87 , 72 , 95 ]

@@ -285,37 +285,45 @@ for mark in marks:
 95
 ```
 
-## Converting Between Lists and Tuples
+## Changing a Tuple After It Is Created
 
-`list()` makes a list from a tuple, and `tuple()` makes a tuple from a list. Neither changes the original.
+A tuple cannot be changed, so a program that needs to add a value has to work around that. The usual approach is to convert the tuple to a list, make the change there, and convert the result back to a tuple.
+
+The `list()` function creates a list from a tuple, and the `tuple()` function creates a tuple from a list.
 
 **Example**
 
 ```python
 marks = (87, 72, 95)
+
 as_list = list(marks)
 as_list.append(60)
-print(as_list)
-print(tuple(as_list))
+marks = tuple(as_list)
+
+print(marks)
+print(type(marks))
 ```
 
 **Output:**
 
 ```
-[87, 72, 95, 60]
 (87, 72, 95, 60)
+<class 'tuple'>
 ```
 
-The original tuple is not changed. A new tuple is created from the modified list.
+Three steps happened here. `list(marks)` created a list holding the same three values. `append()` added the fourth value to that list, which is allowed because a list is mutable. `tuple(as_list)` then created a new tuple from it.
 
-## Choosing Between a List and a Tuple
+The original tuple was never changed. The last line replaced what `marks` refers to with the new tuple, which is why the output shows four values.
 
-Both hold an ordered collection of values, and the choice comes down to whether the values should change.
+## Difference Between a List and a Tuple
 
-Use a list when elements will be added, removed or replaced, such as a list of marks being collected.
-
-Use a tuple when the values are fixed, such as a pair of coordinates or a set of configuration values. The immutability then protects the data, because any line that tries to change it raises an error instead of changing it quietly.
-
+| List | Tuple |
+| --- | --- |
+| Written with square brackets. | Written with round brackets. |
+| Mutable, so elements can be added, removed and replaced. | Immutable, so the elements are fixed once created. |
+| Provides methods such as `append()`, `remove()` and `sort()`. | Provides only `count()` and `index()`. |
+| Suited to data that grows, shrinks or changes. | Suited to data that must stay the same. |
+| A change is made directly on the list. | A change needs a new tuple to be created. |
 ## Summary
 
 The key points about tuples:

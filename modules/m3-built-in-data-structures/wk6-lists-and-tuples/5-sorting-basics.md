@@ -81,8 +81,15 @@ print(marks)
 ```
 
 Two lists exist now. The list `ordered` is sorted, while the list `marks` keeps its original order.
+## Difference Between sort() and sorted()
 
-Use `sort()` when the original order is no longer needed. Use `sorted()` when it is.
+| `sort()` | `sorted()` |
+| --- | --- |
+| A method, called on the list with a dot. |A function, called with the list inside its parentheses. |
+| Rearranges the existing list. | Creates a new list and leaves the original unchanged. |
+| Returns `None`. | Returns the sorted list. |
+| Available on lists only. | Works on other collection types as well. |
+| Used when the original order is no longer needed. | Used when the original order must be kept. |
 
 ## Sorting in Descending Order
 
