@@ -340,4 +340,4 @@ The key points about tuples:
 
 That completes lists and tuples. You can now store many values in one variable, reach any of them by position, change a list, keep a tuple fixed, and work through a collection with a loop.
 
-Next week you will meet collections that find values by name rather than by position.
+Next, you will learn about strings.
