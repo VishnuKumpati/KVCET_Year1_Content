@@ -1,117 +1,134 @@
 # Iteration
 
-A list holds many values, and most useful work visits all of them. A `for` loop walks a sequence one item at a time, and a list is a sequence, so the two fit together directly.
+A list contains many values. Iteration lets a program process those values one by one, without writing the same code repeatedly.
 
-## Looping over a List
+> **Iteration is the process of going through the elements of a list one at a time.** A `for` loop performs this automatically, taking each element in turn from the first to the last.
 
-The loop variable holds one item per iteration:
+## Looping Through a List
+
+A `for` loop takes the list name after the keyword `in`. On each iteration the loop variable holds one element.
+
+**Syntax**
+
+```
+for variable in list_name:
+    statements
+```
+
+**Example**
 
 ```python
-names = ["Anita", "Ravi", "Meera"]
-for name in names:
-    print("Welcome,", name)
+marks = [87, 72, 95]
+for mark in marks:
+    print(mark)
 ```
 
 **Output:**
 
 ```
-Welcome, Anita
-Welcome, Ravi
-Welcome, Meera
+87
+72
+95
 ```
 
-The loop ran three times because the list has three items, and it took them in order. Nothing had to state the length, and the same two lines work for a list of three hundred.
+The loop ran three times, once for each element. `mark` held `87` on the first iteration, `72` on the second and `95` on the third.
 
-The loop variable holds the **value**, not the position. This is what you want most of the time:
+The loop stops on its own at the end of the list. Nothing counts the elements, and the length never appears in the code. On an empty list the loop runs zero times and raises no error.
+
+## Collecting a Result from a List
+
+A variable created before the loop keeps its value across every iteration, which is how a total is built up.
+
+**Example**
 
 ```python
-marks = [78, 91, 64]
+marks = [87, 72, 95]
 total = 0
 for mark in marks:
     total = total + mark
 print("Total:", total)
-print("Average:", total / len(marks))
 ```
 
 **Output:**
 
 ```
-Total: 233
-Average: 77.66666666666667
+Total: 254
 ```
 
-## Membership with in and not in
+`total` started at `0` and grew on every iteration. It is created before the loop so its value can be carried from one iteration to the next.
 
-`in` tests whether a value is somewhere in a list, and gives back `True` or `False`:
+## Using a Condition Inside a Loop
+
+An `if` statement inside the loop body decides what happens for each element.
+
+**Example**
 
 ```python
-names = ["Anita", "Ravi", "Meera"]
-print("Ravi" in names)
-print("Sunil" in names)
+marks = [87, 30, 95, 20]
+passed = 0
+for mark in marks:
+    if mark >= 35:
+        passed = passed + 1
+print("Passed:", passed)
 ```
 
 **Output:**
 
 ```
-True
-False
+Passed: 2
 ```
 
-`not in` is the opposite test, and reads better than negating the whole expression:
-
-```python
-names = ["Anita", "Ravi"]
-if "Sunil" not in names:
-    names.append("Sunil")
-print(names)
-```
-
-**Output:**
-
-```
-['Anita', 'Ravi', 'Sunil']
-```
-
-`in` compares whole items, not parts of them. A list of names contains `"Ravi"`; it does not contain `"Rav"`.
-
-This is also the safe way to use `index()` and `remove()`, both of which raise `ValueError` on a missing value:
-
-```python
-names = ["Anita", "Ravi", "Meera"]
-if "Ravi" in names:
-    print(names.index("Ravi"))
-```
-
-**Output:**
-
-```
-1
-```
+The loop visited all four elements. `passed` was increased only on the two iterations where the condition was true.
 
 ## Looping with the Index
 
-Sometimes the position is needed as well as the value. `range(len(items))` produces every valid index:
+A `for` loop over a list gives the elements but not their positions. When the position is needed, the loop runs over `range(len(list_name))` instead.
+
+**Example**
 
 ```python
-names = ["Anita", "Ravi", "Meera"]
-for position in range(len(names)):
-    print(position, names[position])
+marks = [87, 72, 95]
+for position in range(len(marks)):
+    print(position, marks[position])
 ```
 
 **Output:**
 
 ```
-0 Anita
-1 Ravi
-2 Meera
+0 87
+1 72
+2 95
 ```
 
-`len(names)` is `3`, so `range(3)` gives `0`, `1`, `2` — exactly the valid indexes, and never one too many. This is also why `range()` excluding its stop value is convenient rather than awkward.
+`range(len(marks))` produced `0`, `1` and `2`, and each was used as an index.
 
-The positions are what make this form necessary. Changing items in place needs an index, because assigning to the loop variable changes only the variable:
+## Changing Elements Inside a Loop
+
+When you need to change elements while iterating, you can use their indexes. Assigning to the loop variable does not change the list.
+
+**Example**
 
 ```python
-marks = [78, 91, 64]
+marks = [87, 72, 95]
+for mark in marks:
+    mark = mark + 5
+print(marks)
+```
+
+**Output:**
+
+```
+[87, 72, 95]
+```
+
+Nothing changed. `mark` is a separate variable. Assigning a new value to it changes what `mark` refers to, not the element in the list.
+
+Assigning through the index changes the list itself.
+
+**Example**
+
+```python
+marks = [87, 72, 95]
 for position in range(len(marks)):
     marks[position] = marks[position] + 5
 print(marks)
@@ -120,15 +137,24 @@ print(marks)
 **Output:**
 
 ```
-[83, 96, 69]
+[92, 77, 100]
 ```
 
-## enumerate
+## Looping with enumerate()
 
-Numbering output by hand with `range(len(items))` works, but it reaches back into the list for every value. `enumerate()` hands over the position and the value together:
+`range(len(list_name))` gives the positions, but you then need to use each position to access the corresponding element. The `enumerate()` function gives both at once.
+
+**Syntax**
+
+```
+for position, variable in enumerate(list_name):
+    statements
+```
+
+**Example**
 
 ```python
-names = ["Anita", "Ravi", "Meera"]
+names = ["Asha", "Ravi", "Meera"]
 for position, name in enumerate(names):
     print(position, name)
 ```
@@ -136,138 +162,62 @@ for position, name in enumerate(names):
 **Output:**
 
 ```
-0 Anita
+0 Asha
 1 Ravi
 2 Meera
 ```
 
-Two loop variables appear, separated by a comma, because `enumerate()` produces a pair each time round.
+`enumerate()` gives two values on each iteration: the position and the element. `position` and `name` receive those two values.
 
-Counting from `0` is rarely what a reader wants to see, so `enumerate()` takes a starting number:
+## Removing Elements During a Loop
+
+A list should not be shortened while a loop is going through it. Removing an element moves the later elements along, and the loop skips the one that takes its place.
+
+**Example**
 
 ```python
-names = ["Anita", "Ravi", "Meera"]
-for number, name in enumerate(names, start=1):
-    print(number, name)
+marks = [87, 30, 20, 95]
+for mark in marks:
+    if mark < 35:
+        marks.remove(mark)
+print(marks)
 ```
 
 **Output:**
 
 ```
-1 Anita
-2 Ravi
-3 Meera
+[87, 20, 95]
 ```
 
-The `start` value changes only the number reported. It does not change which items are visited or in what order.
+The `20` should have been removed and was not. When `30` was removed, `20` moved into its position, and the loop had already moved past that position.
 
-Choose between the two forms by what the loop does. `enumerate()` when the position is only being displayed or reported; `range(len(items))` when items are being assigned to by index.
+The safe approach is to build a new list of the elements to keep.
 
-## zip
-
-Two lists that line up item for item can be walked together with `zip()`:
+**Example**
 
 ```python
-names = ["Anita", "Ravi", "Meera"]
-marks = [78, 91, 64]
-for name, mark in zip(names, marks):
-    print(name, "scored", mark)
+marks = [87, 30, 20, 95]
+kept = []
+for mark in marks:
+    if mark >= 35:
+        kept.append(mark)
+print(kept)
 ```
 
 **Output:**
 
 ```
-Anita scored 78
-Ravi scored 91
-Meera scored 64
+[87, 95]
 ```
 
-`zip()` pairs the first item of each list, then the second, and so on. It does the same job as looping over `range(len(names))` and indexing both lists, with less to get wrong.
+The original list is only read, never changed, so nothing is skipped.
 
-When the lists are different lengths, `zip()` stops at the end of the shorter one:
-
-```python
-names = ["Anita", "Ravi", "Meera"]
-marks = [78, 91]
-for name, mark in zip(names, marks):
-    print(name, mark)
-```
-
-**Output:**
-
-```
-Anita 78
-Ravi 91
-```
-
-`"Meera"` was silently dropped. No error is raised, so check the lengths yourself when they are meant to match.
-
-`zip()` takes more than two lists if needed, producing one item from each per iteration.
-
-## Do Not Change a List While Looping over It
-
-A `for` loop tracks its position in the list as it goes. Adding or removing items moves the remaining items, and the loop does not know about it.
-
-Here is a loop that should remove every even number:
-
-```python
-numbers = [2, 4, 6]
-for number in numbers:
-    if number % 2 == 0:
-        numbers.remove(number)
-print(numbers)
-```
-
-**Output:**
-
-```
-[4]
-```
-
-The list should be empty. What happened is that removing `2` shifted `4` and `6` down one position each, and the loop had already moved on to position `1` — which now held `6`, not `4`. `4` was skipped entirely, and the loop ran out of positions before reaching it again.
-
-Adding inside the loop is worse: a loop that appends to the list it is walking never finishes, because the list grows as fast as the loop advances.
-
-The rule is simple: do not add to or remove from a list while looping over it.
-
-There are two straightforward ways round it. Loop over a copy and change the original:
-
-```python
-numbers = [2, 4, 6]
-for number in numbers.copy():
-    if number % 2 == 0:
-        numbers.remove(number)
-print(numbers)
-```
-
-**Output:**
-
-```
-[]
-```
-
-Or build a new list of the items you want to keep, which avoids the problem instead of working around it:
-
-```python
-numbers = [2, 3, 4, 5, 6]
-odd_numbers = []
-for number in numbers:
-    if number % 2 != 0:
-        odd_numbers.append(number)
-print(odd_numbers)
-```
-
-**Output:**
-
-```
-[3, 5]
-```
-
-The second form is usually clearer, and it leaves the original list intact for anything else that needs it.
 
 ## Further Reading
 
-- **Official Python guide to control flow** — https://docs.python.org/3/tutorial/controlflow.html
-- **enumerate and zip in practice** — https://realpython.com/python-enumerate/
+- 📎 **Looping through lists with worked examples** — https://www.programiz.com/python-programming/list
+- 📎 **Official Python guide to lists** — https://docs.python.org/3/tutorial/datastructures.html
 
-You can now visit every item of a list, with or without its position, and walk two lists side by side. Next, you will meet a sequence that indexes and slices in exactly the same way but cannot be changed at all.
+A loop can now visit every element of a list, whatever its length. But sometimes you need the elements in a different order.
+
+Next, you will learn how to put a list in order.
