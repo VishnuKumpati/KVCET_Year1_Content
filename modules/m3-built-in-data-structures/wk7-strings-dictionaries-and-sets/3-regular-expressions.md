@@ -1,363 +1,383 @@
 # Regular Expressions
 
-String methods search for text you can write out in full. `find("cat")` needs the exact word. A great deal of real work is not like that: find every number in a line, check that an entry looks like an email address, split on any run of punctuation. The thing being searched for has a *shape*, not a spelling.
+When working with text, a program often needs to find specific information inside a larger string. You already know how to do this when the exact text is known.
 
-A **regular expression** describes that shape. It is a small pattern language, and the `re` module applies it.
+**Example**
+
+```python
+message = "Contact support on 9876543210 for help"
+print(message.find("9876543210"))
+```
+
+**Output:**
+
+```
+19
+```
+
+Here, `find()` works because the exact number is known.
+
+But suppose the program receives many messages, and each message contains a different ten-digit number:
+
+```
+Contact support on 9876543210 for help
+Contact support on 9123456789 for help
+Contact support on 8765432109 for help
+```
+
+The program still needs to find the number, but it cannot know the exact digits in advance. All it knows is that every number has ten digits in a row.
+
+This is where **regular expressions (regex)** become useful. Instead of searching for one exact piece of text, a regular expression lets you describe a pattern that the text should follow.
+
+For example:
+
+```
+\d{10}
+```
+
+means exactly ten digits in a row. It can therefore find `9876543210`, `9123456789`, or any other ten-digit sequence without knowing the actual digits beforehand.
+
+Python provides regular expressions through its built-in `re` module.
+
+```python
+import re
+```
+
+With the module imported, you can use Python's regular expression functions to search, extract, replace and split text based on patterns.
+
+## Writing a Pattern
+
+The pattern itself describes what to find. In Python, that pattern is written inside a string, and you will often see an `r` before the opening quotation mark.
+
+**Syntax**
+
+```
+r"pattern"
+```
+
+The `r` tells Python to treat backslashes as literal characters instead of interpreting them as Python escape sequences. This is useful because regular expressions use backslashes frequently.
+
+## Searching for a Pattern
+
+The `re.search()` function looks for the pattern anywhere in a string.
+
+**Syntax**
+
+```
+re.search(pattern, string)
+```
+
+**Example**
 
 ```python
 import re
 
-print(re.findall(r"\d+", "Order 17 shipped on day 3"))
+text = "Call 9876543210 today"
+match = re.search(r"\d{10}", text)
+print(match.group())
+print(match.start())
 ```
 
 **Output:**
 
 ```
-['17', '3']
-```
-
-`\d+` means "one or more digits". No string method can express that.
-
-## Raw Strings
-
-Patterns are written as raw strings — a normal string with `r` in front:
-
-```python
-print("a\tb")
-print(r"a\tb")
-```
-
-**Output:**
-
-```
-a	b
-a\tb
-```
-
-Without the `r`, Python interprets the backslash first and the pattern never sees it. Since patterns are full of backslashes, write every one as `r"..."` and the question never arises.
-
-## Searching
-
-`re.search()` looks for the pattern anywhere in the string. It returns a **match object** when it finds one, and `None` when it does not:
-
-```python
-import re
-
-result = re.search(r"\d+", "Room 214 is free")
-print(result.group())
-print(result.start())
-
-print(re.search(r"\d+", "No numbers here"))
-```
-
-**Output:**
-
-```
-214
+9876543210
 5
+```
+
+`re.search()` returns a match object. `group()` gives the text that matched, and `start()` gives the index where it begins.
+
+When nothing matches, the function returns `None`.
+
+**Example**
+
+```python
+import re
+
+text = "Call today"
+match = re.search(r"\d{10}", text)
+print(match)
+```
+
+**Output:**
+
+```
 None
 ```
 
-`group()` gives the matched text and `start()` gives its position. Because a failed search returns `None`, the result is tested before it is used:
+Calling `group()` on `None` would raise an error, so the result is checked first.
+
+**Example**
 
 ```python
 import re
 
-line = "Temperature: 31 degrees"
-found = re.search(r"\d+", line)
+text = "Call today"
+match = re.search(r"\d{10}", text)
 
-if found:
-    print("Number found:", found.group())
+if match:
+    print("Found:", match.group())
 else:
-    print("No number in that line.")
+    print("No number found")
 ```
 
 **Output:**
 
 ```
-Number found: 31
+No number found
 ```
-
-Calling `group()` on `None` raises `AttributeError`, which is the usual first mistake with this module.
-
-## What the Symbols Mean
-
-A pattern is ordinary characters, which match themselves, mixed with special ones.
-
-These match one character of a kind:
-
-| Pattern | Matches |
-| --- | --- |
-| `\d` | one digit |
-| `\w` | one letter, digit or underscore |
-| `\s` | one space, tab or newline |
-| `.` | any character except a newline |
-| `[aeiou]` | any one character listed |
-| `[a-z]` | any one character in the range |
-| `[^0-9]` | any one character *not* listed |
-
-```python
-import re
-
-print(re.findall(r"[aeiou]", "programming"))
-print(re.findall(r"[A-Z]", "Anita and Ravi Met"))
-print(re.findall(r"\w", "a-b c"))
-```
-
-**Output:**
-
-```
-['o', 'a', 'i']
-['A', 'R', 'M']
-['a', 'b', 'c']
-```
-
-These say how many times the thing before them repeats:
-
-| Pattern | Means |
-| --- | --- |
-| `*` | zero or more |
-| `+` | one or more |
-| `?` | zero or one |
-| `{3}` | exactly three |
-| `{2,4}` | two to four |
-
-```python
-import re
-
-print(re.findall(r"\d+", "a1 b22 c333"))
-print(re.findall(r"\d{3}", "a1 b22 c333"))
-print(re.findall(r"colou?r", "color and colour"))
-```
-
-**Output:**
-
-```
-['1', '22', '333']
-['333']
-['color', 'colour']
-```
-
-`\d+` took each run of digits whole rather than one digit at a time, because a quantifier takes as much as it can.
-
-And these fix the position rather than matching a character:
-
-| Pattern | Means |
-| --- | --- |
-| `^` | start of the string |
-| `$` | end of the string |
-
-```python
-import re
-
-print(bool(re.search(r"^Total", "Total: 91")))
-print(bool(re.search(r"^Total", "Subtotal: 91")))
-print(bool(re.search(r"\d$", "Total: 91")))
-```
-
-**Output:**
-
-```
-True
-False
-True
-```
-
-## Matching the Whole String
-
-Validation asks whether the *entire* entry has the right shape, not whether some part of it does. `re.fullmatch()` asks that question:
-
-```python
-import re
-
-print(bool(re.fullmatch(r"\d{6}", "560001")))
-print(bool(re.fullmatch(r"\d{6}", "5600012")))
-print(bool(re.search(r"\d{6}", "5600012")))
-```
-
-**Output:**
-
-```
-True
-False
-True
-```
-
-The last line is the trap: `search()` found six digits inside a seven-digit entry and reported success. Use `fullmatch()` to validate and `search()` to find.
-
-```python
-import re
-
-def valid_email(text):
-    return bool(re.fullmatch(r"[\w.]+@[\w]+\.[a-z]{2,}", text))
-
-print(valid_email("anita@example.com"))
-print(valid_email("anita@example"))
-print(valid_email("not an address"))
-```
-
-**Output:**
-
-```
-True
-False
-False
-```
-
-That pattern is deliberately simple. Genuinely validating an email address is far harder than it looks, and the practical rule is to check for an obvious shape and let a confirmation message do the rest.
 
 ## Finding Every Match
 
-`re.findall()` returns a list of every match, and an empty list when there are none:
+`re.search()` stops at the first match. The `re.findall()` function returns every match as a list.
+
+**Syntax**
+
+```
+re.findall(pattern, string)
+```
+
+**Example**
 
 ```python
 import re
 
-log = "GET /home 200, GET /about 404, POST /login 500"
-print(re.findall(r"\d{3}", log))
-print(re.findall(r"/\w+", log))
+text = "Call 9876543210 or 9123456789"
+print(re.findall(r"\d{10}", text))
 ```
 
 **Output:**
 
 ```
-['200', '404', '500']
-['/home', '/about', '/login']
+['9876543210', '9123456789']
 ```
 
-A list comes back, so every list operation applies to it.
+An empty list is returned when nothing matches, so there is no `None` to check for.
 
-## Capturing Parts of a Match
+## Common Pattern Symbols
 
-Parentheses mark a part of the pattern worth keeping on its own. Each pair is a **group**, numbered from one:
+You have already used `\d` to represent a digit. Regular expressions provide other symbols for describing different kinds of characters.
 
-```python
-import re
-
-entry = "Anita scored 91"
-found = re.search(r"(\w+) scored (\d+)", entry)
-
-print(found.group())
-print(found.group(1))
-print(found.group(2))
-```
-
-**Output:**
-
-```
-Anita scored 91
-Anita
-91
-```
-
-`group()` with no argument is the whole match; `group(1)` is the first pair of parentheses. This pulls fields out of text with a known layout:
-
-```python
-import re
-
-for line in ["16-09-2026", "01-01-2027"]:
-    parts = re.search(r"(\d{2})-(\d{2})-(\d{4})", line)
-    print(parts.group(3), parts.group(2), parts.group(1))
-```
-
-**Output:**
-
-```
-2026 09 16
-2027 01 01
-```
-
-When the pattern has groups, `findall()` returns the groups rather than the whole match:
-
-```python
-import re
-
-text = "Anita scored 91, Ravi scored 78"
-print(re.findall(r"(\w+) scored (\d+)", text))
-```
-
-**Output:**
-
-```
-[('Anita', '91'), ('Ravi', '78')]
-```
-
-One tuple per match, one item per group. Note that `'91'` is a string — a pattern matches text and returns text, so converting with `int()` is still your job.
-
-## Replacing and Splitting
-
-`re.sub()` is `replace()` for patterns:
-
-```python
-import re
-
-print(re.sub(r"\s+", " ", "too   many     spaces"))
-print(re.sub(r"\d", "#", "Card 4213 8890"))
-```
-
-**Output:**
-
-```
-too many spaces
-Card #### ####
-```
-
-Collapsing runs of whitespace is the common use, and `replace()` cannot do it because the runs differ in length.
-
-`re.split()` is `split()` for patterns, which allows several separators at once:
-
-```python
-import re
-
-print(re.split(r"[,;]\s*", "apples, pears;plums, figs"))
-```
-
-**Output:**
-
-```
-['apples', 'pears', 'plums', 'figs']
-```
-
-## Summary of the Functions
-
-| Function | Returns |
+| Pattern | Matches |
 | --- | --- |
-| `re.search(pattern, text)` | a match object, or `None` |
-| `re.fullmatch(pattern, text)` | a match object if the whole string fits, else `None` |
-| `re.findall(pattern, text)` | a list of every match |
-| `re.sub(pattern, new, text)` | the text with matches replaced |
-| `re.split(pattern, text)` | a list of pieces |
+| `\d` | any digit |
+| `\w` | a word character, such as a letter, digit or underscore |
+| `\s` | a whitespace character, such as a space, tab or newline |
+| `.` | almost any character |
 
-Only `search()` and `fullmatch()` return something that needs testing for `None`. The other three always return a list or a string.
-
-## When Not to Use One
-
-A regular expression is compact and hard to read, including for the person who wrote it. The rule is to reach for one only when string methods cannot do the job:
+**Example**
 
 ```python
 import re
 
-filename = "report.pdf"
-
-print(filename.endswith(".pdf"))
-print(bool(re.search(r"\.pdf$", filename)))
+text = "Room 7B has 25 seats"
+print(re.findall(r"\d", text))
 ```
 
 **Output:**
 
 ```
-True
-True
+['7', '2', '5']
 ```
 
-Both work; the first is obviously correct at a glance. Use `in`, `startswith()`, `endswith()`, `split()` and `replace()` where they fit, and a pattern where the target has a shape rather than a spelling.
+Each `\d` matched one digit, which is why `25` appears as two separate results.
 
-When you do write one, test it against the strings that should *fail* as well as the ones that should match. A pattern that is slightly too generous matches things you never intended, and that failure is silent.
+The dot matches almost any character.
+
+**Example**
+
+```python
+import re
+
+print(re.findall(r"c.t", "cat cot cut ct"))
+```
+
+**Output:**
+
+```
+['cat', 'cot', 'cut']
+```
+
+`ct` did not match, because the dot requires one character between the `c` and the `t`.
+
+## Choosing Your Own Characters
+
+Square brackets hold a set of characters, and any one of them matches. A dash inside the brackets gives a range.
+
+**Example**
+
+```python
+import re
+
+text = "cat bat rat mat"
+print(re.findall(r"[cb]at", text))
+print(re.findall(r"[a-z]at", text))
+```
+
+**Output:**
+
+```
+['cat', 'bat']
+['cat', 'bat', 'rat', 'mat']
+```
+
+`[cb]` matched a `c` or a `b`. `[a-z]` matched any lowercase letter.
+
+## Saying How Many
+
+A **quantifier** controls how many times the part before it may repeat.
+
+| Quantifier | Meaning |
+| --- | --- |
+| `{n}` | exactly n times |
+| `{n,m}` | between n and m times |
+| `+` | one or more times |
+| `*` | zero or more times |
+| `?` | zero or one time |
+
+**Example**
+
+```python
+import re
+
+text = "Marks: 7, 25, 100"
+print(re.findall(r"\d+", text))
+print(re.findall(r"\d{2}", text))
+```
+
+**Output:**
+
+```
+['7', '25', '100']
+['25', '10']
+```
+
+`\d+` matched each run of digits as one result, whatever its length. `\d{2}` matches exactly two digits at a time. So `25` matches completely, while in `100`, the first two digits `10` form a match.
+
+## Replacing by Pattern
+
+The `re.sub()` function replaces every match with the given text and returns a new string.
+
+**Syntax**
+
+```
+re.sub(pattern, replacement, string)
+```
+
+**Example**
+
+```python
+import re
+
+text = "Call 9876543210 or 9123456789"
+print(re.sub(r"\d{10}", "XXXXXXXXXX", text))
+print(text)
+```
+
+**Output:**
+
+```
+Call XXXXXXXXXX or XXXXXXXXXX
+Call 9876543210 or 9123456789
+```
+
+The original string is unchanged, exactly as with `replace()`. The difference is that `replace()` needs the exact digits, and `re.sub()` needs only the pattern.
+
+## Splitting by Pattern
+
+The `re.split()` function splits a string wherever the pattern matches.
+
+**Syntax**
+
+```
+re.split(pattern, string)
+```
+
+**Example**
+
+```python
+import re
+
+text = "87, 72;95  60"
+print(re.split(r"[,;\s]+", text))
+```
+
+**Output:**
+
+```
+['87', '72', '95', '60']
+```
+
+The separators are inconsistent, with commas, a semicolon and spaces. `[,;\s]+` matches one or more commas, semicolons or whitespace characters in a row, so one call handles all of them. The `split()` method could not, because it takes only one fixed separator.
+
+## Matching the Whole String
+
+Two symbols fix a pattern to the ends of the string. `^` marks the beginning and `$` marks the end.
+
+**Example**
+
+```python
+import re
+
+for value in ["9876543210", "98765432101", "call 9876543210"]:
+    match = re.search(r"^\d{10}$", value)
+    if match:
+        print(value, "is valid")
+    else:
+        print(value, "is not valid")
+```
+
+**Output:**
+
+```
+9876543210 is valid
+98765432101 is not valid
+call 9876543210 is not valid
+```
+
+The first value is exactly ten digits. The second has eleven. The third contains ten digits but has other text around them, so the pattern does not match the whole string.
+
+This is how typed input is checked. Without `^` and `$`, `re.search()` could find ten digits anywhere inside the text, even when other characters appear before or after them.
+
+## When to Use a String Method Instead
+
+A regular expression is the right tool when the text follows a pattern rather than being fixed, such as a phone number, a date or a code. It is the wrong tool when the text is known.
+
+Checking whether a sentence contains the word `simple` needs `in` or `find()`, not a pattern. A string method is easier to read and easier to get right.
+
+## Symbol Reference
+
+Every symbol used in this topic, with what it does and why it is needed.
+
+| Symbol | Matches | Used for | Example |
+| --- | --- | --- | --- |
+| `\d` | any digit | numbers whose digits are not known | `\d{10}` finds a phone number |
+| `\w` | a letter, digit or underscore | words and codes | `\w+` finds each word |
+| `\s` | a space, tab or newline | the gaps between values | `\s+` matches any run of spaces |
+| `.` | almost any character | one character whose value does not matter | `c.t` finds `cat` and `cot` |
+| `[abc]` | any one character listed | a small set of allowed characters | `[cb]at` finds `cat` and `bat` |
+| `[a-z]` | any one character in the range | letters or digits within limits | `[a-z]at` finds any lowercase letter before `at` |
+| `{n}` | exactly n repeats | values of a fixed length | `\d{10}` requires ten digits |
+| `{n,m}` | between n and m repeats | values of a varying length | `\d{1,3}` matches one to three digits |
+| `+` | one or more repeats | a run of unknown length | `\d+` matches a whole number |
+| `*` | zero or more repeats | a part that may be absent | `\d*` matches digits or nothing |
+| `?` | zero or one repeat | an optional character | `-?` matches an optional dash |
+| `^` | the start of the string | checking a value from its beginning | `^\d` requires a digit first |
+| `$` | the end of the string | checking a value to its end | `\d$` requires a digit last |
 
 ## Further Reading
 
-- **Official `re` module reference** — https://docs.python.org/3/library/re.html
-- **Regular expressions explained step by step** — https://realpython.com/regex-python/
-- **Build and test a pattern interactively** — https://regex101.com/
+- 📎 **Regular expressions with worked examples** — https://www.programiz.com/python-programming/regex
+- 📎 **Official Python guide to regular expressions** — https://docs.python.org/3/howto/regex.html
 
-Patterns find and reshape text by its structure. Next, you will build text for display, replacing the comma-separated `print()` calls used so far.
+You can now find, replace and split text even when the exact text is not known in advance. But once you have found the information you need, you often need to show it in a readable message.
+
+For example, a program may find a student's name and marks and then need to display:
+
+```
+Student: Asha, Marks: 87
+```
+
+Using `+` and `str()` works, but it becomes harder to read when a message contains several values.
+
+Next, you will learn f-strings, which make it much easier to put values directly inside a string.

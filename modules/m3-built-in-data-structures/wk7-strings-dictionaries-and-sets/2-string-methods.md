@@ -1,133 +1,96 @@
 # String Methods
 
-A string is immutable, so no method changes one. Every method here reads the string it is called on and returns something new, leaving the original exactly as it was. Keep the result or lose it.
+A string cannot be changed, so a method never alters the string it is called on. Methods that transform text return a new string. Methods that answer a question return a number or a Boolean.
+
+This rule explains why the methods in this topic never change the original string.
+
+## Changing the Case of a String
+
+Four methods change the capitalization of a string.
+
+| Method | Returns |
+| --- | --- |
+| `upper()` | every letter in uppercase |
+| `lower()` | every letter in lowercase |
+| `title()` | the first letter of every word in uppercase |
+| `capitalize()` | the first letter of the string in uppercase, the rest lowercase |
+
+**Example**
 
 ```python
-name = "anita"
-name.upper()
+name = "python Programming"
+print(name.upper())
+print(name.lower())
+print(name.title())
+print(name.capitalize())
 print(name)
 ```
 
 **Output:**
 
 ```
-anita
+PYTHON PROGRAMMING
+python programming
+Python Programming
+Python programming
+python Programming
 ```
 
-Nothing happened, because nothing was kept. The uppercase string was built and immediately discarded. Assign it:
+The last line shows the original string, unchanged. Each method returned a new string and left `name` alone.
+
+`lower()` is useful when comparing text that a person typed, because `"Yes"` and `"yes"` are different strings and converting both to lowercase makes them match.
+
+## Removing Spaces from the Ends
+
+Typed input often carries spaces at the start or the end. Three methods remove them.
+
+| Method | Removes spaces from |
+| --- | --- |
+| `strip()` | both ends |
+| `lstrip()` | the left end |
+| `rstrip()` | the right end |
+
+**Example**
 
 ```python
-name = "anita"
-name = name.upper()
-print(name)
+answer = "  yes  "
+print("[" + answer.strip() + "]")
+print("[" + answer.lstrip() + "]")
+print("[" + answer.rstrip() + "]")
 ```
 
 **Output:**
 
 ```
-ANITA
+[yes]
+[yes  ]
+[  yes]
 ```
 
-That pattern applies to every method below.
+The square brackets are printed only to make the spaces visible. None of these methods touches spaces inside the text.
 
-## Changing Case
+## Searching Inside a String
 
-Four methods produce differently cased versions:
+Four methods report on what a string contains. None of them changes it.
+
+**Syntax**
+
+```
+string_name.find(text)
+string_name.count(text)
+string_name.startswith(text)
+string_name.endswith(text)
+```
+
+`find()` returns the index where the text begins, or `-1` when the text is absent. `count()` returns how many times the text appears.
+
+**Example**
 
 ```python
-text = "python is readable"
-print(text.upper())
-print(text.lower())
-print(text.title())
-print(text.capitalize())
-```
-
-**Output:**
-
-```
-PYTHON IS READABLE
-python is readable
-Python Is Readable
-Python is readable
-```
-
-`title()` capitalises every word. `capitalize()` capitalises the first character of the string and lowercases everything else. The difference matters for names against sentences.
-
-`lower()` is how case-insensitive comparison is done. Compare the converted forms rather than the originals:
-
-```python
-answer = "YES"
-if answer.lower() == "yes":
-    print("Confirmed")
-```
-
-**Output:**
-
-```
-Confirmed
-```
-
-This handles `"yes"`, `"Yes"`, `"YES"` and `"yEs"` with one test.
-
-## Removing Whitespace
-
-Text typed by a person often carries stray spaces at the ends. `strip()` removes whitespace from both ends:
-
-```python
-entry = "   anita   "
-print("[" + entry + "]")
-print("[" + entry.strip() + "]")
-```
-
-**Output:**
-
-```
-[   anita   ]
-[anita]
-```
-
-The brackets are there only to make the spaces visible.
-
-`lstrip()` and `rstrip()` remove from one end only:
-
-```python
-entry = "   anita   "
-print("[" + entry.lstrip() + "]")
-print("[" + entry.rstrip() + "]")
-```
-
-**Output:**
-
-```
-[anita   ]
-[anita   ]
-```
-
-Whitespace inside the string is never touched. `strip()` works on the ends.
-
-Given an argument, these methods remove those characters instead of whitespace:
-
-```python
-line = "###heading###"
-print(line.strip("#"))
-```
-
-**Output:**
-
-```
-heading
-```
-
-Stripping input before using it removes a whole class of bug, where `"anita "` fails to match `"anita"` for no visible reason.
-
-## Searching
-
-`find()` reports the position where a piece of text starts:
-
-```python
-sentence = "Python is readable"
+sentence = "Python is simple"
 print(sentence.find("is"))
-print(sentence.find("java"))
+print(sentence.find("Java"))
+print(sentence.count("i"))
 ```
 
 **Output:**
@@ -135,15 +98,18 @@ print(sentence.find("java"))
 ```
 7
 -1
+2
 ```
 
-A missing piece gives `-1` rather than an error, so `find()` can be used as a test as well as a locator.
+`is` begins at index `7`. `Java` is not in the string, so `find()` returned `-1` rather than raising an error.
 
-`index()` does the same search and raises an error instead:
+The `index()` method does the same as `find()`, except that it raises an error when the text is absent.
+
+**Example**
 
 ```python
-sentence = "Python is readable"
-print(sentence.index("java"))
+sentence = "Python is simple"
+print(sentence.index("Java"))
 ```
 
 **Output:**
@@ -152,30 +118,16 @@ print(sentence.index("java"))
 ValueError: substring not found
 ```
 
-Use `find()` when absence is expected and `index()` when absence means something has gone wrong.
+Use `find()` when the text may be missing, and `index()` when it should always be there.
 
-`count()` reports how many times a piece appears:
+`startswith()` and `endswith()` return a Boolean.
 
-```python
-print("banana".count("a"))
-print("banana".count("na"))
-print("banana".count("z"))
-```
-
-**Output:**
-
-```
-3
-2
-0
-```
-
-`startswith()` and `endswith()` test the ends and return `True` or `False`:
+**Example**
 
 ```python
-filename = "report.pdf"
-print(filename.endswith(".pdf"))
-print(filename.startswith("report"))
+name = "Python"
+print(name.startswith("Py"))
+print(name.endswith("on"))
 ```
 
 **Output:**
@@ -185,159 +137,135 @@ True
 True
 ```
 
-These are clearer than slicing for the same job. `filename[-4:] == ".pdf"` works, but it makes the reader count characters.
+## Replacing Text
 
-## Replacing
+The `replace()` method returns a new string with one piece of text swapped for another.
 
-`replace()` returns a new string with every occurrence swapped:
+**Syntax**
+
+```
+string_name.replace(old_text, new_text)
+string_name.replace(old_text, new_text, count)
+```
+
+**Example**
 
 ```python
-text = "one two one"
-print(text.replace("one", "1"))
-print(text)
+sentence = "Python is simple"
+print(sentence.replace("simple", "powerful"))
+print(sentence)
 ```
 
 **Output:**
 
 ```
-1 two 1
-one two one
+Python is powerful
+Python is simple
 ```
 
-Every match was replaced, and the original is untouched. A third argument limits how many:
+Every occurrence is replaced unless a third argument limits how many.
+
+**Example**
 
 ```python
-text = "one two one"
-print(text.replace("one", "1", 1))
+print("a-b-a-b".replace("a", "x", 1))
 ```
 
 **Output:**
 
 ```
-1 two one
+x-b-a-b
 ```
 
-Replacing with an empty string deletes:
+Only the first `a` changed, because the count was `1`.
+
+## Splitting a String into a List
+
+The `split()` method breaks a string apart and returns the pieces as a list.
+
+**Syntax**
+
+```
+string_name.split()
+string_name.split(separator)
+```
+
+With no argument, it splits at the spaces.
+
+**Example**
 
 ```python
-number = "98-765-4321"
-print(number.replace("-", ""))
-```
-
-**Output:**
-
-```
-987654321
-```
-
-## Splitting and Joining
-
-`split()` cuts a string into a list:
-
-```python
-line = "Anita,Ravi,Meera"
-names = line.split(",")
-print(names)
-print(len(names))
-```
-
-**Output:**
-
-```
-['Anita', 'Ravi', 'Meera']
-3
-```
-
-The separator is removed and does not appear in any of the pieces.
-
-With no argument, `split()` splits on whitespace and treats any run of it as one separator:
-
-```python
-sentence = "Python   is    readable"
+sentence = "Python is simple"
 print(sentence.split())
 ```
 
 **Output:**
 
 ```
-['Python', 'is', 'readable']
+['Python', 'is', 'simple']
 ```
 
-No empty strings appear between the words. Splitting a sentence into words is the common use, and it makes every list operation available on text:
+With an argument, it splits at that text instead.
+
+**Example**
 
 ```python
-sentence = "python is readable and python is popular"
-words = sentence.split()
-print("Words:", len(words))
-print("python appears", words.count("python"), "times")
+print("87,72,95".split(","))
 ```
 
 **Output:**
 
 ```
-Words: 7
-python appears 2 times
+['87', '72', '95']
 ```
 
-`join()` is the reverse, building one string out of a list. It is called on the separator, which reads backwards the first few times:
+The elements are strings, even when they look like numbers. Each one needs `int()` before it can be used in a calculation.
+
+## Joining a List into a String
+
+The `join()` method does the opposite. It is called on the separator, and takes the list as its argument.
+
+**Syntax**
+
+```
+separator.join(list_name)
+```
+
+**Example**
 
 ```python
-names = ["Anita", "Ravi", "Meera"]
-print(", ".join(names))
-print(" and ".join(names))
-print("".join(names))
+words = ["Python", "is", "simple"]
+print(" ".join(words))
+print("-".join(words))
 ```
 
 **Output:**
 
 ```
-Anita, Ravi, Meera
-Anita and Ravi and Meera
-AnitaRaviMeera
+Python is simple
+Python-is-simple
 ```
 
-Read `", ".join(names)` as "put a comma and a space between the items of `names`". The separator has to be the one doing the joining, because that is the string whose contents go between the items.
+The method is called on the separator because the separator is what goes between the elements.
 
-Every item must already be a string:
+Every element of the list must be a string.
+
+## Testing What a String Contains
+
+Three methods return a Boolean describing the characters in a string.
+
+| Method | Returns `True` when |
+| --- | --- |
+| `isdigit()` | every character is a digit |
+| `isalpha()` | every character is a letter |
+| `isspace()` | every character is a space |
+
+**Example**
 
 ```python
-marks = [78, 91, 64]
-print(", ".join(marks))
-```
-
-**Output:**
-
-```
-TypeError: sequence item 0: expected str instance, int found
-```
-
-Convert first:
-
-```python
-marks = [78, 91, 64]
-pieces = []
-for mark in marks:
-    pieces.append(str(mark))
-print(", ".join(pieces))
-```
-
-**Output:**
-
-```
-78, 91, 64
-```
-
-`split()` and `join()` together are how text becomes data and data becomes text again. Splitting a line into fields, working on the fields as a list, then joining them back is the shape of a great deal of real text processing.
-
-## Testing the Contents
-
-Three methods report what kind of characters a string holds. Each returns `True` or `False`:
-
-```python
-print("12345".isdigit())
-print("12.5".isdigit())
-print("abc".isalpha())
-print("abc1".isalpha())
+print("87".isdigit())
+print("8a".isdigit())
+print("Asha".isalpha())
 print("   ".isspace())
 ```
 
@@ -347,53 +275,56 @@ print("   ".isspace())
 True
 False
 True
-False
 True
 ```
 
-`isdigit()` is `False` for `"12.5"` because `.` is not a digit, and `isalpha()` is `False` for `"abc1"` for the matching reason. Each method requires *every* character to qualify. An empty string returns `False` from all of them.
+`isdigit()` can be used to check typed input before converting it with `int()`.
 
-`isdigit()` is the standard guard before converting input, because `int()` raises `ValueError` on anything else:
+## Calling Methods One After Another
+
+A method that returns a string can have another method called on its result straight away. This is called chaining.
+
+**Example**
 
 ```python
-answer = input("Enter your age: ")
-if answer.isdigit():
-    age = int(answer)
-    print("Next year you will be", age + 1)
-else:
-    print("That is not a whole number.")
+answer = "  YES  "
+print(answer.strip().lower())
 ```
 
 **Output:**
 
 ```
-Enter your age: 21
-Next year you will be 22
+yes
 ```
 
-Note that `isdigit()` rejects negative numbers as well as decimals, since `-` and `.` are not digits.
+`strip()` ran first and returned `"YES"`. `lower()` was then called on that result and returned `"yes"`.
 
-## Summary of the Methods
+This pattern is how typed input is usually prepared before it is compared.
 
-| Method | Returns |
-| --- | --- |
-| `upper()`, `lower()` | the string in one case |
-| `title()`, `capitalize()` | the string with capitals at word or sentence start |
-| `strip()`, `lstrip()`, `rstrip()` | the string with ends trimmed |
-| `find(piece)` | the first position, or `-1` |
-| `index(piece)` | the first position, or `ValueError` |
-| `count(piece)` | how many times it appears |
-| `startswith(piece)`, `endswith(piece)` | `True` or `False` |
-| `replace(old, new)` | the string with matches swapped |
-| `split(separator)` | a list of pieces |
-| `separator.join(items)` | one joined string |
-| `isdigit()`, `isalpha()`, `isspace()` | `True` or `False` |
+**Example**
 
-Only `split()` returns a list and only the tests return booleans. Everything else returns a string, and none of them alters the original.
+```python
+answer = input("Continue? ")
+if answer.strip().lower() == "yes":
+    print("Carrying on")
+else:
+    print("Stopping")
+```
+
+**Output:**
+
+```
+Continue?   YES  
+Carrying on
+```
+
+The person typed capitals with spaces around them, and the comparison still matched.
 
 ## Further Reading
 
-- **Official string method reference** — https://docs.python.org/3/library/stdtypes.html#string-methods
-- **String methods with worked examples** — https://www.programiz.com/python-programming/methods/string
+- 📎 **String methods with worked examples** — https://www.programiz.com/python-programming/methods/string
+- 📎 **Official Python reference for string methods** — https://docs.python.org/3/library/stdtypes.html#string-methods
 
-These methods clean, search and reshape text you can spell out in full. Next, searching for text you can only describe by its shape.
+Building a message from several values still needs `+` and `str()`, which becomes awkward as soon as there is more than one value to insert.
+
+Next, you will learn a way to put values directly inside a string.

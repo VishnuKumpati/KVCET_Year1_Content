@@ -1,312 +1,147 @@
 # Dictionaries
 
-Storing people's ages with two lists works, just about:
+Strings, lists and tuples so far have found a value by its position. `marks[0]` is the first mark, and `name[0]` is the first character.
+
+Storing the marks of three students in a list means keeping their names in a second list, in the same order.
 
 ```python
-names = ["Anita", "Ravi", "Meera"]
-ages = [21, 22, 20]
+names = ["Asha", "Ravi", "Meera"]
+marks = [87, 72, 95]
+```
 
-position = names.index("Ravi")
-print(ages[position])
+To get Ravi's mark, you must first know that Ravi is at position 1. The list of marks holds no names, so the two lists must stay in the same order throughout the program.
+
+A dictionary is designed for this situation.
+
+> **A dictionary is a collection of key-value pairs.** The key is a name chosen by the programmer, and the value is the data stored under that name. A value is accessed by its key rather than by a position.
+
+**Example**
+
+```python
+marks = {"Asha": 87, "Ravi": 72}
+print(marks["Asha"])
+print(marks["Ravi"])
 ```
 
 **Output:**
 
 ```
-22
+87
+72
 ```
 
-Every lookup goes through a position. The two lists have to stay the same length and in the same order forever, and one item removed from one of them and not the other quietly corrupts every answer afterwards.
+One collection holds both the names and the marks. `marks["Ravi"]` returns Ravi's mark, and the answer does not depend on where Ravi is stored.
 
-The real problem is that a list finds things **by position**, and the position here is meaningless. What is wanted is a lookup **by name**.
+The key is what makes a dictionary different from everything before it, and every rule in this topic is a rule about keys.
 
-A **dictionary** does that. It stores pairs, and looks a value up by the name attached to it.
+## Syntax of a Dictionary
 
-## Keys and Values
+Curly braces hold the pairs. Each pair is a key, a colon, then its value, and the pairs are separated by commas.
 
-Each pair is a **key** and a **value**, written `key: value`, inside curly brackets:
+**Syntax**
+
+```
+variable = {key1: value1, key2: value2}
+```
+
+**Example**
 
 ```python
-ages = {"Anita": 21, "Ravi": 22, "Meera": 20}
-print(ages)
+marks = {"Asha": 87, "Ravi": 72, "Meera": 95}
+print(marks)
+print(len(marks))
+print(type(marks))
 ```
 
 **Output:**
 
 ```
-{'Anita': 21, 'Ravi': 22, 'Meera': 20}
-```
-
-The key is what you look something up by. The value is what you get back. Here the keys are names and the values are ages, and the connection between them is stored in the structure itself rather than being implied by matching positions in two lists.
-
-Longer dictionaries are usually written one pair to a line:
-
-```python
-student = {
-    "name": "Anita",
-    "age": 21,
-    "course": "Computer Science",
-    "average": 77.67,
-}
-```
-
-This shape — keys naming the fields of one thing — is how a single record is normally represented.
-
-The empty dictionary uses empty braces:
-
-```python
-counts = {}
-print(counts)
-print(len(counts))
-```
-
-**Output:**
-
-```
-{}
-0
-```
-
-`len()` reports the number of pairs, not the number of keys plus values:
-
-```python
-ages = {"Anita": 21, "Ravi": 22, "Meera": 20}
-print(len(ages))
-```
-
-**Output:**
-
-```
+{'Asha': 87, 'Ravi': 72, 'Meera': 95}
 3
+<class 'dict'>
 ```
 
-## Reading a Value
+`len()` returns `3`, the number of pairs. `dict` is a built-in data type, like `list` and `str`.
 
-Square brackets take a key instead of a position:
+A dictionary keeps its pairs in the order they were added, which is why the output above matches the order they were written in.
+
+Several pairs read more easily on separate lines.
 
 ```python
-ages = {"Anita": 21, "Ravi": 22, "Meera": 20}
-print(ages["Ravi"])
-```
-
-**Output:**
-
-```
-22
-```
-
-No `index()` call, no second list, and no assumption about where `"Ravi"` sits.
-
-Keys are exact. Case, spacing and type all have to match:
-
-```python
-ages = {"Anita": 21}
-print(ages["anita"])
-```
-
-**Output:**
-
-```
-KeyError: 'anita'
-```
-
-## KeyError and get
-
-A key that is not present is an error:
-
-```python
-ages = {"Anita": 21, "Ravi": 22}
-print(ages["Sunil"])
-```
-
-**Output:**
-
-```
-KeyError: 'Sunil'
-```
-
-`KeyError` is to a dictionary what `IndexError` is to a list, and it is just as common. There are two ways to avoid it.
-
-Test first with `in`, which checks the keys:
-
-```python
-ages = {"Anita": 21, "Ravi": 22}
-if "Sunil" in ages:
-    print(ages["Sunil"])
-else:
-    print("No record for Sunil")
-```
-
-**Output:**
-
-```
-No record for Sunil
-```
-
-Or use `get()`, which returns `None` instead of raising:
-
-```python
-ages = {"Anita": 21, "Ravi": 22}
-print(ages.get("Ravi"))
-print(ages.get("Sunil"))
-```
-
-**Output:**
-
-```
-22
-None
-```
-
-A second argument sets what to return instead of `None`:
-
-```python
-ages = {"Anita": 21, "Ravi": 22}
-print(ages.get("Sunil", 0))
-print(ages.get("Sunil", "unknown"))
-```
-
-**Output:**
-
-```
-0
-unknown
-```
-
-`get()` with a sensible default is often the cleanest form, because it removes the `if` entirely:
-
-```python
-counts = {"yes": 5}
-counts["yes"] = counts.get("yes", 0) + 1
-counts["no"] = counts.get("no", 0) + 1
-print(counts)
-```
-
-**Output:**
-
-```
-{'yes': 6, 'no': 1}
-```
-
-Both lines are identical, and one updated an existing count while the other created a new one. `get("no", 0)` supplied the starting value for a key that did not yet exist.
-
-Use `[]` when a missing key means a bug worth stopping for, and `get()` when it is a normal case with a sensible answer.
-
-## Adding and Updating
-
-Assignment adds a pair:
-
-```python
-ages = {"Anita": 21, "Ravi": 22}
-ages["Meera"] = 20
-print(ages)
-```
-
-**Output:**
-
-```
-{'Anita': 21, 'Ravi': 22, 'Meera': 20}
-```
-
-Assignment to an existing key replaces its value:
-
-```python
-ages["Anita"] = 22
-print(ages)
-```
-
-**Output:**
-
-```
-{'Anita': 22, 'Ravi': 22, 'Meera': 20}
-```
-
-The syntax is the same in both cases. Whether a pair is created or changed depends only on whether the key was already there — there is no separate "add" operation, and no error for either.
-
-That differs sharply from a list, where assigning to `items[5]` on a three-item list is an `IndexError`. A dictionary has no fixed size to run past.
-
-A key appears once. Assigning to it again replaces the value; it does not store a second copy.
-
-New keys are added at the end, and a dictionary keeps its pairs in the order they were inserted. Printing or looping over one gives that order back.
-
-## Deleting
-
-`del` removes a pair:
-
-```python
-ages = {"Anita": 21, "Ravi": 22, "Meera": 20}
-del ages["Ravi"]
-print(ages)
-```
-
-**Output:**
-
-```
-{'Anita': 21, 'Meera': 20}
-```
-
-`pop()` removes it and hands the value back:
-
-```python
-ages = {"Anita": 21, "Ravi": 22}
-removed = ages.pop("Ravi")
-print(removed)
-print(ages)
-```
-
-**Output:**
-
-```
-22
-{'Anita': 21}
-```
-
-Both raise `KeyError` on a missing key, but `pop()` takes a default in the same way `get()` does:
-
-```python
-ages = {"Anita": 21}
-print(ages.pop("Sunil", "not found"))
-print(ages)
-```
-
-**Output:**
-
-```
-not found
-{'Anita': 21}
-```
-
-Note that `pop()` on a list takes a position and `pop()` on a dictionary takes a key. Both remove and return; they differ in how the thing to remove is identified.
-
-## What Can Be a Key
-
-Values can be anything at all. Keys cannot.
-
-A key must be **immutable**. Strings, numbers, booleans and tuples work:
-
-```python
-mixed = {
-    "name": "Anita",
-    7: "seven",
-    3.5: "three point five",
-    True: "yes",
-    (3, 5): "a coordinate",
+marks = {
+    "Asha": 87,
+    "Ravi": 72,
+    "Meera": 95
 }
-print(mixed[7])
-print(mixed[(3, 5)])
+```
+
+## Accessing a Value
+
+The key is written in square brackets after the dictionary name.
+
+**Syntax**
+
+```
+dictionary_name[key]
+```
+
+**Example**
+
+```python
+marks = {"Asha": 87, "Ravi": 72}
+print(marks["Asha"])
 ```
 
 **Output:**
 
 ```
-seven
-a coordinate
+87
 ```
 
-Lists and dictionaries cannot be keys:
+The brackets are the same as those used for list indexing. A list takes a position, and a dictionary takes a key.
+
+## Every Key Must Be Unique
+
+A dictionary cannot hold the same key twice. When a key is written twice, only the last value assigned to it is kept.
+
+**Example**
 
 ```python
-bad = {["Anita", "Ravi"]: 21}
+marks = {"Asha": 87, "Asha": 95}
+print(marks)
+```
+
+**Output:**
+
+```
+{'Asha': 95}
+```
+
+The dictionary holds one pair. A key identifies one value, which makes the lookup reliable.
+
+## Keys Must Be Immutable
+
+Dictionary keys must be immutable, which means they cannot be changed after they are created. Strings, numbers and tuples can be keys, but lists cannot.
+
+**Example**
+
+```python
+mixed = {"name": "Asha", 7: "seven", (1, 2): "pair"}
+print(mixed)
+```
+
+**Output:**
+
+```
+{'name': 'Asha', 7: 'seven', (1, 2): 'pair'}
+```
+
+A list used as a key raises an error.
+
+**Example**
+
+```python
+bad = {[1, 2]: "pair"}
 ```
 
 **Output:**
@@ -315,66 +150,176 @@ bad = {["Anita", "Ravi"]: 21}
 TypeError: unhashable type: 'list'
 ```
 
-The reason is how a dictionary finds things. It computes a number from the key's contents and uses that to go straight to the value, which is why a lookup is fast no matter how many pairs are stored. If the key's contents could change afterwards, the computed number would no longer match and the value would become unreachable. Forbidding mutable keys prevents that.
+In practice, keys are nearly always strings because names make a dictionary easy to read.
 
-A tuple of immutable values is fine as a key, which makes tuples the way to key something by a pair — a coordinate, or a year and month together.
+## Adding and Updating Values
 
-In practice almost every key is a string.
+Assigning to a key does one of two things, and the key decides which.
 
-## Dictionaries Are Mutable
+**Syntax**
 
-A dictionary is mutable, so everything true of list mutation is true here. Two names can refer to one dictionary:
+```
+dictionary_name[key] = value
+```
+
+**Example**
 
 ```python
-first = {"a": 1}
-second = first
-second["b"] = 2
-print(first)
-print(first is second)
+marks = {"Asha": 87}
+
+marks["Ravi"] = 72
+print(marks)
+
+marks["Asha"] = 90
+print(marks)
 ```
 
 **Output:**
 
 ```
-{'a': 1, 'b': 2}
-True
+{'Asha': 87, 'Ravi': 72}
+{'Asha': 90, 'Ravi': 72}
 ```
 
-And a function can change its caller's dictionary:
+The same statement added a pair the first time and replaced a value the second. `Ravi` was absent, so the pair was created. `Asha` was present, so its value was overwritten.
+
+Python does not warn in either case. Assigning to an existing key replaces its current value.
+
+## KeyError
+
+Reading a key that does not exist raises a `KeyError`.
+
+**Example**
 
 ```python
-def add_grade(record):
-    record["grade"] = "A"
-
-student = {"name": "Anita"}
-add_grade(student)
-print(student)
+marks = {"Asha": 87, "Ravi": 72}
+print(marks["Kiran"])
 ```
 
 **Output:**
 
 ```
-{'name': 'Anita', 'grade': 'A'}
+KeyError: 'Kiran'
 ```
 
-The same care applies, and so does the same remedy: copy when the original must survive.
+`KeyError` names the key that was missing. It is the dictionary equivalent of the `IndexError` raised by a position outside a list.
 
-## List Against Dictionary
+A key must match exactly, including its capital letters.
 
-| | List | Dictionary |
-| --- | --- | --- |
-| Finds by | position | key |
-| Written with | `[ ]` | `{ }` |
-| Positions or keys | `0` upwards, automatic | chosen by you |
-| Duplicates | allowed | one value per key |
-| Missing lookup | `IndexError` | `KeyError` |
-| Mutable | yes | yes |
+**Example**
 
-Use a list when the items are many of the same kind of thing and order is what matters. Use a dictionary when each value has a name, and that name is how you will want to find it.
+```python
+marks = {"Asha": 87}
+print(marks["asha"])
+```
+
+**Output:**
+
+```
+KeyError: 'asha'
+```
+
+`"asha"` and `"Asha"` are different strings, so they are different keys. This matters when a key comes from typed input, where the capitals cannot be relied on.
+
+The `in` operator checks for a key before it is used.
+
+**Example**
+
+```python
+marks = {"Asha": 87, "Ravi": 72}
+name = "Kiran"
+
+if name in marks:
+    print(marks[name])
+else:
+    print(name, "has no marks recorded")
+```
+
+**Output:**
+
+```
+Kiran has no marks recorded
+```
+
+`in` checks the keys only. Searching for `87` returns `False`, even though that value is stored in the dictionary.
+
+## Removal Takes the Whole Pair
+
+The `del` statement removes the key and its value together.
+
+**Syntax**
+
+```
+del dictionary_name[key]
+```
+
+**Example**
+
+```python
+marks = {"Asha": 87, "Ravi": 72}
+del marks["Ravi"]
+print(marks)
+```
+
+**Output:**
+
+```
+{'Asha': 87}
+```
+
+A value cannot be removed on its own. The key and the value exist only as a pair.
+
+## Values Can Be Any Data Type
+
+The restrictions discussed so far apply to keys. Values can be any Python data type, including a list.
+
+**Example**
+
+```python
+student = {"name": "Asha", "class": 7, "marks": [87, 72], "passed": True}
+print(student["name"])
+print(student["marks"])
+```
+
+**Output:**
+
+```
+Asha
+[87, 72]
+```
+
+A dictionary can also describe one item by storing several named pieces of information about it.
+
+`student["marks"]` returns the list, which can be used like any other list.
+
+## Creating an Empty Dictionary
+
+Empty curly braces create a dictionary with no pairs.
+
+**Example**
+
+```python
+marks = {}
+print(len(marks))
+
+marks["Asha"] = 87
+print(marks)
+```
+
+**Output:**
+
+```
+0
+{'Asha': 87}
+```
+
+A dictionary can be changed after it is created, so an empty one is a normal starting point. Pairs are added, replaced and removed as the program runs.
 
 ## Further Reading
 
-- **Official Python guide to dictionaries** — https://docs.python.org/3/tutorial/datastructures.html#dictionaries
-- **Dictionaries with worked examples** — https://www.programiz.com/python-programming/dictionary
+- 📎 **Dictionaries with worked examples** — https://www.programiz.com/python-programming/dictionary
+- 📎 **Official Python guide to dictionaries** — https://docs.python.org/3/tutorial/datastructures.html
 
-A dictionary stores pairs and finds a value by its key. Next, you will work through the full set of operations on one.
+Reading one value at a time covers only part of what a program does with a dictionary. Getting a missing key without an error, pulling out all the keys or all the values, and merging two dictionaries each need a method of their own.
+
+Next, you will learn the methods a dictionary provides.

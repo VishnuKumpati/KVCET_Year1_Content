@@ -1,74 +1,103 @@
 # Strings
 
-A string has been used so far as a single value, something to print, compare or read from `input()`. A string is also a sequence of characters kept in order, so many of the operations used on lists work on strings as well.
+A string has been used from the beginning of Python as a way to represent text inside quotation marks. What was not said then is that a string is also a sequence, built from individual characters in order, exactly as a list is built from elements.
 
-> **A string is an ordered sequence of characters.** Each character has a position, so a string can be indexed, sliced and looped through like a list. Unlike a list, a string cannot be changed after it is created.
+Everything already learned about positions, indexing and slicing therefore applies to a string as well.
 
-## Creating a String
+> **A string is an ordered sequence of characters.** Each character has a position, starting at `0`. A string is also immutable, which means its characters cannot be changed, added or removed after the string is created.
 
-A string is written inside single quotes or double quotes. Both produce the same type.
+## String Immutability
+
+Immutability is the one behaviour that sets a string apart from a list. A list allows its elements to be replaced, and a string does not.
 
 **Example**
 
 ```python
-first = 'Asha'
-second = "Asha"
-print(first)
-print(second)
-print(type(first))
-print(first == second)
+name = "Python"
+name[0] = "J"
 ```
 
 **Output:**
 
 ```
-Asha
-Asha
-<class 'str'>
-True
+TypeError: 'str' object does not support item assignment
 ```
 
-The quotes mark where the string begins and ends. They are not part of the string, so they do not appear in the output.
+A string cannot be changed. If you try to add something to a string, Python creates a new string and the old one stays the same.
+
+**Example**
+
+```python
+name = "Python"
+new_name = name + " 3"
+print(new_name)
+print(name)
+```
+
+**Output:**
+
+```
+Python 3
+Python
+```
+
+`new_name` holds `Python 3`. `name` still holds `Python`. The `+` did not add anything to `name`. It made a new string out of it.
+
+The same thing happens when the result is stored back in the same variable.
+
+**Example**
+
+```python
+name = "Python"
+name = name + " 3"
+print(name)
+```
+
+**Output:**
+
+```
+Python 3
+```
+
+It looks as if `name` grew longer. It did not. Python made a new string, `Python 3`, and the assignment stored that new string in `name`. The original string `Python` was not changed.
+
+Whenever an operation produces changed text, it produces a new string. The original string stays exactly as it was.
 
 ## Finding the Length of a String
 
-The `len()` function returns the number of characters in a string. Spaces and punctuation are characters too, so they are counted.
-
-**Syntax**
-
-```
-len(string_name)
-```
+The `len()` function returns the number of characters in a string.
 
 **Example**
 
 ```python
-name = "Asha"
-message = "Hello, Asha!"
+name = "Python"
 print(len(name))
-print(len(message))
-print(len(""))
 ```
 
 **Output:**
 
 ```
-4
-12
-0
+6
 ```
 
-`""` is an empty string. It contains no characters, so its length is `0`.
+Spaces count as characters, because a space is a character like any other.
+
+**Example**
+
+```python
+spaced = "a b"
+print(len(spaced))
+```
+
+**Output:**
+
+```
+3
+```
 
 ## Accessing a Character
 
-A character is read by writing its index inside square brackets after the string. Positions start at `0`, exactly as in a list.
-
-```
-word        P    y    t    h    o    n
-index       0    1    2    3    4    5
-negative   -6   -5   -4   -3   -2   -1
-```
+A character is read by writing its index in square brackets after the string name. Positions start at `0`, and a negative index counts from the end.
 
 **Syntax**
 
@@ -79,52 +108,33 @@ string_name[index]
 **Example**
 
 ```python
-word = "Python"
-print(word[0])
-print(word[3])
-print(type(word[0]))
+name = "Python"
+print(name[0])
+print(name[5])
+print(name[-1])
 ```
 
 **Output:**
 
 ```
 P
-h
-<class 'str'>
-```
-
-`word[0]` gave the first character. Python has no separate character type, so a single character is a string of length `1`.
-
-## Negative Indexing
-
-A negative index counts from the end of the string, with `-1` for the last character.
-
-**Example**
-
-```python
-word = "Python"
-print(word[-1])
-print(word[-3])
-```
-
-**Output:**
-
-```
 n
-h
+n
 ```
 
-`word[-1]` gives the last character without needing to know the length of the string.
+```
+name      =    P    y    t    h    o    n
+index          0    1    2    3    4    5
+negative      -6   -5   -4   -3   -2   -1
+```
 
-## Index Out of Range
-
-An index that does not exist in the string causes an error.
+An index outside the string raises an error.
 
 **Example**
 
 ```python
-word = "Python"
-print(word[6])
+name = "Python"
+print(name[6])
 ```
 
 **Output:**
@@ -133,7 +143,7 @@ print(word[6])
 IndexError: string index out of range
 ```
 
-The string has six characters, so its highest index is `5`. Python raises an `IndexError`, the same error a list gives.
+The string has six characters, so its highest index is `5`.
 
 ## Slicing a String
 
@@ -143,223 +153,50 @@ A slice takes a range of characters and returns them as a new string. The stop i
 
 ```
 string_name[start:stop]
-```
-
-**Example**
-
-```python
-word = "Python"
-print(word[0:3])
-print(word[2:])
-print(word[:4])
-```
-
-**Output:**
-
-```
-Pyt
-thon
-Pyth
-```
-
-`word[0:3]` returned the characters at indexes `0`, `1` and `2`. Leaving out the start begins at the first character, and leaving out the stop runs to the end.
-
-Slicing is how part of a string is taken out when its position is known.
-
-**Example**
-
-```python
-date = "2026-10-05"
-print("Year:", date[0:4])
-print("Month:", date[5:7])
-print("Day:", date[8:])
-```
-
-**Output:**
-
-```
-Year: 2026
-Month: 10
-Day: 05
-```
-
-## Slicing with a Step
-
-A third value sets the step, which is how far the slice moves each time.
-
-**Syntax**
-
-```
 string_name[start:stop:step]
 ```
 
 **Example**
 
 ```python
-word = "Python"
-print(word[::2])
-print(word[::-1])
+name = "Python"
+print(name[0:3])
+print(name[:3])
+print(name[3:])
+print(name[::2])
+print(name[::-1])
 ```
 
 **Output:**
 
 ```
+Pyt
+Pyt
+hon
 Pto
 nohtyP
 ```
 
-A step of `2` selected every other character. A step of `-1` moved through the string backwards, which returns the string reversed.
+Every form behaves as it does on a list. Leaving out the start or stop uses the beginning or the end, a step controls how many positions the slice moves each time, and a negative step returns the characters in reverse order.
 
-## Strings Cannot Be Changed
+## Checking Whether Text Is in a String
 
-A string is immutable, like a tuple. Assigning to an index raises an error.
-
-**Example**
-
-```python
-word = "Python"
-word[0] = "J"
-```
-
-**Output:**
-
-```
-TypeError: 'str' object does not support item assignment
-```
-
-A changed version of a string is made by building a new string from parts of the old one.
-
-**Example**
-
-```python
-word = "Python"
-new_word = "J" + word[1:]
-print(new_word)
-print(word)
-```
-
-**Output:**
-
-```
-Jython
-Python
-```
-
-`new_word` is a separate string. `word` still holds `"Python"`.
-
-Assigning the new string back to the same variable makes the variable refer to the new string.
-
-**Example**
-
-```python
-word = "Python"
-word = "J" + word[1:]
-print(word)
-```
-
-**Output:**
-
-```
-Jython
-```
-
-The string `"Python"` was not changed. The variable `word` now holds a different string.
-
-## Joining Strings
-
-> **Concatenation is the joining of two strings end to end to make a new string.** It is written with the `+` operator.
-
-**Example**
-
-```python
-first = "Asha"
-last = "Kumar"
-full = first + " " + last
-print(full)
-```
-
-**Output:**
-
-```
-Asha Kumar
-```
-
-The space was written as its own string. `+` joins exactly what it is given and adds nothing between the parts.
-
-Both sides of `+` must be strings. Joining a string and a number raises an error.
-
-**Example**
-
-```python
-mark = 87
-print("Marks: " + mark)
-```
-
-**Output:**
-
-```
-TypeError: can only concatenate str (not "int") to str
-```
-
-Converting the number with `str()` first makes the join work.
-
-**Example**
-
-```python
-mark = 87
-print("Marks: " + str(mark))
-```
-
-**Output:**
-
-```
-Marks: 87
-```
-
-## Repeating a String
-
-The `*` operator repeats a string a given number of times.
+The `in` operator tests whether one string appears inside another. It returns `True` or `False`.
 
 **Syntax**
 
 ```
-string_name * count
+text in string_name
+text not in string_name
 ```
 
 **Example**
 
 ```python
-print("ab" * 3)
-print("-" * 20)
-```
-
-**Output:**
-
-```
-ababab
---------------------
-```
-
-Repeating a single character is a quick way to print a separator line.
-
-## Checking for a Substring
-
-> **A substring is a sequence of characters that appears inside a larger string.** The `in` operator checks whether a substring is present, and `not in` checks whether it is absent. Both give `True` or `False`.
-
-**Syntax**
-
-```
-substring in string_name
-substring not in string_name
-```
-
-**Example**
-
-```python
-message = "Python is easy to learn"
-print("easy" in message)
-print("hard" in message)
-print("hard" not in message)
+sentence = "Python is simple"
+print("is" in sentence)
+print("Java" in sentence)
+print("Java" not in sentence)
 ```
 
 **Output:**
@@ -370,22 +207,7 @@ False
 True
 ```
 
-The check is case-sensitive, so a capital letter and a lower-case letter are different characters.
-
-**Example**
-
-```python
-message = "Python is easy to learn"
-print("python" in message)
-```
-
-**Output:**
-
-```
-False
-```
-
-`"python"` was not found, because the string contains `"Python"` with a capital `P`.
+On a list, `in` looks for a whole element. On a string, it looks for a run of characters anywhere in the text.
 
 ## Looping Through a String
 
@@ -394,7 +216,7 @@ A `for` loop over a string gives one character on each iteration.
 **Example**
 
 ```python
-name = "Asha"
+name = "cat"
 for letter in name:
     print(letter)
 ```
@@ -402,129 +224,93 @@ for letter in name:
 **Output:**
 
 ```
-A
-s
-h
+c
 a
+t
 ```
 
-The loop ran four times, once for each character.
+## Joining and Repeating Strings
 
-A condition inside the loop decides what happens for each character.
+The `+` operator joins two strings end to end, which is called concatenation. The `*` operator repeats a string a given number of times.
 
 **Example**
 
 ```python
-name = "Meera"
-vowels = 0
-for letter in name:
-    if letter in "aeiou":
-        vowels = vowels + 1
-print("Vowels:", vowels)
+first = "Py"
+second = "thon"
+print(first + second)
+print("ab" * 3)
 ```
 
 **Output:**
 
 ```
-Vowels: 3
+Python
+ababab
 ```
 
-`letter in "aeiou"` was true for `e`, `e` and `a`, so `vowels` was increased three times.
-
-## Comparing Strings
-
-The `==` operator checks whether two strings contain exactly the same characters in the same order.
+Both operands of `+` must be strings. Joining a string to a number raises an error.
 
 **Example**
 
 ```python
-print("Asha" == "Asha")
-print("Asha" == "asha")
-print("Asha" == "Asha ")
+age = 20
+print("Age: " + age)
 ```
 
 **Output:**
 
 ```
-True
-False
-False
+TypeError: can only concatenate str (not "int") to str
 ```
 
-A different capital letter or an extra space is enough to make two strings unequal.
+The number has to be converted first, with `str(age)`.
 
 ## Escape Sequences
 
-Some characters cannot be typed directly inside a string. A double quote inside double quotes would end the string early, and pressing Enter would end the line.
+An **escape sequence** uses a backslash followed by a character to represent something special inside a string, such as a quotation mark, new line or tab.
 
-> **An escape sequence is a backslash followed by a character, used to write a character that cannot be typed directly inside a string.** Python reads the two characters together as one special character.
-
-**Example**
-
-```python
-print("She said \"hello\" quietly")
-print("Line one\nLine two")
-print("Name:\tAsha")
-print("Path: C:\\Users")
-```
-
-**Output:**
-
-```
-She said "hello" quietly
-Line one
-Line two
-Name:	Asha
-Path: C:\Users
-```
-
-| Escape sequence | Produces |
+| Escape sequence | Meaning |
 | --- | --- |
-| `\"` | a double quote |
-| `\'` | a single quote |
+| `\"` | a double quotation mark |
+| `\'` | a single quotation mark |
 | `\n` | a new line |
 | `\t` | a tab |
 | `\\` | a backslash |
 
-An escape sequence is a single character, even though it takes two to write.
-
 **Example**
 
 ```python
-print(len("a\nb"))
+print("She said \"hello\"")
+print('It\'s fine')
+print("Line one\nLine two")
+print("Name\tMark")
+print("C:\\pythonwork")
 ```
 
 **Output:**
 
 ```
-3
+She said "hello"
+It's fine
+Line one
+Line two
+Name    Mark
+C:\pythonwork
 ```
 
-A quote only needs escaping when it matches the quotes around the string. Using the other kind of quote on the outside avoids the backslash.
+Each escape sequence is one character in the string, even though it is written with two.
 
-**Example**
+## Multi-line Strings
 
-```python
-print('She said "hello" quietly')
-```
-
-**Output:**
-
-```
-She said "hello" quietly
-```
-
-## Multi-Line Strings
-
-Three quotation marks start a string that can run across several lines. The line breaks are kept exactly as typed.
+A string written in triple quotation marks can span several lines. The line breaks are part of the string.
 
 **Example**
 
 ```python
 message = """Dear Asha,
-
 Your result is ready.
-Please log in to view it."""
+Thank you."""
 print(message)
 ```
 
@@ -532,40 +318,17 @@ print(message)
 
 ```
 Dear Asha,
-
 Your result is ready.
-Please log in to view it.
+Thank you.
 ```
 
-No `\n` was written. Every line break inside the triple quotes is part of the string. Either `"""` or `'''` can be used.
-
-## Summary
-
-The key points about strings:
-
-- A string is an ordered sequence of characters.
-- A string is written inside single or double quotes, and both produce the type `str`.
-- `len()` returns the number of characters, including spaces and punctuation.
-- Indexing reads one character, and a single character is a string of length `1`.
-- Negative indexes count from the end, with `-1` for the last character.
-- An index that does not exist raises an `IndexError`.
-- A slice returns a new string, and the stop index is not included.
-- A step of `-1` returns the string reversed.
-- A string is immutable, so assigning to an index raises a `TypeError`.
-- A changed string is made by building a new string from parts of the old one.
-- `+` joins two strings, and both sides must be strings.
-- `*` repeats a string a given number of times.
-- `in` and `not in` check whether a substring is present, and the check is case-sensitive.
-- A `for` loop over a string gives one character on each iteration.
-- `==` is true only when two strings have exactly the same characters in the same order.
-- An escape sequence writes a special character, such as `\n` for a new line.
-- Triple quotes create a string that runs across several lines.
+Triple quotes are commonly used for docstrings, especially when the documentation spans several lines.
 
 ## Further Reading
 
 - 📎 **Strings with worked examples** — https://www.programiz.com/python-programming/string
 - 📎 **Official Python guide to strings** — https://docs.python.org/3/tutorial/introduction.html#text
 
-A string can now be created, indexed, sliced, joined and searched. But every changed string so far has been built by hand from slices and `+`.
+Reading and slicing a string covers only part of what a program does with text. Changing case, removing spaces, searching and splitting are all common tasks.
 
-Next, you will learn the methods that strings provide for working with text.
+Next, you will learn the methods a string provides for those.

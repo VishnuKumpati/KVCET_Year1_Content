@@ -1,171 +1,227 @@
 # Sets
 
-A list keeps order and allows duplicates. A dictionary looks values up by key. A **set** gives up both order and duplicates, and in exchange answers two questions very well: is this value present, and what do two collections have in common.
+Lists, tuples and strings keep their values in order, and the same value can appear in them any number of times. Both of those behaviours are useful when the order matters or when repeated values need to be kept.
 
-A set is an unordered collection of unique values.
+Some questions want neither. A class of sixty students is asked which language each speaks at home. Thirty answer Tamil, and listing every answer gives Tamil thirty times. The question was which languages are spoken, and the answer is Tamil once. The order of the languages does not matter either.
 
-## Creating a Set
+Python has a data type for exactly this.
 
-Values in curly brackets, without the colons that make a dictionary:
+> **A set is a collection of unique values.** A value can appear only once in a set. A set has no positions, so its values cannot be accessed by index.
+
+**Example**
 
 ```python
-numbers = {3, 1, 2}
-print(numbers)
-print(len(numbers))
+answers = ["Tamil", "Hindi", "Tamil", "Telugu", "Hindi", "Tamil"]
+languages = set(answers)
+print(len(languages))
 ```
 
 **Output:**
 
 ```
-{1, 2, 3}
 3
 ```
 
-Duplicates are discarded as the set is built:
+Six students answered, but only three unique languages were found. The repeated answers do not create additional values in the set, so Tamil and Hindi each appear only once.
+
+## Syntax of a Set
+
+A set is written with curly braces, and the values inside are separated by commas.
+
+**Syntax**
+
+```
+variable = {value1, value2, value3}
+```
+
+**Example**
 
 ```python
-numbers = {3, 1, 2, 3, 1}
-print(numbers)
-print(len(numbers))
+subjects = {"Maths", "Science", "English"}
+print(len(subjects))
+print(type(subjects))
 ```
 
 **Output:**
 
 ```
-{1, 2, 3}
+3
+<class 'set'>
+```
+
+`set` is a built-in data type, like `list` and `dict`.
+
+The braces are the same braces a dictionary uses. A dictionary holds pairs written with colons, and a set holds single values.
+
+A value written twice is stored once.
+
+**Example**
+
+```python
+marks = {87, 72, 87}
+print(sorted(marks))
+print(len(marks))
+```
+
+**Output:**
+
+```
+[72, 87]
+2
+```
+
+No error is raised. The duplicate is simply dropped.
+
+## Removing Duplicates from a List
+
+The `set()` function builds a set from an existing list, keeping only one copy of each value.
+
+**Example**
+
+```python
+marks = [87, 72, 87, 95, 72]
+unique = set(marks)
+print(len(unique))
+```
+
+**Output:**
+
+```
 3
 ```
 
-Five values were written and three were stored. No error, no warning — a set simply cannot hold the same value twice.
+This is one of the most common uses of a set.
 
-A set has no order. Printing one shows the items in whatever arrangement the set happens to use internally, and that arrangement is not the insertion order and is not something to rely on. When output order matters, sort it:
+## A Set Has No Order
+
+A set does not keep its values in the order they were written.
+
+**Example**
 
 ```python
-names = {"Meera", "Anita", "Ravi"}
-print(sorted(names))
+numbers = {5, 1, 3}
+print(sorted(numbers))
 ```
 
 **Output:**
 
 ```
-['Anita', 'Meera', 'Ravi']
+[1, 3, 5]
 ```
 
-`sorted()` returns a list, as it always does.
+`sorted()` creates a sorted list from the set. Without `sorted()`, the values may appear in a different order.
 
-## The Empty Set
+Because there is no order, there are no positions either.
 
-Empty curly brackets were already taken:
+**Example**
 
 ```python
-print(type({}))
+subjects = {"Maths", "Science"}
+print(subjects[0])
 ```
 
 **Output:**
 
 ```
-<class 'dict'>
+TypeError: 'set' object is not subscriptable
 ```
 
-An empty set needs the `set()` function:
+There is no first value in a set, so indexing and slicing do not apply.
+
+## Creating an Empty Set
+
+Empty curly braces create a dictionary, not a set. The `set()` function creates an empty set.
+
+**Example**
 
 ```python
 empty = set()
 print(empty)
-print(type(empty))
 print(len(empty))
+
+not_a_set = {}
+print(type(not_a_set))
 ```
 
 **Output:**
 
 ```
 set()
-<class 'set'>
 0
+<class 'dict'>
 ```
 
-Note that an empty set even *prints* as `set()`, because `{}` would be misread as a dictionary.
+An empty set prints as `set()` rather than as empty braces, because `{}` already means an empty dictionary.
 
-`set()` also builds a set from any sequence:
+## Adding and Removing Values
+
+The `add()` method adds one value. The `remove()` method removes one.
+
+**Syntax**
+
+```
+set_name.add(value)
+set_name.remove(value)
+```
+
+**Example**
 
 ```python
-print(set([1, 2, 2, 3]))
-print(sorted(set("hello")))
+subjects = {"Maths"}
+subjects.add("Science")
+print(len(subjects))
+
+subjects.add("Maths")
+print(len(subjects))
 ```
 
 **Output:**
 
 ```
-{1, 2, 3}
-['e', 'h', 'l', 'o']
+2
+2
 ```
 
-A string is a sequence of characters, so `set("hello")` gives the distinct characters — one `l`, not two.
+The second `add()` changed nothing, because `Maths` was already there.
 
-## Adding and Removing
+`remove()` raises an error when the value is absent.
 
-`add()` adds one value:
+**Example**
 
 ```python
-letters = {"a", "b"}
-letters.add("c")
-letters.add("a")
-print(sorted(letters))
+subjects = {"Maths"}
+subjects.remove("History")
 ```
 
 **Output:**
 
 ```
-['a', 'b', 'c']
+KeyError: 'History'
 ```
 
-Adding a value that is already there does nothing, and is not an error. That is often the point: a set can be added to repeatedly without any check for duplicates.
+The `discard()` method removes a value and does nothing when it is absent.
 
-`remove()` and `discard()` both take a value out, and differ on a value that is not there:
+**Example**
 
 ```python
-letters = {"a", "b", "c"}
-letters.remove("b")
-print(sorted(letters))
-letters.discard("z")
-print(sorted(letters))
-letters.remove("z")
+subjects = {"Maths"}
+subjects.discard("History")
+print(subjects)
 ```
 
 **Output:**
 
 ```
-['a', 'c']
-['a', 'c']
-KeyError: 'z'
+{'Maths'}
 ```
 
-`discard()` is silent about a missing value. `remove()` raises `KeyError`. Choose `remove()` when the value's absence would mean something has gone wrong, and `discard()` when it is a normal case.
+Use `remove()` when the value should be there, and `discard()` when it may not be.
 
-`pop()` removes and returns an arbitrary item, and `clear()` empties the set. Because there is no order, there is no "last" item for `pop()` to take, which makes it much less useful here than on a list.
+## Values a Set Can Hold
 
-## Membership
+A set can hold strings, numbers and tuples. A list cannot be a value in a set.
 
-`in` is what a set is for:
-
-```python
-allowed = {"admin", "editor", "viewer"}
-print("editor" in allowed)
-print("guest" in allowed)
-```
-
-**Output:**
-
-```
-True
-False
-```
-
-A set finds a value the way a dictionary finds a key: it computes a number from the value and goes straight to where that value would be. It does not compare against each item in turn. A list has to, which means checking membership in a list of a million items takes a million times as long as checking a list of one, while checking a set stays about as fast either way.
-
-If a program does many membership tests against a fixed collection, store that collection as a set.
-
-The same rule as dictionary keys applies to what a set can hold. Items must be immutable, so strings, numbers and tuples are fine and lists are not:
+**Example**
 
 ```python
 bad = {[1, 2]}
@@ -177,237 +233,104 @@ bad = {[1, 2]}
 TypeError: unhashable type: 'list'
 ```
 
-## No Indexing
+## Checking Whether a Value Is in a Set
 
-A set has no positions, so it cannot be indexed or sliced:
+The `in` operator tests whether a value is in the set.
+
+**Example**
 
 ```python
-numbers = {1, 2, 3}
-print(numbers[0])
+students = {"Asha", "Ravi", "Meera"}
+print("Meera" in students)
+print("Kiran" in students)
 ```
 
 **Output:**
 
 ```
-TypeError: 'set' object is not subscriptable
-```
-
-There is no first item to ask for. Looping works, and the order it produces is not guaranteed:
-
-```python
-numbers = {1, 2, 3}
-for number in sorted(numbers):
-    print(number)
-```
-
-**Output:**
-
-```
-1
-2
-3
-```
-
-Sort it when the order of the output matters.
-
-## Removing Duplicates from a List
-
-The commonest everyday use of a set is not set theory at all. Converting a list to a set drops the duplicates, and converting back gives a list again:
-
-```python
-marks = [78, 91, 78, 64, 91, 78]
-unique = list(set(marks))
-print(sorted(unique))
-print(len(marks), "values,", len(unique), "distinct")
-```
-
-**Output:**
-
-```
-[64, 78, 91]
-6 values, 3 distinct
-```
-
-The round trip loses the original order, because a set has none to keep. When the order must survive, `dict.fromkeys()` does the same job using a dictionary's insertion order:
-
-```python
-marks = [78, 91, 78, 64, 91, 78]
-print(list(dict.fromkeys(marks)))
-```
-
-**Output:**
-
-```
-[78, 91, 64]
-```
-
-If only the count of distinct values is wanted, no conversion back is needed:
-
-```python
-words = "the cat sat on the mat the end".split()
-print(len(words), "words,", len(set(words)), "distinct")
-```
-
-**Output:**
-
-```
-8 words, 6 distinct
-```
-
-## The Four Set Operations
-
-Four operations combine two sets. Each has an operator and a named method.
-
-```python
-a = {1, 2, 3, 4}
-b = {3, 4, 5, 6}
-
-print(a | b)
-print(a & b)
-print(a - b)
-print(a ^ b)
-```
-
-**Output:**
-
-```
-{1, 2, 3, 4, 5, 6}
-{3, 4}
-{1, 2}
-{1, 2, 5, 6}
-```
-
-| Operation | Operator | Method | Gives |
-| --- | --- | --- | --- |
-| Union | `a \| b` | `a.union(b)` | everything in either |
-| Intersection | `a & b` | `a.intersection(b)` | only what is in both |
-| Difference | `a - b` | `a.difference(b)` | in `a` but not in `b` |
-| Symmetric difference | `a ^ b` | `a.symmetric_difference(b)` | in one but not both |
-
-Union and intersection give the same answer whichever way round they are written. Difference does not: `a - b` gave `{1, 2}` and `b - a` gives `{5, 6}`.
-
-```python
-a = {1, 2, 3, 4}
-b = {3, 4, 5, 6}
-print(b - a)
-```
-
-**Output:**
-
-```
-{5, 6}
-```
-
-Note what `&`, `|` and `^` are doing here. Those three symbols were bitwise operators on whole numbers, and they now carry a second meaning on sets. The meanings line up: bitwise AND keeps the bits set in both operands, and `&` on sets keeps the items in both sets.
-
-The methods do the same work as the operators, with one practical difference. A method accepts any sequence, while an operator requires both sides to be sets:
-
-```python
-a = {1, 2, 3}
-print(a.union([4, 5]))
-print(a | [4, 5])
-```
-
-**Output:**
-
-```
-{1, 2, 3, 4, 5}
-TypeError: unsupported operand type(s) for |: 'set' and 'list'
-```
-
-Use the methods when one side is a list, and the operators when both sides are sets.
-
-These operations answer real questions directly. Which students take both courses, which take either, which take one but not the other:
-
-```python
-maths = {"Anita", "Ravi", "Sunil"}
-physics = {"Ravi", "Meera", "Sunil"}
-
-print("Both:", sorted(maths & physics))
-print("Either:", sorted(maths | physics))
-print("Maths only:", sorted(maths - physics))
-print("Exactly one:", sorted(maths ^ physics))
-```
-
-**Output:**
-
-```
-Both: ['Ravi', 'Sunil']
-Either: ['Anita', 'Meera', 'Ravi', 'Sunil']
-Maths only: ['Anita']
-Exactly one: ['Anita', 'Meera']
-```
-
-Doing the same with lists takes a loop and a membership test for each question.
-
-## Subset and Superset
-
-A set is a **subset** of another when every one of its items is in that other set. The other is then a **superset** of it:
-
-```python
-small = {1, 2}
-big = {1, 2, 3, 4}
-
-print(small.issubset(big))
-print(big.issuperset(small))
-print(big.issubset(small))
-```
-
-**Output:**
-
-```
-True
 True
 False
 ```
 
-`<=` and `>=` do the same tests:
+Membership checking is one of the main reasons to choose a set over a list.
+
+## Looping Through a Set
+
+A `for` loop gives one value on each iteration. The order is not the order the values were written in.
+
+**Example**
 
 ```python
-print(small <= big)
-print(big >= small)
+subjects = {"Maths", "Science", "English"}
+for subject in sorted(subjects):
+    print(subject)
 ```
 
 **Output:**
 
 ```
-True
-True
+English
+Maths
+Science
 ```
 
-A set is a subset of itself, so `big <= big` is `True`.
+`sorted()` was used so the output is in a predictable order. Without it, the three lines could appear in any order.
 
-`isdisjoint()` tests the opposite relationship — no items in common at all:
+## Comparing Two Sets
+
+Sets can be compared to find common or different values.
+
+| Operator | Meaning |
+| --- | --- |
+| `\|` | Values in either or both sets |
+| `&` | Values in both sets |
+| `-` | Values only in the first set |
+| `^` | Values in one set but not both |
+
+**Example**
 
 ```python
-morning = {"Anita", "Ravi"}
-evening = {"Meera", "Sunil"}
-print(morning.isdisjoint(evening))
+science = {"Asha", "Ravi", "Meera"}
+maths = {"Ravi", "Meera", "Kiran"}
+
+print(sorted(science | maths))
+print(sorted(science & maths))
+print(sorted(science - maths))
+print(sorted(science ^ maths))
 ```
 
 **Output:**
 
 ```
-True
+['Asha', 'Kiran', 'Meera', 'Ravi']
+['Meera', 'Ravi']
+['Asha']
+['Asha', 'Kiran']
 ```
 
-These tests answer permission and eligibility questions in one line. Whether a user's roles include everything a task requires is `required.issubset(user_roles)`.
+- `|` combines both sets.
+- `&` finds common values.
+- `-` finds values only in the first set.
+- `^` finds values that appear in only one set.
 
-## Choosing the Type
+`sorted()` is used so the results appear in a fixed order, which is why the output shows square brackets.
 
-| | List | Tuple | Dictionary | Set |
-| --- | --- | --- | --- | --- |
-| Ordered | yes | yes | by insertion | no |
-| Duplicates | yes | yes | one value per key | no |
-| Indexed | yes | yes | by key | no |
-| Mutable | yes | no | yes | yes |
-| Written with | `[ ]` | `( )` | `{key: value}` | `{ }` or `set()` |
+## Choosing Between a List and a Set
 
-Order and duplicates are the deciding questions. If both matter, use a list. If neither does, and the work is membership testing or comparing collections, use a set.
+Both store collections of values. The way you need to use those values determines which one to choose.
+
+| List | Set |
+| --- | --- |
+| Keeps elements in order. | Has no order. |
+| Allows duplicate values. | Keeps one copy of each value. |
+| Elements are accessed by index. | Values cannot be accessed by index. |
+| Suited to data where order and repeats matter. | Suited to membership checks and comparisons between groups. |
 
 ## Further Reading
 
-- **Official Python guide to sets** — https://docs.python.org/3/tutorial/datastructures.html#sets
-- **Sets with worked examples** — https://www.programiz.com/python-programming/set
+- 📎 **Sets with worked examples** — https://www.programiz.com/python-programming/set
+- 📎 **Official Python guide to sets** — https://docs.python.org/3/tutorial/datastructures.html
 
-A set holds unique values with no order, tests membership quickly, and compares collections in a single operation. Next, you will combine all four types into structures that hold real records.
+Every collection so far has held values directly. A value can also be a collection of its own, which is how a program stores a list inside a dictionary or a dictionary inside a list.
+
+Next, you will learn about nested data structures.

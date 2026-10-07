@@ -1,78 +1,59 @@
-# f-strings
+# Formatted Strings
 
-Putting values into text has been done two ways so far, and both have problems.
+A program rarely has only values to show. It has a message to present, with values sitting inside it, such as a student's name and marks in a line of a report.
 
-Commas in `print()` insert a space between every item, whether or not one is wanted:
+Until now, building that message has required `+` and `str()`.
+
+**Example**
 
 ```python
-name = "Anita"
-age = 21
-print("Name:", name, "- Age:", age)
+name = "Asha"
+marks = 87
+print("Student: " + name + ", Marks: " + str(marks))
 ```
 
 **Output:**
 
 ```
-Name: Anita - Age: 21
+Student: Asha, Marks: 87
 ```
 
-Concatenation with `+` gives control of the spacing and demands `str()` around every number:
+The line is hard to read and easy to get wrong. The quotation marks, the `+` signs and the `str()` call all have to be in the right places, and a missing space inside the quotes is invisible until the program runs.
+
+A formatted string writes the same message with the values placed directly inside the text.
+
+## Writing an f-string
+
+An **f-string** is a string with the letter `f` before the opening quotation mark. Anything inside curly braces is evaluated, and the result is inserted into the string.
+
+**Syntax**
+
+```
+f"text {value} more text"
+```
+
+**Example**
 
 ```python
-name = "Anita"
-age = 21
-print("Name: " + name + " - Age: " + str(age))
+name = "Asha"
+marks = 87
+print(f"Student: {name}, Marks: {marks}")
 ```
 
 **Output:**
 
 ```
-Name: Anita - Age: 21
+Student: Asha, Marks: 87
 ```
 
-The second is fiddly to write and hard to read, and it only works inside `print()`. Neither builds a string you can store.
+The same output, in one readable line. No `+` signs and no `str()`. Python automatically places the values into the string.
 
-An **f-string** does both jobs cleanly.
+The `f` is required. Without it, the braces and their contents are printed as ordinary characters.
 
-## The f Prefix
-
-Put `f` immediately before the opening quote, and any name in braces is replaced by its value:
+**Example**
 
 ```python
-name = "Anita"
-age = 21
-print(f"Name: {name} - Age: {age}")
-```
-
-**Output:**
-
-```
-Name: Anita - Age: 21
-```
-
-The text reads as it will appear, spacing included. Values in braces are converted automatically, so `str()` is never needed.
-
-An f-string is an ordinary string, so the result can be stored rather than printed:
-
-```python
-name = "Anita"
-age = 21
-line = f"{name} is {age}"
-print(line)
-print(len(line))
-```
-
-**Output:**
-
-```
-Anita is 21
-11
-```
-
-Forgetting the `f` is the usual mistake. Without it, the braces are just characters:
-
-```python
-name = "Anita"
+name = "Asha"
 print("Hello {name}")
 ```
 
@@ -82,65 +63,72 @@ print("Hello {name}")
 Hello {name}
 ```
 
-An actual brace in the output is written by doubling it: `{{` produces `{`.
+## Expressions Inside the Braces
 
-## Expressions in the Braces
+The braces can hold any expression, not just a variable name. Python works it out first and puts the result into the string.
 
-The braces take any expression, not only a name:
+**Example**
 
 ```python
-marks = [78, 91, 64]
-name = "anita"
-print(f"Highest: {max(marks)}")
-print(f"Average: {sum(marks) / len(marks)}")
-print(f"Name: {name.upper()}")
-print(f"First mark: {marks[0]}")
+first = 87
+second = 72
+print(f"Total: {first + second}")
+print(f"Average: {(first + second) / 2}")
+
+name = "asha"
+print(f"Name: {name.title()}")
 ```
 
 **Output:**
 
 ```
-Highest: 91
-Average: 77.66666666666667
-Name: ANITA
-First mark: 78
+Total: 159
+Average: 79.5
+Name: Asha
 ```
 
-Arithmetic, method calls, indexing and function calls all work. Keep them short. An f-string carrying a complicated calculation is harder to read than a line that computes the value first and then prints it.
+Arithmetic, method calls and function calls all work inside the braces.
 
-Quotes inside the braces must differ from the quotes around the string:
+## Controlling the Number of Decimal Places
 
-```python
-student = ["Anita", 78]
-print(f"Name: {student[0]}")
+A division often produces a long decimal. A colon after the value, followed by `.2f`, formats the number to two decimal places.
+
+**Syntax**
+
+```
+f"{value:.2f}"
 ```
 
-If a quoted string is needed inside the braces, use single quotes inside a double-quoted f-string.
-
-## Formatting Numbers
-
-A colon inside the braces introduces a **format specification**, which controls how the value is displayed.
-
-Decimal places are the most common need. `.2f` means "as a fixed-point number with two decimal places":
+**Example**
 
 ```python
-average = 77.66666666666667
+average = 84.666666
+print(f"Average: {average}")
 print(f"Average: {average:.2f}")
-print(f"Average: {average:.1f}")
 print(f"Average: {average:.0f}")
 ```
 
 **Output:**
 
 ```
-Average: 77.67
-Average: 77.7
-Average: 78
+Average: 84.666666
+Average: 84.67
+Average: 85
 ```
 
-The value is rounded for display. The variable itself is unchanged, and the full precision is still there for any further calculation.
+The number before the `f` specifies how many decimal places to show. The value itself is unchanged; only the text produced is rounded.
 
-A comma inserts thousands separators:
+## Adding Thousands Separators
+
+A colon followed by a comma groups large numbers in threes.
+
+**Syntax**
+
+```
+f"{value:,}"
+```
+
+**Example**
 
 ```python
 population = 1234567
@@ -153,147 +141,106 @@ print(f"Population: {population:,}")
 Population: 1,234,567
 ```
 
-The two combine, in that order:
+The comma and the decimal places can be used together, written as `,.2f`. This is the usual way to show an amount of money.
+
+**Example**
 
 ```python
-revenue = 1234567.891
-print(f"Revenue: {revenue:,.2f}")
+amount = 1234567.891
+print(f"Amount: {amount:,.2f}")
 ```
 
 **Output:**
 
 ```
-Revenue: 1,234,567.89
+Amount: 1,234,567.89
 ```
 
-`%` multiplies by 100 and adds a percent sign, which is what a proportion normally needs:
+## Setting the Width of a Value
 
-```python
-rate = 0.2567
-print(f"Pass rate: {rate:.1%}")
-```
+A colon followed by a number sets the minimum number of character positions for the value. This lines values into columns when several lines are printed.
 
-**Output:**
-
-```
-Pass rate: 25.7%
-```
-
-Note that the value must be the proportion, not the percentage. `0.2567` displays as `25.7%`.
-
-| Specification | Meaning | `1234.5678` becomes |
-| --- | --- | --- |
-| `.2f` | two decimal places | `1234.57` |
-| `,` | thousands separators | `1,234.5678` |
-| `,.2f` | both | `1,234.57` |
-| `.1%` | percentage, one decimal | `123456.8%` |
-
-## Width and Alignment
-
-A number after the colon sets a minimum **width**, padding with spaces to fill it. Alignment is chosen with `<`, `>` or `^`:
-
-```python
-name = "Anita"
-print(f"[{name:<10}]")
-print(f"[{name:>10}]")
-print(f"[{name:^10}]")
-```
-
-**Output:**
-
-```
-[Anita     ]
-[     Anita]
-[  Anita   ]
-```
-
-The brackets are there to make the padding visible.
-
-| Symbol | Alignment |
+| Format | Effect |
 | --- | --- |
-| `<` | left |
-| `>` | right |
-| `^` | centre |
+| `{value:<10}` | left aligned in 10 characters |
+| `{value:>10}` | right aligned in 10 characters |
+| `{value:^10}` | centred in 10 characters |
 
-A value longer than the width is never cut off. The width is a minimum, not a limit.
-
-This is what makes printed tables line up. Left-align text, right-align numbers, and give each column a fixed width:
+**Example**
 
 ```python
-names = ["Anita", "Ravi", "Meera"]
-marks = [78, 91, 64]
-
-print(f"{'Name':<10}{'Mark':>5}")
-for name, mark in zip(names, marks):
-    print(f"{name:<10}{mark:>5}")
+name = "Asha"
+mark = 87
+print(f"{name:<10}{mark:>5}")
 ```
 
 **Output:**
 
 ```
-Name       Mark
-Anita        78
-Ravi         91
-Meera        64
+Asha         87
 ```
 
-Numbers right-aligned put their last digits in one column, which is what makes a column of figures readable.
+`name` gets a minimum of 10 character positions and `mark` gets a minimum of 5. `<` puts the name on the left, while `>` puts the mark on the right.
 
-Width combines with the number formats, width first:
+## Printing a Brace
+
+A brace that should appear in the output is written twice.
+
+**Example**
 
 ```python
-prices = [5.5, 120.0, 19.99]
-for price in prices:
-    print(f"{price:>10.2f}")
+print(f"{{braces}}")
 ```
 
 **Output:**
 
 ```
-      5.50
-    120.00
-     19.99
+{braces}
 ```
 
-## Older Formatting Styles
+## Formatted Strings Across Several Lines
 
-Two earlier styles still appear in existing code and in older tutorials. Both do the same job less clearly.
+An f-string can use triple quotation marks, so a long message keeps its line breaks.
 
-`format()` is a string method, with empty braces as placeholders filled from its arguments:
+**Example**
 
 ```python
-name = "Anita"
-age = 21
-print("{} is {}".format(name, age))
+name = "Asha"
+marks = 87
+message = f"""Dear {name},
+Your marks: {marks}
+Thank you."""
+print(message)
 ```
 
 **Output:**
 
 ```
-Anita is 21
+Dear Asha,
+Your marks: 87
+Thank you.
 ```
 
-Older still is the `%` operator, where `%s` stands for a string and `%d` for a whole number:
+## Formatting Reference
 
-```python
-name = "Anita"
-age = 21
-print("%s is %d" % (name, age))
-```
+Every formatting option used in this topic, with what it does and why it is needed.
 
-**Output:**
-
-```
-Anita is 21
-```
-
-Both accept the same format specifications after a colon or a percent sign, so `"{:.2f}".format(value)` and `"%.2f" % value` mean what `f"{value:.2f}"` means.
-
-Recognise them when reading other people's code. Write f-strings in your own: the value sits where it appears in the output, rather than in a list at the end that has to be matched up by counting.
+| Format | Effect | Used for |
+| --- | --- | --- |
+| `{value}` | inserts the value as text | putting any value into a message |
+| `{value:.2f}` | shows two decimal places | prices, averages and percentages |
+| `{value:,}` | groups digits in threes | large numbers that are hard to read |
+| `{value:,.2f}` | groups digits and shows two decimal places | amounts of money |
+| `{value:<10}` | left aligned in 10 characters | names and words in a column |
+| `{value:>10}` | right aligned in 10 characters | numbers in a column |
+| `{value:^10}` | centred in 10 characters | headings above a column |
+| `{{` and `}}` | one brace in the output | text that contains braces |
 
 ## Further Reading
 
-- **Official format specification reference** — https://docs.python.org/3/library/string.html#format-specification-mini-language
-- **f-strings in depth** — https://realpython.com/python-f-strings/
+- 📎 **f-strings with worked examples** — https://www.programiz.com/python-programming/string-formatting
+- 📎 **Official Python guide to formatted strings** — https://docs.python.org/3/tutorial/inputoutput.html
 
-f-strings put values into text and control how those values are displayed. Next, you will store values that are found by name rather than by position.
+Strings, lists and tuples all find a value by its position. A program often needs to find a value by name instead, such as the marks belonging to a particular student.
+
+Next, you will learn a collection that stores values under names.
