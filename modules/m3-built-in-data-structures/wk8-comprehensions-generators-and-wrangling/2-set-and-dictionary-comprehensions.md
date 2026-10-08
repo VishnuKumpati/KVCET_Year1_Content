@@ -1,289 +1,165 @@
 # Set and Dictionary Comprehensions
 
-The comprehension form is not tied to lists. The same expression, `for` clause and optional condition build a set or a dictionary. What changes is the brackets, and for a dictionary, the expression.
+A list comprehension uses square brackets, and the result is a list. Curly braces give a set or a dictionary instead.
 
-| Brackets | Expression | Produces |
-| --- | --- | --- |
-| `[ ]` | one value | a list |
-| `{ }` | one value | a set |
-| `{ }` | `key: value` | a dictionary |
+```
+[expression for variable in collection]        a list
+{expression for variable in collection}        a set
+{key: value for variable in collection}        a dictionary
+```
 
-Curly brackets do two jobs, and the colon is what distinguishes them — exactly as it does when writing a set or dictionary out by hand.
+The `for` part and the `if` part work the same way as in a list comprehension. What changes is what the comprehension builds: a set stores values, while a dictionary stores key-value pairs.
 
 ## Set Comprehensions
 
-Square brackets swapped for curly ones, and the result is a set: unordered, with duplicates dropped.
+A set comprehension builds a set, so duplicate values are kept only once.
+
+**Syntax**
+
+```
+{expression for variable in collection}
+```
+
+**Example**
+
+This example takes a list of answers and builds a set of the languages, with each one capitalised.
 
 ```python
-words = ["the", "cat", "sat", "on", "the", "mat"]
-
-print([len(word) for word in words])
-print({len(word) for word in words})
+answers = ["tamil", "hindi", "tamil", "telugu"]
+languages = {answer.title() for answer in answers}
+print(sorted(languages))
+print(len(languages))
 ```
 
 **Output:**
 
 ```
-[3, 3, 3, 2, 3, 3]
-[2, 3]
+['Hindi', 'Tamil', 'Telugu']
+3
 ```
 
-The list reports every length. The set reports the distinct lengths, which is usually the question worth asking.
+**Explanation:**
 
-Filtering and transforming work as before:
+- `answer` takes each value from the list, one at a time
+- `answer.title()` capitalises it, so `"tamil"` becomes `"Tamil"`
+- the result is added to the set
+- when `tamil` comes round the second time, `Tamil` is already there, so it is kept only once
+
+Sets do not give us a particular order to rely on when displaying their values. `sorted()` puts the values in alphabetical order so we can see a predictable output.
+
+**Example**
+
+This example keeps only the passing scores, with the duplicates removed.
 
 ```python
-numbers = [1, -2, 3, -2, 5, 3]
-print({abs(number) for number in numbers})
-print({number for number in numbers if number > 0})
+scores = [87, 32, 72, 87, 25]
+passed = {score for score in scores if score >= 35}
+print(sorted(passed))
 ```
 
 **Output:**
 
 ```
-{1, 2, 3, 5}
-{1, 3, 5}
+[72, 87]
 ```
 
-Since a set has no order, sort when the output order matters:
+**Explanation:**
 
-```python
-names = ["anita", "RAVI", "Anita", "ravi"]
-print(sorted({name.lower() for name in names}))
-```
-
-**Output:**
-
-```
-['anita', 'ravi']
-```
-
-Four names, two distinct people. A set comprehension normalised and deduplicated in one expression.
-
-This is the usual reason to reach for one: a list comprehension followed by `set()` does the same job, and the set comprehension says up front that duplicates are not wanted.
+- `score` takes each value from the list
+- `score >= 35` decides whether it is kept, so `32` and `25` are skipped
+- `87` passes the condition twice, and the set stores it once
 
 ## Dictionary Comprehensions
 
-A dictionary comprehension has a colon in its expression. The part before the colon becomes the key, the part after becomes the value:
+A dictionary comprehension builds pairs, so the expression has two parts separated by a colon.
+
+**Syntax**
+
+```
+{key: value for variable in collection}
+```
+
+The part before the colon becomes the key. The part after it becomes the value.
+
+**Example**
+
+This example builds a dictionary in which each name is a key and the length of that name is its value.
 
 ```python
-squares = {number: number * number for number in range(1, 6)}
-print(squares)
+names = ["asha", "ravi", "meera"]
+lengths = {name: len(name) for name in names}
+print(lengths)
 ```
 
 **Output:**
 
 ```
-{1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
+{'asha': 4, 'ravi': 4, 'meera': 5}
 ```
 
-Written the long way, that is an empty dictionary and an assignment in a loop:
+**Explanation:**
+
+- `name` takes each value from the list
+- `name` before the colon becomes the key
+- `len(name)` after the colon becomes the value
+- so `"asha"` gives the pair `'asha': 4`
+
+## Building a Dictionary from a Dictionary
+
+`items()` gives a key and a value on each pass, which the comprehension can use in both halves.
+
+**Example**
+
+This example builds a new dictionary with the same names and five added to every score.
 
 ```python
-squares = {}
-for number in range(1, 6):
-    squares[number] = number * number
-```
-
-Either half of the expression can be computed. Here the keys are transformed and the values are left alone:
-
-```python
-ages = {"anita": 21, "ravi": 22}
-print({name.title(): age for name, age in ages.items()})
+results = {"Asha": 87, "Ravi": 72}
+bonus = {name: score + 5 for name, score in results.items()}
+print(bonus)
 ```
 
 **Output:**
 
 ```
-{'Anita': 21, 'Ravi': 22}
+{'Asha': 92, 'Ravi': 77}
 ```
 
-And here the values are transformed:
+**Explanation:**
+
+- `items()` gives one `name` and one `score` on each pass
+- `name` is kept as the key
+- `score + 5` becomes the new value
+- so `Asha: 87` becomes `Asha: 92`
+
+**Example**
+
+This example keeps only the pairs whose score is a pass.
 
 ```python
-prices = {"pen": 10, "book": 250}
-print({item: price * 1.18 for item, price in prices.items()})
+results = {"Asha": 87, "Ravi": 30, "Meera": 95}
+passed = {name: score for name, score in results.items() if score >= 35}
+print(passed)
 ```
 
 **Output:**
 
 ```
-{'pen': 11.799999999999999, 'book': 295.0}
+{'Asha': 87, 'Meera': 95}
 ```
 
-Rounding is worth adding when money is involved:
+**Explanation:**
 
-```python
-prices = {"pen": 10, "book": 250}
-print({item: round(price * 1.18, 2) for item, price in prices.items()})
-```
+- `Asha` has 87, so `Asha: 87` is added
+- `Ravi` has 30, so the pair is skipped
+- `Meera` has 95, so `Meera: 95` is added
 
-**Output:**
-
-```
-{'pen': 11.8, 'book': 295.0}
-```
-
-Filtering a dictionary uses the trailing `if`, exactly as a list comprehension does:
-
-```python
-ages = {"Anita": 21, "Ravi": 22, "Meera": 20}
-print({name: age for name, age in ages.items() if age >= 21})
-```
-
-**Output:**
-
-```
-{'Anita': 21, 'Ravi': 22}
-```
-
-`items()` and the two loop variables do most of the work in all of these. A dictionary comprehension over `record.items()` is the standard way to produce a changed copy of a dictionary without altering the original.
-
-## Building a Dictionary from Two Lists
-
-Two lists that line up item for item become a dictionary through `zip()`:
-
-```python
-names = ["Anita", "Ravi", "Meera"]
-ages = [21, 22, 20]
-
-ages_by_name = {name: age for name, age in zip(names, ages)}
-print(ages_by_name)
-```
-
-**Output:**
-
-```
-{'Anita': 21, 'Ravi': 22, 'Meera': 20}
-```
-
-`zip()` produces the pairs, the two names unpack each pair, and the expression puts them either side of the colon.
-
-For this exact case — pairs straight in, nothing transformed — `dict()` does it without the comprehension:
-
-```python
-print(dict(zip(names, ages)))
-```
-
-**Output:**
-
-```
-{'Anita': 21, 'Ravi': 22, 'Meera': 20}
-```
-
-Use `dict(zip(...))` when nothing needs changing, and the comprehension when a key or value has to be computed or a condition applied:
-
-```python
-names = ["anita", "ravi", "meera"]
-ages = [21, 22, 20]
-print({name.title(): age for name, age in zip(names, ages) if age >= 21})
-```
-
-**Output:**
-
-```
-{'Anita': 21, 'Ravi': 22}
-```
-
-This is also the cure for the pair of parallel lists that a dictionary replaces. Data often arrives as separate columns, and one line turns it into records keyed properly.
-
-## Inverting a Dictionary
-
-Swapping the two sides of the colon turns keys into values and values into keys:
-
-```python
-ages = {"Anita": 21, "Ravi": 22, "Meera": 20}
-by_age = {age: name for name, age in ages.items()}
-print(by_age)
-print(by_age[22])
-```
-
-**Output:**
-
-```
-{21: 'Anita', 22: 'Ravi', 20: 'Meera'}
-Ravi
-```
-
-Two conditions have to hold for this to be sensible.
-
-The values must be usable as keys, so they must be immutable. Inverting a dictionary whose values are lists fails with `TypeError: unhashable type: 'list'`.
-
-And the values must be unique. A dictionary holds one value per key, so duplicates collapse and the last one wins:
-
-```python
-courses = {"Anita": "Maths", "Ravi": "Physics", "Meera": "Maths"}
-print({course: name for name, course in courses.items()})
-```
-
-**Output:**
-
-```
-{'Maths': 'Meera', 'Physics': 'Ravi'}
-```
-
-Anita has been lost. Inverting is only safe when the values genuinely identify one thing each — an id, a username, a code.
-
-When values repeat, grouping is what is actually wanted, and that needs a loop with `setdefault()` rather than a comprehension:
-
-```python
-courses = {"Anita": "Maths", "Ravi": "Physics", "Meera": "Maths"}
-
-by_course = {}
-for name, course in courses.items():
-    by_course.setdefault(course, []).append(name)
-
-print(by_course)
-```
-
-**Output:**
-
-```
-{'Maths': ['Anita', 'Meera'], 'Physics': ['Ravi']}
-```
-
-Nobody is lost, because each key now holds a list. A comprehension cannot do this: it produces one value per iteration and has nowhere to accumulate.
-
-## Empty Braces Are Still a Dictionary
-
-`{}` means an empty dictionary, and `set()` is the only way to write an empty set. That rule is unchanged, and it has one consequence worth stating.
-
-A set comprehension is written with braces and no colon, so it is a set even when it produces nothing:
-
-```python
-numbers = [1, 2, 3]
-result = {number for number in numbers if number > 100}
-print(result)
-print(type(result))
-```
-
-**Output:**
-
-```
-set()
-<class 'set'>
-```
-
-The type is decided by the form of the expression, not by what comes out of it. A comprehension with a colon is a dictionary comprehension however few pairs it yields:
-
-```python
-empty = {k: v for k, v in [] }
-print(empty)
-print(type(empty))
-```
-
-**Output:**
-
-```
-{}
-<class 'dict'>
-```
-
-So a set comprehension is the one brace-delimited form that reliably produces a set. When a set has to be built from literal values with no comprehension involved, and it might be empty, `set()` is still the way to start it.
+With curly braces, no colon means a set; a `key: value` pair means a dictionary.
 
 ## Further Reading
 
-- **Official Python guide to comprehensions** — https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
-- **Dictionary comprehensions explained** — https://realpython.com/python-dict-comprehension/
+- 📎 **Set comprehensions with worked examples** — https://www.programiz.com/python-programming/set-comprehension
+- 📎 **Official Python guide to data structures** — https://docs.python.org/3/tutorial/datastructures.html
 
-The comprehension form builds lists, sets and dictionaries from the same three parts. Next, a way of writing a function small enough to fit inside an expression.
+So far, our comprehensions have used simple expressions such as `len(name)` and `score + 5`. Python also lets us write a small function directly where we need it, without giving it a name.
+
+Next, you will learn about lambda functions.

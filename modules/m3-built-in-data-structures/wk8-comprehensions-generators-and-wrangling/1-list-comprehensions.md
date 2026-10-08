@@ -1,295 +1,220 @@
 # List Comprehensions
 
-One shape of loop appears over and over: create an empty list, walk a sequence, append something to the list each time.
+Building a new list from an existing collection often follows the same pattern: an empty list, a loop, and `append()`.
 
 ```python
-squares = []
-for number in range(1, 6):
-    squares.append(number * number)
+names = ["asha", "ravi", "meera"]
+
+titled = []
+for name in names:
+    titled.append(name.title())
+
+print(titled)
+```
+
+**Output:**
+
+```
+['Asha', 'Ravi', 'Meera']
+```
+
+For many tasks like this, three parts stay the same: you create an empty list, loop through the items, and append the result. The part that changes from task to task is the expression, such as `name.title()`.
+
+Python has a shorter form. You write the part you choose, and Python handles the rest.
+
+```python
+names = ["asha", "ravi", "meera"]
+titled = [name.title() for name in names]
+print(titled)
+```
+
+**Output:**
+
+```
+['Asha', 'Ravi', 'Meera']
+```
+
+This is a **list comprehension**. It builds a new list by going through a collection and putting a value into the new list for each item.
+
+## Syntax of a List Comprehension
+
+```
+[expression for variable in collection]
+```
+
+The `for` part of the loop is still there, with the variable and collection in the same order.
+
+```
+titled = [ name.title()   for name in names ]
+             ↑                    ↑
+      what to put in        where the values come from
+```
+
+Read it aloud and it says what it does: for each name in names, store `name.title()`.
+
+## Transforming Every Item
+
+The expression decides what value is added to the new list.
+
+**Example**
+
+This example builds a list of the squares of the numbers.
+
+```python
+numbers = [1, 2, 3, 4]
+squares = [number * number for number in numbers]
 print(squares)
 ```
 
 **Output:**
 
 ```
-[1, 4, 9, 16, 25]
+[1, 4, 9, 16]
 ```
 
-Four lines, three of which are scaffolding. The single interesting part is `number * number`.
+**Explanation:**
 
-A **list comprehension** writes the same thing as one expression:
+- `number` takes each value from the list, one at a time
+- `number * number` works out the square
+- the result is added to the new list, so `3` gives `9`
+
+## Filtering Values
+
+An `if` at the end of the comprehension keeps only the values that satisfy it.
+
+**Syntax**
+
+```
+[expression for variable in collection if condition]
+```
+
+**Example**
+
+This example keeps only the scores that are a pass.
 
 ```python
-squares = [number * number for number in range(1, 6)]
-print(squares)
+scores = [87, 32, 72, 25, 95]
+passed = [score for score in scores if score >= 35]
+print(passed)
 ```
 
 **Output:**
 
 ```
-[1, 4, 9, 16, 25]
+[87, 72, 95]
 ```
 
-Same result. The empty list, the `append()` call and the loop body have all gone, because the form implies them.
+**Explanation:**
 
-## The Three Parts
+- `score` takes each value from the list
+- `score >= 35` decides whether it is kept
+- `32` and `25` fail the condition, so they are skipped
+- the expression is just `score`, so the values that pass are stored unchanged
 
-A comprehension has an expression, a `for` clause, and an optional `if` clause, in that order, inside square brackets:
+## Filtering and Transforming Together
 
-```
-[  number * number    for number in range(1, 6)    if number % 2 == 0  ]
-    expression            for clause                   condition
-```
+The expression and the condition do two different jobs, so both can be used at once.
 
-- The **expression** is what goes into the new list. It usually mentions the loop variable.
-- The **for clause** names the loop variable and the sequence, written exactly as in an ordinary `for` line without the colon.
-- The **condition** decides which items are used at all. Leave it out and every item is used.
+**Example**
 
-The brackets matter: square brackets produce a list.
-
-A comprehension always builds a **new** list. It never changes the sequence it reads.
-
-## Reading One Aloud
-
-The parts are written expression-first and execute for-clause-first, which is what makes a comprehension awkward to read at the start. Read it in execution order:
+This example keeps the passing scores and adds a bonus of five to each one.
 
 ```python
-squares = [number * number for number in range(1, 6)]
-```
-
-*For each number in the range 1 to 6, give number times number.*
-
-With a condition, the condition comes second and the expression last:
-
-```python
-even_squares = [number * number for number in range(1, 11) if number % 2 == 0]
-print(even_squares)
+scores = [87, 32, 72, 25, 95]
+bonus = [score + 5 for score in scores if score >= 35]
+print(bonus)
 ```
 
 **Output:**
 
 ```
-[4, 16, 36, 64, 100]
+[92, 77, 100]
 ```
 
-*For each number in the range 1 to 11, if the number is even, give number times number.*
+**Explanation:**
 
-Reading right to left and then jumping back to the front is the habit to build. Once it is automatic, the expression sitting first is an advantage: the thing being collected is the first thing you see.
+- `score >= 35` selects the values first, so `32` and `25` never reach the expression
+- `score + 5` is worked out for each selected value
+- so `87` gives `92`, and `72` gives `77`
 
-## Filtering
+## Choosing a Result
 
-Without an expression that transforms anything, a comprehension filters:
+Sometimes every value should produce a result, but the result depends on a condition. The `if/else` expression comes before the `for`.
+
+**Syntax**
+
+```
+[value_if_true if condition else value_if_false for variable in collection]
+```
+
+**Example**
+
+This example turns each score into the word `Pass` or `Fail`.
 
 ```python
-numbers = [4, -2, 7, 0, -9, 3]
-positives = [number for number in numbers if number > 0]
-print(positives)
+scores = [87, 32, 72]
+status = ["Pass" if score >= 35 else "Fail" for score in scores]
+print(status)
 ```
 
 **Output:**
 
 ```
-[4, 7, 3]
+['Pass', 'Fail', 'Pass']
 ```
 
-The expression is just `number`, so each item that passes the test goes through unchanged.
+**Explanation:**
 
-The condition can be any expression that yields `True` or `False`, including method calls and membership tests:
+- `score` takes each value from the list
+- the condition decides which of the two words is stored
+- `87` passes, so `"Pass"` is stored
+- `32` fails, so `"Fail"` is stored
+
+Three scores went in and three results came out. Nothing was removed, because this form gives a result for every value.
+
+These two forms do different jobs:
+
+`if` after the `for` filters items.
+
+`if/else` before the `for` chooses the result for each item.
+
+## Using a Comprehension with a Dictionary
+
+`items()` gives a key and value on each pass, so we can unpack them into two variables.
+
+**Example**
+
+This example builds a list of the names whose score is a pass.
 
 ```python
-words = ["python", "is", "readable", "and", "popular"]
-long_words = [word for word in words if len(word) > 3]
-print(long_words)
-
-names = ["anita", "Ravi", "meera"]
-capitalised = [name for name in names if name[0].isupper()]
-print(capitalised)
+results = {"Asha": 87, "Ravi": 30}
+passed = [name for name, score in results.items() if score >= 35]
+print(passed)
 ```
 
 **Output:**
 
 ```
-['python', 'readable', 'popular']
-['Ravi']
+['Asha']
 ```
 
-## Transforming
+**Explanation:**
 
-Without a condition, a comprehension transforms every item:
+- `items()` gives one `name` and one `score` on each pass
+- `score >= 35` decides whether the name is kept
+- `Asha` has 87, so `Asha` is added
+- `Ravi` has 30, so he is skipped
+- the expression is `name`, so only the names appear in the result
 
-```python
-names = ["anita", "ravi", "meera"]
-print([name.title() for name in names])
+## When Not to Use a Comprehension
 
-marks = [78, 91, 64]
-print([mark + 5 for mark in marks])
-
-print([str(mark) for mark in marks])
-```
-
-**Output:**
-
-```
-['Anita', 'Ravi', 'Meera']
-[83, 96, 69]
-['78', '91', '64']
-```
-
-The last one is the tidy way to prepare numbers for `join()`.
-
-Pulling one field out of a list of records is the same thing:
-
-```python
-students = [
-    {"name": "Anita", "age": 21},
-    {"name": "Ravi", "age": 22},
-    {"name": "Meera", "age": 20},
-]
-print([student["name"] for student in students])
-print([student["name"] for student in students if student["age"] >= 21])
-```
-
-**Output:**
-
-```
-['Anita', 'Ravi', 'Meera']
-['Anita', 'Ravi']
-```
-
-Filtering and transforming together is the common case: select the records that matter, then keep only the field that matters.
-
-## A Conditional Expression Inside
-
-The `if` at the end **removes** items. Sometimes every item should stay and only the value should differ. That needs a different construct in a different place — a conditional expression, which chooses between two values:
-
-```python
-marks = [78, 45, 91, 32]
-results = ["pass" if mark >= 50 else "fail" for mark in marks]
-print(results)
-```
-
-**Output:**
-
-```
-['pass', 'fail', 'pass', 'fail']
-```
-
-Four marks in, four results out. Nothing was filtered.
-
-The form is `value_if_true if condition else value_if_false`, and it is an expression, so it fits where the comprehension's expression goes — before the `for`.
-
-Position is the whole difference between the two uses of `if`:
-
-```python
-marks = [78, 45, 91, 32]
-
-print(["pass" if mark >= 50 else "fail" for mark in marks])
-print([mark for mark in marks if mark >= 50])
-```
-
-**Output:**
-
-```
-['pass', 'fail', 'pass', 'fail']
-[78, 91]
-```
-
-| Where the `if` sits | What it does | `else` |
-| --- | --- | --- |
-| before the `for` | chooses between two values | required |
-| after the `for` | keeps or discards the item | not allowed |
-
-The `else` requirement is the giveaway. An expression must produce a value in every case, so it needs both branches. A filter has nothing to produce when the test fails, so an `else` would be meaningless.
-
-## Nested Comprehensions
-
-A comprehension whose expression is itself a comprehension builds a list of lists:
-
-```python
-grid = [[0 for column in range(4)] for row in range(3)]
-print(grid)
-```
-
-**Output:**
-
-```
-[[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
-```
-
-Read it from the outside: *for each row in the range 0 to 3, give a list made of a zero for each column in the range 0 to 4.* The inner comprehension runs once per outer iteration, producing a fresh list each time.
-
-That last point matters. Each row is separately built, so this does not suffer the aliasing problem that `[[0] * 4] * 3` has:
-
-```python
-grid = [[0 for column in range(4)] for row in range(3)]
-grid[0][0] = 9
-print(grid)
-```
-
-**Output:**
-
-```
-[[9, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
-```
-
-One cell changed, as intended.
-
-A comprehension can also carry two `for` clauses, which flattens rather than nests:
-
-```python
-matrix = [[1, 2], [3, 4], [5, 6]]
-flat = [value for row in matrix for value in row]
-print(flat)
-```
-
-**Output:**
-
-```
-[1, 2, 3, 4, 5, 6]
-```
-
-One list came out, not three. The two `for` clauses appear in the same order as the equivalent nested loop:
-
-```python
-flat = []
-for row in matrix:
-    for value in row:
-        flat.append(value)
-```
-
-Left to right in the comprehension is outer to inner in the loop. This is the one place where reading strictly left to right after the expression is correct, and getting the two clauses the wrong way round is a common error.
-
-## When a Comprehension Is the Wrong Choice
-
-A comprehension is clearer than a loop when it builds one list from one sequence with a simple expression and at most one condition. That covers most cases, and it is worth preferring because the reader can see at a glance that a list is being built and nothing else is happening.
-
-It is the wrong choice in four situations.
-
-**When the body does more than produce a value.** A comprehension holds one expression. Anything needing several statements — a `try`, a running total, a print — needs a loop.
-
-**When the expression is long.** Compare:
-
-```python
-results = ["distinction" if m >= 85 else "pass" if m >= 50 else "fail" for m in marks]
-```
-
-with the same logic as an `if`/`elif`/`else` in a loop. The comprehension is shorter and the loop is comprehensible. Chained conditional expressions are where comprehensions stop paying.
-
-**When the nesting is more than two levels.** Two `for` clauses are readable. Three are not.
-
-**When the result is not used.** A comprehension written for its side effects builds a list that gets thrown away:
-
-```python
-[print(name) for name in names]
-```
-
-This prints, and it also constructs a list of `None` values for no reason. Write the loop.
-
-The test to apply: if the comprehension needs a comment to explain it, a loop probably did not.
+Use a list comprehension when you are building a new list and the logic remains easy to read. If the loop has several steps or becomes difficult to understand, use a normal `for` loop instead.
 
 ## Further Reading
 
-- **Official Python guide to list comprehensions** — https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
-- **Comprehensions in depth** — https://realpython.com/list-comprehension-python/
+- 📎 **List comprehensions with worked examples** — https://www.programiz.com/python-programming/list-comprehension
+- 📎 **Official Python guide to list comprehensions** — https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
 
-A list comprehension builds a list from a sequence in one expression, filtering with a trailing `if` and choosing values with a conditional expression. Next, the same three parts with different brackets.
+The same idea can also be used to build sets and dictionaries.
+
+Next, you will learn set and dictionary comprehensions.
