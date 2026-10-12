@@ -37,6 +37,42 @@ print(type(marks))
 
 `tuple` is a built-in data type, like `list`. The output shows round brackets instead of square ones.
 
+## Creating a Tuple with the `tuple()` Constructor
+
+The `tuple()` function is another way to create a tuple. With no argument, it creates an empty tuple. When given an existing collection or a string, it creates a tuple containing its elements.
+
+**Example**
+
+```python
+empty = tuple()
+letters = tuple("cat")
+numbers = tuple([10, 20, 30])
+
+print(empty)
+print(type(empty))
+
+print(letters)
+print(type(letters))
+
+print(numbers)
+print(type(numbers))
+```
+
+**Output:**
+
+```text
+()
+<class 'tuple'>
+('c', 'a', 't')
+<class 'tuple'>
+(10, 20, 30)
+<class 'tuple'>
+```
+
+`tuple()` creates a tuple and stores it in the variable. A string becomes a tuple of characters, while a list becomes a tuple containing the list's elements.
+
+Parentheses are commonly used when writing tuple values directly. Use `tuple()` when you want to create a tuple from existing data.
+
 ## Accessing Elements
 
 Indexing and slicing work exactly as they do on a list.
@@ -331,6 +367,7 @@ The key points about tuples:
 - A tuple is an ordered collection of values that cannot be changed after it is created.
 - A tuple is written with round brackets, and the elements are separated by commas.
 - `tuple` is a built-in data type, like `list`.
+- `tuple()` creates an empty tuple, or a tuple of the elements of an existing collection or string.
 - Indexing and slicing work exactly as they do on a list.
 - Assigning to an index raises a `TypeError`.
 - A tuple has no methods that would change it, so `append()` raises an `AttributeError`.

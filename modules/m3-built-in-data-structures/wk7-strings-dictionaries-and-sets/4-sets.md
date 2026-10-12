@@ -72,6 +72,42 @@ print(len(marks))
 
 No error is raised. The duplicate is simply dropped.
 
+## Creating a Set with the `set()` Constructor
+
+The `set()` function is another way to create a set. With no argument, it creates an empty set. When given an existing collection or a string, it creates a set containing only unique elements.
+
+**Example**
+
+```python
+empty = set()
+letters = set("cat")
+numbers = set([10, 20, 10, 30])
+
+print(empty)
+print(type(empty))
+
+print(sorted(letters))
+print(type(letters))
+
+print(sorted(numbers))
+print(type(numbers))
+```
+
+**Output:**
+
+```text
+set()
+<class 'set'>
+['a', 'c', 't']
+<class 'set'>
+[10, 20, 30]
+<class 'set'>
+```
+
+`set()` creates a set and stores it in the variable. A string becomes a set of unique characters, while a list becomes a set containing only unique elements.
+
+Curly braces are commonly used when writing a set with known values directly. Use `set()` when you want to create a set from existing data. Remember that `{}` creates an empty dictionary, not an empty set.
+
 ## Removing Duplicates from a List
 
 The `set()` function builds a set from an existing list, keeping only one copy of each value.

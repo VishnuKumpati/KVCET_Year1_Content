@@ -170,6 +170,42 @@ print(len(marks))
 
 An empty list is useful when the values will be added later. A list with one element is still a list because the value is inside square brackets. Without the brackets, `marks = 87` would create an integer.
 
+## Creating a List with the `list()` Constructor
+
+The `list()` function is another way to create a list. With no argument, it creates an empty list. When given an existing collection or a string, it creates a list containing its elements.
+
+**Example**
+
+```python
+empty = list()
+letters = list("cat")
+numbers = list(range(5))
+
+print(empty)
+print(type(empty))
+
+print(letters)
+print(type(letters))
+
+print(numbers)
+print(type(numbers))
+```
+
+**Output:**
+
+```text
+[]
+<class 'list'>
+['c', 'a', 't']
+<class 'list'>
+[0, 1, 2, 3, 4]
+<class 'list'>
+```
+
+`list()` creates a list and stores it in the variable. A string becomes a list of characters, while `range(5)` becomes a list of numbers from `0` to `4`.
+
+Square brackets are useful when writing known values directly. Use `list()` when you want to create a list from existing data.
+
 ## Adding an Element to a List
 
 The `append()` method adds one element to the end of a list.
@@ -241,6 +277,7 @@ The key points about lists:
 - The elements stay in the order they were written unless the program changes that order.
 - The same value can appear more than once, and each occurrence counts as a separate element.
 - A list may hold zero elements, one element, or any number.
+- `list()` creates an empty list, or a list of the elements of an existing collection or string.
 - `len()` returns the number of elements in a list.
 - `append()` adds one element to the end of a list and changes the existing list.
 
