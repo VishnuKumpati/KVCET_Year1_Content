@@ -61,7 +61,9 @@ print(type(marks))
 <class 'dict'>
 ```
 
-`len()` returns `3`, the number of pairs. `dict` is a built-in data type, like `list` and `str`.
+`len()` returns `3`, the number of pairs. `dict` is a built-in data type, like `list` and `set`.
+
+A set also uses curly braces. The colon in each pair is what makes this a dictionary.
 
 A dictionary keeps its pairs in the order they were added, which is why the output above matches the order they were written in.
 

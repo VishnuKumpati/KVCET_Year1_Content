@@ -370,16 +370,16 @@
                                            "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/2-string-methods.md"
                                        },
                                        {
-                                           "id":  "b8e4c017-5a96-42d3-8f71-2c0ab6d95e84",
-                                           "title":  "Regular Expressions",
-                                           "tooltip":  "Week 7 - Patterns, search, fullmatch, findall, groups, sub and split",
-                                           "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/3-regular-expressions.md"
-                                       },
-                                       {
                                            "id":  "36d7d491-479b-4f88-8458-d16fa5136308",
                                            "title":  "Formatted String Literals",
                                            "tooltip":  "Week 7 - f-strings, number formats, width and alignment",
-                                           "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/4-f-strings.md"
+                                           "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/3-f-strings.md"
+                                       },
+                                       {
+                                           "id":  "f06de0d4-3bb2-413d-b95e-52671e0e2f27",
+                                           "title":  "Sets",
+                                           "tooltip":  "Week 7 - Uniqueness, membership, union, intersection and difference",
+                                           "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/4-sets.md"
                                        },
                                        {
                                            "id":  "4f9283e6-2424-4782-bf77-083a2ed07c3a",
@@ -400,16 +400,10 @@
                                            "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/7-dictionary-iteration.md"
                                        },
                                        {
-                                           "id":  "f06de0d4-3bb2-413d-b95e-52671e0e2f27",
-                                           "title":  "Sets",
-                                           "tooltip":  "Week 7 - Uniqueness, membership, union, intersection and difference",
-                                           "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/8-sets.md"
-                                       },
-                                       {
                                            "id":  "11314f59-f4c1-42b9-a30f-be1c121cfcec",
                                            "title":  "Nested Data Structures",
                                            "tooltip":  "Week 7 - Lists of dictionaries, dictionaries of lists, and reading them",
-                                           "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/9-nested-data-structures.md"
+                                           "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/8-nested-data-structures.md"
                                        },
                                        {
                                            "id":  "e077310d-9c92-4600-b3d2-b004bdc71f03",
@@ -626,22 +620,28 @@
                                            "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/5-modules-and-imports.md"
                                        },
                                        {
+                                           "id":  "b8e4c017-5a96-42d3-8f71-2c0ab6d95e84",
+                                           "title":  "Regular Expressions",
+                                           "tooltip":  "Week 11 - Patterns, search, findall, sub, split, and matching the whole string",
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/6-regular-expressions.md"
+                                       },
+                                       {
                                            "id":  "74aad0ce-fb11-4cc4-8005-7ab924e96400",
                                            "title":  "Packages",
                                            "tooltip":  "Week 11 - __init__.py, nested packages, and running with -m",
-                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/6-packages.md"
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/7-packages.md"
                                        },
                                        {
                                            "id":  "750cd2f4-bdb9-4221-b3a4-fe7043497f53",
                                            "title":  "The Standard Library",
                                            "tooltip":  "Week 11 - math, random, datetime, collections and what else exists",
-                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/7-the-standard-library.md"
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/8-the-standard-library.md"
                                        },
                                        {
                                            "id":  "c4a71e58-30b6-4a92-8d05-71f9be3c6a1d",
                                            "title":  "Dates and Times",
                                            "tooltip":  "Week 11 - date, datetime, timedelta, strftime and strptime, and sorting by date",
-                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/8-dates-and-times.md"
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/9-dates-and-times.md"
                                        },
                                        {
                                            "id":  "9d8b6631-d91c-4991-bf93-cd6ac2d86847",

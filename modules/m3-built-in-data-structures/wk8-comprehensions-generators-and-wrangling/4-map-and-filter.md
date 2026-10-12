@@ -1,139 +1,65 @@
-# map and filter
+# map() and filter()
 
-Two built-in functions take a function as an argument and apply it across a sequence. `map()` transforms every item. `filter()` keeps some of them.
+A lambda becomes useful when we pass it to another function. Python's built-in `map()` and `filter()` functions are common examples of this.
 
-Both do work that a comprehension also does, and the comparison at the end of this topic is worth making honestly.
+`map()` applies a function to every item in an iterable. `filter()` keeps the items for which a function returns `True`.
 
-## map
+## The map() Function
 
-`map()` takes a function and a sequence, and applies the function to every item:
+In its simplest form, `map()` takes two arguments: a function and an iterable. It applies the function to each item and produces the results.
+
+**Syntax**
+
+```
+map(function, iterable)
+```
+
+**Example**
 
 ```python
-numbers = [1, 2, 3, 4]
-squares = map(lambda number: number * number, numbers)
-print(list(squares))
+scores = [87, 72, 95]
+bonus = map(lambda score: score + 5, scores)
+print(list(bonus))
 ```
 
 **Output:**
 
 ```
-[1, 4, 9, 16]
+[92, 77, 100]
 ```
 
-The function comes first and the sequence second. The function is passed **without brackets** — `map(square, numbers)`, never `map(square(), numbers)`. Brackets would call it, and what `map()` needs is the function itself, to call later.
+The lambda receives one score at a time. `87` gives `92`, `72` gives `77`, and `95` gives `100`.
 
-A named function works exactly the same way:
+The function does not have to be a lambda. Any function name works.
+
+**Example**
 
 ```python
-def to_fahrenheit(celsius):
-    return celsius * 9 / 5 + 32
+def add_bonus(score):
+    return score + 5
 
-temperatures = [0, 25, 100]
-print(list(map(to_fahrenheit, temperatures)))
+scores = [87, 72, 95]
+print(list(map(add_bonus, scores)))
 ```
 
 **Output:**
 
 ```
-[32.0, 77.0, 212.0]
+[92, 77, 100]
 ```
 
-Built-in functions and methods can be passed too, which is where `map()` reads best:
+`add_bonus` is written without brackets, because the function is being handed to `map()` rather than called.
+
+## map() Returns a map Object
+
+`map()` returns a map object, which is an iterator rather than a list. It produces each result when needed.
+
+**Example**
 
 ```python
-pieces = "10 20 30".split()
-print(pieces)
-print(list(map(int, pieces)))
-
-names = ["anita", "ravi"]
-print(list(map(str.upper, names)))
-```
-
-**Output:**
-
-```
-['10', '20', '30']
-[10, 20, 30]
-['ANITA', 'RAVI']
-```
-
-No lambda was needed in either case, because a function that does the job already exists.
-
-`map()` also accepts more than one sequence, calling the function with one item from each:
-
-```python
-prices = [100, 250, 40]
-quantities = [2, 1, 5]
-print(list(map(lambda price, quantity: price * quantity, prices, quantities)))
-```
-
-**Output:**
-
-```
-[200, 250, 200]
-```
-
-Like `zip()`, it stops at the end of the shortest sequence.
-
-## filter
-
-`filter()` takes a function and a sequence, and keeps the items for which the function returns `True`:
-
-```python
-numbers = [4, -2, 7, 0, -9, 3]
-print(list(filter(lambda number: number > 0, numbers)))
-```
-
-**Output:**
-
-```
-[4, 7, 3]
-```
-
-The items are unchanged. `filter()` only decides which ones survive, which is the difference from `map()`: `map()` always returns as many items as it was given, `filter()` returns at most that many.
-
-A named function is often clearer, because its name states the test:
-
-```python
-def is_passing(mark):
-    return mark >= 50
-
-marks = [78, 45, 91, 32]
-print(list(filter(is_passing, marks)))
-```
-
-**Output:**
-
-```
-[78, 91]
-```
-
-Filtering records reads the same way:
-
-```python
-students = [
-    {"name": "Anita", "age": 21},
-    {"name": "Ravi", "age": 17},
-    {"name": "Meera", "age": 20},
-]
-adults = list(filter(lambda student: student["age"] >= 18, students))
-print([student["name"] for student in adults])
-```
-
-**Output:**
-
-```
-['Anita', 'Meera']
-```
-
-## Both Return an Iterator
-
-`list()` has appeared around every result so far, and it is not decoration. Neither function returns a list:
-
-```python
-numbers = [1, 2, 3]
-result = map(lambda n: n * 2, numbers)
-print(type(result))
+scores = [87, 72, 95]
+bonus = map(lambda score: score + 5, scores)
+print(type(bonus))
 ```
 
 **Output:**
@@ -142,111 +68,149 @@ print(type(result))
 <class 'map'>
 ```
 
-Printing one directly shows the object rather than the values:
+Use `list()` when you want to collect all the results into a list. You can also process the results one at a time using a `for` loop.
+
+A map object is an iterator. Once all its results have been consumed, there are no results left to retrieve from it.
+
+**Example**
 
 ```python
-print(result)
+scores = [87, 72]
+bonus = map(lambda score: score + 5, scores)
+print(list(bonus))
+print(list(bonus))
 ```
 
 **Output:**
 
 ```
-<map object at 0x000001B2C3D40A90>
-```
-
-The hexadecimal number is a memory address and differs every run. What it tells you is that nothing has been computed yet.
-
-A `map` object is an **iterator**: it produces its values one at a time, on demand, and holds none of them. That is useful — a `map()` over a million items uses no more memory than one over ten — and it has a consequence that catches everyone once.
-
-An iterator can only be walked through once:
-
-```python
-numbers = [1, 2, 3]
-doubled = map(lambda n: n * 2, numbers)
-
-print(list(doubled))
-print(list(doubled))
-```
-
-**Output:**
-
-```
-[2, 4, 6]
+[92, 77]
 []
 ```
 
-The first `list()` consumed every value. The second found nothing left. The same happens with a `for` loop: looping over the result twice runs the body only on the first pass.
+The first `list()` used up the results. The second found nothing left.
 
-So convert once and keep the list if the values are needed more than once:
+## The filter() Function
+
+`filter()` also takes a function and an iterable. The function tests each item. `filter()` keeps the items for which the function returns `True` in these examples.
+
+**Syntax**
+
+```
+filter(function, iterable)
+```
+
+**Example**
 
 ```python
-numbers = [1, 2, 3]
-doubled = list(map(lambda n: n * 2, numbers))
-print(doubled)
-print(doubled)
+scores = [87, 32, 72, 25, 95]
+passed = filter(lambda score: score >= 35, scores)
+print(list(passed))
 ```
 
 **Output:**
 
 ```
-[2, 4, 6]
-[2, 4, 6]
+[87, 72, 95]
 ```
 
-If the result is being consumed immediately — looped over once, or handed to `sum()` or `max()` — the conversion is unnecessary:
+The lambda returns `True` for `87`, `72` and `95`, so those are kept. It returns `False` for `32` and `25`, so those are dropped.
+
+`filter()` never changes the values. It only decides which ones stay.
+
+**Example**
 
 ```python
-marks = [78, 45, 91]
-print(sum(map(lambda mark: mark + 5, marks)))
+names = ["Asha", "Ravi", "Meera"]
+print(list(filter(lambda name: len(name) > 4, names)))
 ```
 
 **Output:**
 
 ```
-229
+['Meera']
 ```
 
-`filter()` behaves identically, returning a `filter` object with the same one-pass rule.
+Only `Meera` has more than four characters, and it comes back exactly as it was.
 
-## The Same Work as a Comprehension
+When nothing matches, the result is empty.
 
-Every `map()` and `filter()` has a comprehension that does the same thing:
-
-| Task | With map/filter | With a comprehension |
-| --- | --- | --- |
-| Square each item | `list(map(lambda n: n * n, nums))` | `[n * n for n in nums]` |
-| Keep the positives | `list(filter(lambda n: n > 0, nums))` | `[n for n in nums if n > 0]` |
-| Both | `list(map(lambda n: n * n, filter(lambda n: n > 0, nums)))` | `[n * n for n in nums if n > 0]` |
-
-The first two rows are close. The third is not:
+**Example**
 
 ```python
-numbers = [4, -2, 7, 0, -9, 3]
-
-print(list(map(lambda n: n * n, filter(lambda n: n > 0, numbers))))
-print([n * n for n in numbers if n > 0])
+scores = [20, 30]
+print(list(filter(lambda score: score >= 35, scores)))
 ```
 
 **Output:**
 
 ```
-[16, 49, 9]
-[16, 49, 9]
+[]
 ```
 
-The comprehension reads in one pass. The nested version has to be read inside out, and the `filter()` that runs first is written last.
+## The Difference Between map() and filter()
 
-The practical guidance:
+Both take a function and an iterable, and what the function returns is what separates them.
 
-**Prefer a comprehension** when a lambda would be needed, and whenever filtering and transforming happen together. It is the form most Python programmers reach for, and it stays readable as the expression grows.
+| `map()` | `filter()` |
+| --- | --- |
+| Applies a function to each item to produce a result. | Tests each item to decide whether to keep it. |
+| Produces one result per input item. | Keeps only items whose test result is truthy. |
+| With one input iterable, produces the same number of results as input items. | Produces the same number of items or fewer. |
+| The results may differ from the original items. | Keeps the original items; it does not transform them. |
 
-**`map()` reads well** when a function already exists and no lambda is required. `map(int, pieces)` and `map(str.strip, lines)` are shorter and no less clear than the comprehensions that match them.
+## Using Them Together
 
-**Recognise both** regardless of which you write. `map()` and `filter()` are common in existing code, and in other languages they are the standard way to express this work.
+The result of `filter()` can be passed straight into `map()`.
+
+**Example**
+
+```python
+scores = [87, 32, 72, 25, 95]
+
+passed = filter(lambda score: score >= 35, scores)
+bonus = map(lambda score: score + 5, passed)
+
+print(list(bonus))
+```
+
+**Output:**
+
+```
+[92, 77, 100]
+```
+
+`filter()` removed `32` and `25` first. `map()` then added five to each of the three that remained.
+
+## Comparing with a Comprehension
+
+A list comprehension does the same work.
+
+**Example**
+
+```python
+scores = [87, 72, 95]
+
+print(list(map(lambda score: score + 5, scores)))
+print([score + 5 for score in scores])
+```
+
+**Output:**
+
+```
+[92, 77, 100]
+[92, 77, 100]
+```
+
+The comprehension needs no lambda and no `list()`, which is why it is the more common choice in Python for this kind of work.
+
+`map()` and `filter()` are still worth knowing. They appear in existing code, and they are useful when the function already has a name and does not need a lambda at all.
 
 ## Further Reading
 
-- **Official reference for `map()` and `filter()`** — https://docs.python.org/3/library/functions.html#map
-- **map, filter and comprehensions compared** — https://realpython.com/python-map-function/
+- 📎 **map() and filter() with worked examples** — https://www.programiz.com/python-programming/methods/built-in/map
+- 📎 **Official Python reference for built-in functions** — https://docs.python.org/3/library/functions.html
 
-`map()` transforms and `filter()` selects, both returning single-use iterators. Next, a third function that takes a function as an argument — and the one that is genuinely without a comprehension equivalent.
+`map()` and `filter()` produce results on demand instead of building a list immediately. This is the same iterator behaviour that makes them useful when processing data. Python also lets us create our own iterators using generators.
+
+Next, you will learn about generators.

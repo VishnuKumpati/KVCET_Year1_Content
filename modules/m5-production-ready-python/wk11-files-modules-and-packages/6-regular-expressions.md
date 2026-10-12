@@ -370,14 +370,6 @@ Every symbol used in this topic, with what it does and why it is needed.
 - 📎 **Regular expressions with worked examples** — https://www.programiz.com/python-programming/regex
 - 📎 **Official Python guide to regular expressions** — https://docs.python.org/3/howto/regex.html
 
-You can now find, replace and split text even when the exact text is not known in advance. But once you have found the information you need, you often need to show it in a readable message.
+You can now find, replace and split text even when the exact text is not known in advance. `re` is one module, imported by name. As a program grows, its own modules also need to be grouped together.
 
-For example, a program may find a student's name and marks and then need to display:
-
-```
-Student: Asha, Marks: 87
-```
-
-Using `+` and `str()` works, but it becomes harder to read when a message contains several values.
-
-Next, you will learn f-strings, which make it much easier to put values directly inside a string.
+Next, you will learn how to organise modules into packages.

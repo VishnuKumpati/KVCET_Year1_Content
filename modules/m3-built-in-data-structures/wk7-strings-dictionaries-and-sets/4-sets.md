@@ -94,7 +94,7 @@ This is one of the most common uses of a set.
 
 ## A Set Has No Order
 
-A set does not keep its values in the order they were written.
+A set does not guarantee the order in which its values appear. If you need predictable sorted output, use `sorted()`.
 
 **Example**
 
@@ -109,7 +109,7 @@ print(sorted(numbers))
 [1, 3, 5]
 ```
 
-`sorted()` creates a sorted list from the set. Without `sorted()`, the values may appear in a different order.
+`sorted()` creates a sorted list from the set.
 
 Because there is no order, there are no positions either.
 
@@ -219,12 +219,25 @@ Use `remove()` when the value should be there, and `discard()` when it may not b
 
 ## Values a Set Can Hold
 
-A set can hold strings, numbers and tuples. A list cannot be a value in a set.
+A set can hold strings, numbers and tuples whose contents are also suitable for use in a set. A list cannot be stored directly in a set because lists are mutable.
 
 **Example**
 
 ```python
-bad = {[1, 2]}
+valid = {(1, 2), (3, 4)}
+print(len(valid))
+```
+
+**Output:**
+
+```
+2
+```
+
+**Example**
+
+```python
+invalid = {([1, 2],)}
 ```
 
 **Output:**
@@ -232,6 +245,8 @@ bad = {[1, 2]}
 ```
 TypeError: unhashable type: 'list'
 ```
+
+The first set is valid because both tuples hold only numbers. The second raises an error because the tuple contains a list.
 
 ## Checking Whether a Value Is in a Set
 
@@ -331,6 +346,6 @@ Both store collections of values. The way you need to use those values determine
 - 📎 **Sets with worked examples** — https://www.programiz.com/python-programming/set
 - 📎 **Official Python guide to sets** — https://docs.python.org/3/tutorial/datastructures.html
 
-Every collection so far has held values directly. A value can also be a collection of its own, which is how a program stores a list inside a dictionary or a dictionary inside a list.
+Lists, tuples and strings let you access values by position, while sets help you check whether a value exists. But what if you need to find a student's marks using their name?
 
-Next, you will learn about nested data structures.
+Next, you will learn about dictionaries, which store values under keys so you can look them up directly.

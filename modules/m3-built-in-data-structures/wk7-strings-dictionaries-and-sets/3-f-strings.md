@@ -20,7 +20,7 @@ Student: Asha, Marks: 87
 
 The line is hard to read and easy to get wrong. The quotation marks, the `+` signs and the `str()` call all have to be in the right places, and a missing space inside the quotes is invisible until the program runs.
 
-A formatted string writes the same message with the values placed directly inside the text.
+An f-string lets you place variables directly inside a message, making the code easier to read.
 
 ## Writing an f-string
 
@@ -116,7 +116,7 @@ Average: 84.67
 Average: 85
 ```
 
-The number before the `f` specifies how many decimal places to show. The value itself is unchanged; only the text produced is rounded.
+The number after the decimal point and before `f` specifies how many decimal places to display. For example, `.2f` displays two decimal places, while `.0f` displays none. This changes only the displayed text, not the original value.
 
 ## Adding Thousands Separators
 
@@ -171,16 +171,16 @@ A colon followed by a number sets the minimum number of character positions for 
 ```python
 name = "Asha"
 mark = 87
-print(f"{name:<10}{mark:>5}")
+print(f"|{name:<10}|{mark:>5}|")
 ```
 
 **Output:**
 
 ```
-Asha         87
+|Asha      |   87|
 ```
 
-`name` gets a minimum of 10 character positions and `mark` gets a minimum of 5. `<` puts the name on the left, while `>` puts the mark on the right.
+The `|` characters are included only to show where each column begins and ends. `name` occupies 10 character positions and `mark` occupies 5. `<` places the name on the left of its column, while `>` places the mark on the right.
 
 ## Printing a Brace
 
@@ -241,6 +241,6 @@ Every formatting option used in this topic, with what it does and why it is need
 - 📎 **f-strings with worked examples** — https://www.programiz.com/python-programming/string-formatting
 - 📎 **Official Python guide to formatted strings** — https://docs.python.org/3/tutorial/inputoutput.html
 
-Strings, lists and tuples all find a value by its position. A program often needs to find a value by name instead, such as the marks belonging to a particular student.
+Lists, tuples and strings all keep their values in order, and the same value can appear in them any number of times. Some data needs neither, such as a collection where every value must appear only once.
 
-Next, you will learn a collection that stores values under names.
+Next, you will learn about sets.

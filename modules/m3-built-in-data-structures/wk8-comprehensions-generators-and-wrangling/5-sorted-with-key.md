@@ -1,274 +1,170 @@
 # Sorting with a Key
 
-Sorting so far has compared whole items. Numbers sorted as numbers, strings alphabetically, and mixed types not at all. That is often not the order wanted: words by length, records by one field, names ignoring case.
+`sorted()` on its own compares the items directly. Numbers sort by value and strings sort alphabetically.
 
-`sorted()` and `sort()` both take a `key` — a function that says what to sort **by**.
+That works until each item contains multiple values. For example, when sorting students represented as dictionaries, should Python compare their names or their scores? The `key` argument lets us choose which field determines the order.
 
-## How key Works
+It takes a function, and `sorted()` sorts by whatever that function returns.
 
-The key function is called once for each item. Whatever it returns is used for the comparison, and the items themselves are what come out:
-
-```python
-words = ["banana", "fig", "cherry", "date"]
-print(sorted(words))
-print(sorted(words, key=len))
-```
-
-**Output:**
+**Syntax**
 
 ```
-['banana', 'cherry', 'date', 'fig']
-['fig', 'date', 'banana', 'cherry']
+sorted(iterable, key=function)
 ```
 
-The first is alphabetical. The second is by length: `fig` is 3, `date` is 4, and `banana` and `cherry` are both 6.
+## Sorting a List of Dictionaries
 
-`len` is passed without brackets, the same rule as `map()` and `filter()`. `sorted()` needs the function, not the result of calling it.
+The function receives one item at a time and returns the field to sort by.
 
-Note what came back: the original words, not their lengths. The key decides the order and nothing else.
-
-## Case-Insensitive Sorting
-
-Sorting strings alphabetically puts every capital before every lowercase letter, which is rarely intended:
-
-```python
-fruits = ["banana", "Apple", "cherry", "Date"]
-print(sorted(fruits))
-print(sorted(fruits, key=str.lower))
-```
-
-**Output:**
-
-```
-['Apple', 'Date', 'banana', 'cherry']
-['Apple', 'banana', 'cherry', 'Date']
-```
-
-`str.lower` is the `lower()` method, referred to without calling it. Each item is lowercased for comparison purposes only, so the order is alphabetical while the original capitalisation survives in the result.
-
-This is the fix for the capitalisation trap, and it is worth applying by default to any list of names or titles.
-
-## Sorting Records by a Field
-
-A list of dictionaries cannot be sorted without a key, because dictionaries are not comparable with `<`. A lambda that picks out one field supplies the ordering:
+**Example**
 
 ```python
 students = [
-    {"name": "Anita", "mark": 78},
-    {"name": "Ravi", "mark": 91},
-    {"name": "Meera", "mark": 64},
+    {"name": "Asha", "score": 87},
+    {"name": "Ravi", "score": 30},
+    {"name": "Meera", "score": 95}
 ]
 
-by_mark = sorted(students, key=lambda student: student["mark"])
-print([student["name"] for student in by_mark])
-```
+ordered = sorted(students, key=lambda student: student["score"])
 
-**Output:**
-
-```
-['Meera', 'Anita', 'Ravi']
-```
-
-This is the single most common use of `key`, and it is the one job with no comprehension equivalent. A comprehension can filter and transform; it cannot reorder.
-
-Sorting by a computed value is the same, with the computation in the lambda:
-
-```python
-students = [
-    {"name": "Anita", "marks": [78, 91, 64]},
-    {"name": "Ravi", "marks": [88, 72, 95]},
-    {"name": "Meera", "marks": [60, 85, 70]},
-]
-
-by_average = sorted(students, key=lambda s: sum(s["marks"]) / len(s["marks"]))
-for student in by_average:
-    print(f"{student['name']:<10}{sum(student['marks']) / len(student['marks']):>8.1f}")
-```
-
-**Output:**
-
-```
-Meera         71.7
-Anita         77.7
-Ravi          85.0
-```
-
-## reverse Alongside key
-
-`reverse=True` works with a key, and reverses the order the key produced:
-
-```python
-students = [
-    {"name": "Anita", "mark": 78},
-    {"name": "Ravi", "mark": 91},
-    {"name": "Meera", "mark": 64},
-]
-
-ranked = sorted(students, key=lambda student: student["mark"], reverse=True)
-for position, student in enumerate(ranked, start=1):
-    print(f"{position}. {student['name']:<10}{student['mark']:>4}")
-```
-
-**Output:**
-
-```
-1. Ravi        91
-2. Anita       78
-3. Meera       64
-```
-
-For numbers, negating inside the key does the same job:
-
-```python
-marks = [78, 91, 64]
-print(sorted(marks, key=lambda mark: -mark))
-```
-
-**Output:**
-
-```
-[91, 78, 64]
-```
-
-That looks like a needless trick until two fields have to sort in opposite directions, which is what the next section covers. For a single field, `reverse=True` says what it means and is the better choice.
-
-## Sorting by Several Things
-
-A key can return a tuple, and tuples compare item by item: the first items decide, and the second are consulted only when the first are equal.
-
-```python
-students = [
-    {"name": "Ravi", "course": "Maths", "mark": 91},
-    {"name": "Anita", "course": "Maths", "mark": 78},
-    {"name": "Meera", "course": "Physics", "mark": 64},
-    {"name": "Sunil", "course": "Maths", "mark": 91},
-]
-
-ordered = sorted(students, key=lambda s: (s["course"], -s["mark"], s["name"]))
 for student in ordered:
-    print(f"{student['course']:<10}{student['mark']:>4}  {student['name']}")
+    print(student["name"], student["score"])
 ```
 
 **Output:**
 
 ```
-Maths       91  Ravi
-Maths       91  Sunil
-Maths       78  Anita
-Physics     64  Meera
+Ravi 30
+Asha 87
+Meera 95
 ```
 
-Course ascending, then mark descending, then name ascending. The negation is what reverses the middle field on its own — `reverse=True` would have flipped all three.
+The lambda receives one dictionary and returns its score. `sorted()` compares `30`, `87` and `95`, and moves the whole dictionaries into that order, so each name stays with its own score.
 
-## Stable Sorting
+## Sorting in Reverse
 
-When two items have equal keys, Python keeps them in the order they were already in. This is called a **stable** sort.
+The `reverse` argument works alongside `key`.
 
-```python
-words = ["banana", "fig", "cherry", "date"]
-print(sorted(words, key=len))
-```
-
-**Output:**
-
-```
-['fig', 'date', 'banana', 'cherry']
-```
-
-`banana` and `cherry` are both six letters, and `banana` came first in the original list, so it comes first here.
-
-Stability is a guarantee, not an accident, and it is useful: sorting twice sorts by two fields. Sort by the less important field first, then by the more important one, and the first ordering survives inside each group of the second.
-
-## The Key Is Called Once per Item
-
-`sorted()` computes every key first, then sorts using those values. It does not call the key function each time it compares two items.
-
-```python
-def show_key(word):
-    print("computing key for", word)
-    return len(word)
-
-print(sorted(["bb", "a", "ccc"], key=show_key))
-```
-
-**Output:**
-
-```
-computing key for bb
-computing key for a
-computing key for ccc
-['a', 'bb', 'ccc']
-```
-
-Three items, three calls. Sorting three items takes more than three comparisons, so the keys are clearly being reused.
-
-This matters when the key is expensive. A key that reads a file or does a long calculation runs once per item rather than once per comparison, which makes `key` the right place for such work — and a reason to prefer it over older approaches that compared items pairwise.
-
-It also means the key function must be **pure**: given the same item it should return the same value, and it should not change anything. A key with side effects runs an unpredictable number of times relative to the rest of the program.
-
-## min and max Take the Same Key
-
-`min()` and `max()` accept `key` and interpret it identically:
-
-```python
-words = ["banana", "fig", "cherry"]
-print(min(words, key=len))
-print(max(words, key=len))
-```
-
-**Output:**
-
-```
-fig
-banana
-```
-
-`banana` and `cherry` are both longest; `max()` returns the first one it found, consistent with stability.
-
-On records, this finds the whole record rather than just the winning value:
+**Example**
 
 ```python
 students = [
-    {"name": "Anita", "mark": 78},
-    {"name": "Ravi", "mark": 91},
-    {"name": "Meera", "mark": 64},
+    {"name": "Asha", "score": 87},
+    {"name": "Ravi", "score": 30},
+    {"name": "Meera", "score": 95}
 ]
 
-best = max(students, key=lambda student: student["mark"])
-print(best)
-print(best["name"], "scored", best["mark"])
+ordered = sorted(students, key=lambda student: student["score"], reverse=True)
+print([student["name"] for student in ordered])
 ```
 
 **Output:**
 
 ```
-{'name': 'Ravi', 'mark': 91}
-Ravi scored 91
+['Meera', 'Asha', 'Ravi']
 ```
 
-`max(student["mark"] for student in students)` would give `91` and lose the name. `max(students, key=...)` gives the record, which is almost always what the question actually wanted.
+The highest score now comes first.
 
-## sort Takes It Too
+## Sorting a Dictionary by Value
 
-Everything above applies to the `sort()` method, with the usual difference: it reorders the list in place and returns `None`.
+By default, iterating over a dictionary gives its keys. To sort by value, use `items()` to get its key-value pairs, then pass a `key` function to `sorted()`.
+
+**Example**
 
 ```python
-names = ["banana", "Apple", "cherry"]
-names.sort(key=str.lower)
-print(names)
+results = {"Asha": 87, "Ravi": 30, "Meera": 95}
+ordered = sorted(results.items(), key=lambda pair: pair[1])
+print(ordered)
 ```
 
 **Output:**
 
 ```
-['Apple', 'banana', 'cherry']
+[('Ravi', 30), ('Asha', 87), ('Meera', 95)]
 ```
 
-Use `sort(key=...)` when the list's own order should change, and `sorted(key=...)` when the original must survive.
+Each pair looks like `('Asha', 87)`, so `pair[0]` is the name and `pair[1]` is the score. Returning `pair[1]` sorts by score.
+
+The result is a list of tuples, not a dictionary.
+
+## Sorting by Two Fields
+
+When the key function returns a tuple, Python compares the first values. If they are equal, it compares the second values, and continues if needed.
+
+**Example**
+
+```python
+students = [
+    {"name": "Ravi", "class": 7, "score": 87},
+    {"name": "Asha", "class": 7, "score": 95},
+    {"name": "Meera", "class": 6, "score": 72}
+]
+
+ordered = sorted(students, key=lambda student: (student["class"], student["name"]))
+
+for student in ordered:
+    print(student["class"], student["name"])
+```
+
+**Output:**
+
+```
+6 Meera
+7 Asha
+7 Ravi
+```
+
+Meera is first because class 6 comes before class 7. Asha and Ravi are both in class 7, so their names decide the order between them.
+
+## Ignoring Capital Letters
+
+Sorting strings puts capital letters before lowercase ones. A `key` can remove that difference.
+
+**Example**
+
+```python
+names = ["ravi", "Zoya", "meera"]
+print(sorted(names))
+print(sorted(names, key=lambda name: name.lower()))
+```
+
+**Output:**
+
+```
+['Zoya', 'meera', 'ravi']
+['meera', 'ravi', 'Zoya']
+```
+
+The first sort put `Zoya` first because `Z` is a capital letter. The second sort compared the lowercase versions of the names but kept the original names in the output. This gives a case-insensitive alphabetical order.
+
+## sorted() Returns a New List
+
+`sorted()` returns a new list and leaves the original alone, whatever the `key` does.
+
+**Example**
+
+```python
+scores = [87, 30, 95]
+ordered = sorted(scores, key=lambda score: -score)
+print(ordered)
+print(scores)
+```
+
+**Output:**
+
+```
+[95, 87, 30]
+[87, 30, 95]
+```
+
+The lambda returned `-87`, `-30` and `-95`, which sorted the values from highest to lowest. The list itself still holds the original positive numbers.
 
 ## Further Reading
 
-- **Official Python sorting guide** — https://docs.python.org/3/howto/sorting.html
-- **Sorting with key functions** — https://realpython.com/python-sort/
+- 📎 **Sorting with key explained** — https://docs.python.org/3/howto/sorting.html
+- 📎 **Official Python reference for sorted()** — https://docs.python.org/3/library/functions.html#sorted
 
-A key function chooses what to sort by, works with `reverse`, extends to several fields through tuples, and serves `min()` and `max()` unchanged. Next, a way of producing values that does not build a list at all.
+A `key` function tells Python what value to compare for each item. Python also lets us produce values one at a time without creating an entire list in advance.
+
+Next, you will learn about generators.

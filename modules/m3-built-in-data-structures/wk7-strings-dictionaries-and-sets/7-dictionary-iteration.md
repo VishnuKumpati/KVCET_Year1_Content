@@ -281,6 +281,6 @@ Loop finished
 - 📎 **Looping through dictionaries with worked examples** — https://www.programiz.com/python-programming/dictionary
 - 📎 **Official Python guide to dictionaries** — https://docs.python.org/3/tutorial/datastructures.html
 
-Lists, tuples and strings can contain duplicate values, and dictionary values can also repeat. Sometimes you need a collection where every value is unique.
+Every collection so far has held values directly. A value can also be a collection of its own, which is how a program stores a list inside a dictionary or a dictionary inside a list.
 
-Next, you will learn about sets.
+Next, you will learn about nested data structures.

@@ -299,4 +299,4 @@ The dependencies point one way — `app` uses `cart`, `cart` uses `products` —
 - **Official Python guide to modules** — https://docs.python.org/3/tutorial/modules.html
 - **Python modules and imports** — https://realpython.com/python-modules-packages/
 
-A module is a file, `import` runs it once and caches it, and the main guard separates what a file defines from what it does. Next, grouping modules into a directory.
+A module is a file, `import` runs it once and caches it, and the main guard separates what a file defines from what it does. Next, the `re` module, which searches text by pattern rather than by exact content.

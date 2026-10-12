@@ -1,201 +1,149 @@
 # Lambda Functions
 
-A function defined with `def` has a name, and the name is how it is called later. Some functions are never called later. They exist to be handed to something else, used once, and forgotten.
+A common way to define a function is with `def`, a name, and a `return` statement:
 
-A **lambda** is a function written as a single expression, with no name.
+```python
+def add_bonus(score):
+    return score + 5
 
-## The Syntax
+def double(number):
+    return number * 2
+```
+
+Both of these do one calculation and return the result. For these simple functions, we need a function definition with a name and a `return` statement, even when the function performs just one calculation.
+
+Python gives us a shorter way to write a function like this.
+
+```python
+add_bonus = lambda score: score + 5
+double = lambda number: number * 2
+```
+
+Each one is still a function, and calling it works exactly as before. Only the form has changed.
+
+> **A lambda function is a function defined using the `lambda` keyword instead of `def`.** It can have any number of parameters but contains only one expression. The expression is evaluated, and its value is returned automatically, so no `return` statement is needed.
+
+## Syntax of a Lambda Function
 
 ```
 lambda parameters: expression
 ```
 
-The keyword `lambda`, the parameters, a colon, and one expression. Compare the two forms of the same function:
+Every part of the line has a job.
 
 ```python
-def square(number):
-    return number * number
+square = lambda x: x * x
+```
 
+- `square` is the variable the function is stored in, so it can be called later
+- `lambda` is the keyword that defines the function
+- `x` is the parameter that receives the input
+- `:` separates the parameters from the expression
+- `x * x` is the expression whose value is returned
+
+**Example**
+
+```python
+square = lambda x: x * x
 print(square(5))
-print((lambda number: number * number)(5))
 ```
 
 **Output:**
 
 ```
 25
-25
 ```
 
-The brackets around the lambda group it so that `(5)` calls it. That is an unusual thing to write, and it is shown here only to make the point that a lambda is a function like any other.
+The call `square(5)` passes `5` as the argument, so `x` receives `5`. The expression `x * x` gives `25`, and that value is returned.
 
-Several parameters are separated by commas, and no parameters at all is allowed:
+## Lambda with Multiple Parameters
+
+Several parameters are separated by commas, exactly as in a `def` function.
+
+**Syntax**
+
+```
+lambda parameter1, parameter2: expression
+```
+
+**Example**
 
 ```python
-add = lambda a, b: a + b
-print(add(3, 4))
-
-always_zero = lambda: 0
-print(always_zero())
+total = lambda x, y, z: x + y + z
+print(total(10, 20, 30))
 ```
 
 **Output:**
 
 ```
-7
-0
+60
 ```
 
-## There Is No return
+Each value in the call is matched to a parameter by its position, so `x` receives `10`, `y` receives `20` and `z` receives `30`.
 
-A lambda's expression **is** its return value. Writing `return` inside one is a syntax error:
+## Single Expression Restriction
+
+A lambda can contain only one expression. If the function needs more logic than can be written in one expression, use a normal `def` function.
+
+A conditional expression still counts as one expression, so it can go inside a lambda.
+
+**Example**
 
 ```python
-double = lambda n: return n * 2
+status = lambda score: "Pass" if score >= 35 else "Fail"
+print(status(87))
+print(status(30))
 ```
 
 **Output:**
 
 ```
-SyntaxError: invalid syntax
+Pass
+Fail
 ```
 
-Remove the keyword and it works, because returning the expression is what a lambda does:
+## Passing a Lambda to Another Function
+
+This is where lambdas become especially useful.
+
+`sorted()` takes a `key` argument, which is a function. `sorted()` calls that function on every item and sorts by what comes back.
 
 ```python
-double = lambda n: n * 2
-print(double(21))
+names = ["Meera", "Asha", "Ravi"]
+print(sorted(names, key=lambda name: len(name)))
 ```
 
 **Output:**
 
 ```
-42
+['Asha', 'Ravi', 'Meera']
 ```
 
-This is also why a lambda always returns something. There is no way to write one that returns `None` by falling off the end, as a `def` function can.
+`sorted()` needs a value to use for comparison. The `key` function provides that value.
 
-## What a Lambda Cannot Do
-
-A lambda holds **one expression**. Everything that is a statement rather than an expression is unavailable:
-
-- no assignment
-- no `if` statement, `for` loop or `while` loop
-- no `try`
-- no `return`, `raise` or `pass`
-- no docstring
-- no type annotations
-
-A conditional expression is allowed, because it is an expression:
-
-```python
-result = lambda mark: "pass" if mark >= 50 else "fail"
-print(result(78))
-print(result(32))
-```
-
-**Output:**
+For each name, the lambda returns its length:
 
 ```
-pass
-fail
+"Meera" → 5
+"Asha"  → 4
+"Ravi"  → 4
 ```
 
-That is the limit of decision-making inside a lambda, and it is already close to the point where a named function reads better.
+`sorted()` then sorts the names using those lengths.
 
-| | `def` | `lambda` |
-| --- | --- | --- |
-| Has a name | yes | no |
-| Body | any number of statements | one expression |
-| `return` | written explicitly | implied |
-| Docstring | yes | no |
-| Appears in a traceback as | its name | `<lambda>` |
+We could define a separate function using `def` and pass its name to `sorted()`. Here, the lambda lets us write the sorting logic directly inside the `key` argument.
 
-The traceback row matters more than it looks. When a lambda raises, the error names `<lambda>`, so nothing in the message says which one:
+## Choosing Between def and lambda
 
-```python
-divide = lambda a, b: a / b
-print(divide(1, 0))
-```
+Use `def` when you need a named function that can be reused or needs more logic.
 
-**Output:**
-
-```
-ZeroDivisionError: division by zero
-```
-
-The traceback above that line says `in <lambda>`, and in a program with several, that is no help at all.
-
-## Why Lambdas Exist
-
-A function can be passed to another function, the same way a number or a list can. Here is one that takes a function as an argument and applies it to every item:
-
-```python
-def apply_to_all(items, action):
-    return [action(item) for item in items]
-
-print(apply_to_all([1, 2, 3, 4], lambda number: number * number))
-print(apply_to_all(["anita", "ravi"], lambda name: name.title()))
-```
-
-**Output:**
-
-```
-[1, 4, 9, 16]
-['Anita', 'Ravi']
-```
-
-Each lambda was written where it was needed and existed only for that call. Defining `square` and `titlecase` with `def` first would work and would put two names into the program that nothing else ever mentions.
-
-This is the whole case for lambdas: a small piece of behaviour, supplied as an argument, used once. Several built-in functions are designed to take a function this way, and that is where lambdas are almost always found.
-
-## Do Not Assign a Lambda to a Name
-
-Every example above that names a lambda was written that way to demonstrate the syntax. In real code, do not:
-
-```python
-double = lambda n: n * 2
-```
-
-```python
-def double(n):
-    return n * 2
-```
-
-The second is the same length, gives the function a real name for tracebacks, allows a docstring, and is what the style guide calls for. A named lambda has all of `def`'s obligations and none of its advantages.
-
-The rule follows from what a lambda is for. If the function needs a name, it is being kept, and anything being kept should be a `def`.
-
-## Choosing Between Them
-
-Use a lambda when all of these hold:
-
-- the function is one short expression
-- it is being passed as an argument
-- it will not be used anywhere else
-- what it does is obvious from reading it
-
-Use `def` when any of them fails. In particular, a lambda that needs a comment, or that a reader has to work through twice, has already failed the last test:
-
-```python
-records = sorted(records, key=lambda r: (r["dept"], -r["salary"], r["name"].lower()))
-```
-
-That works, and it will be read many more times than it was written. Give it a name and a line of its own instead:
-
-```python
-def sort_key(record):
-    """Sort by department, then highest salary, then name."""
-    return (record["dept"], -record["salary"], record["name"].lower())
-
-records = sorted(records, key=sort_key)
-```
-
-Both lines say what they do. Only the second says why.
+Use `lambda` when you need a simple function directly inside another expression, such as the `key` argument of `sorted()`.
 
 ## Further Reading
 
-- **Official Python reference for lambda expressions** — https://docs.python.org/3/reference/expressions.html#lambda
-- **Lambda functions in practice** — https://realpython.com/python-lambda/
+- 📎 **Lambda functions with worked examples** — https://www.programiz.com/python-programming/anonymous-function
+- 📎 **Official Python guide to lambda expressions** — https://docs.python.org/3/tutorial/controlflow.html#lambda-expressions
 
-A lambda is a nameless one-expression function, made for passing as an argument. Next, the two built-in functions that were designed to receive one.
+A lambda is most useful when passed to a function that accepts another function. Two built-in functions are commonly used with lambdas: `map()` applies a function to every item, while `filter()` keeps the items for which the function returns `True`.
+
+Next, you will learn `map()` and `filter()`.

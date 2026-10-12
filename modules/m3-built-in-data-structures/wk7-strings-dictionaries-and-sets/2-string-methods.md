@@ -1,8 +1,6 @@
 # String Methods
 
-A string cannot be changed, so a method never alters the string it is called on. Methods that transform text return a new string. Methods that answer a question return a number or a Boolean.
-
-This rule explains why the methods in this topic never change the original string.
+Python strings are immutable, which means their contents cannot be changed after creation. String methods that transform text return a new value instead of changing the original string. Depending on the method, that value might be a string, a number, a Boolean, or a list.
 
 ## Changing the Case of a String
 
@@ -40,15 +38,11 @@ The last line shows the original string, unchanged. Each method returned a new s
 
 `lower()` is useful when comparing text that a person typed, because `"Yes"` and `"yes"` are different strings and converting both to lowercase makes them match.
 
-## Removing Spaces from the Ends
+## Removing Whitespace from the Ends
 
-Typed input often carries spaces at the start or the end. Three methods remove them.
+Typed input can contain unwanted whitespace at the beginning or end. The `strip()`, `lstrip()`, and `rstrip()` methods remove it from both ends, the left end, or the right end, respectively.
 
-| Method | Removes spaces from |
-| --- | --- |
-| `strip()` | both ends |
-| `lstrip()` | the left end |
-| `rstrip()` | the right end |
+They do not remove whitespace from the middle of the string.
 
 **Example**
 
@@ -67,7 +61,7 @@ print("[" + answer.rstrip() + "]")
 [  yes]
 ```
 
-The square brackets are printed only to make the spaces visible. None of these methods touches spaces inside the text.
+The square brackets are printed only to make the spaces visible.
 
 ## Searching Inside a String
 
@@ -103,23 +97,6 @@ print(sentence.count("i"))
 
 `is` begins at index `7`. `Java` is not in the string, so `find()` returned `-1` rather than raising an error.
 
-The `index()` method does the same as `find()`, except that it raises an error when the text is absent.
-
-**Example**
-
-```python
-sentence = "Python is simple"
-print(sentence.index("Java"))
-```
-
-**Output:**
-
-```
-ValueError: substring not found
-```
-
-Use `find()` when the text may be missing, and `index()` when it should always be there.
-
 `startswith()` and `endswith()` return a Boolean.
 
 **Example**
@@ -136,6 +113,43 @@ print(name.endswith("on"))
 True
 True
 ```
+
+## Difference Between find() and index()
+
+Both methods search for text and return the index where it begins. They differ only when the text is not found.
+
+**Example**
+
+```python
+sentence = "Python is simple"
+print(sentence.find("Java"))
+```
+
+**Output:**
+
+```
+-1
+```
+
+**Example**
+
+```python
+sentence = "Python is simple"
+print(sentence.index("Java"))
+```
+
+**Output:**
+
+```
+ValueError: substring not found
+```
+
+| `find()` | `index()` |
+| --- | --- |
+| Returns `-1` if the text is not found. | Raises `ValueError` if the text is not found. |
+| Useful when the text might be absent and you want to check the result. | Useful when you want to handle a missing match through exception handling. |
+
+Check the result of `find()` before using it as an index. `-1` is also a valid negative index, and it refers to the last character of the string.
 
 ## Replacing Text
 
@@ -190,7 +204,7 @@ string_name.split()
 string_name.split(separator)
 ```
 
-With no argument, it splits at the spaces.
+With no argument, `split()` separates the string wherever whitespace occurs. Multiple consecutive whitespace characters count as one separator, and whitespace at the beginning or end is ignored.
 
 **Example**
 
@@ -278,7 +292,7 @@ True
 True
 ```
 
-`isdigit()` can be used to check typed input before converting it with `int()`.
+`isdigit()` can help check whether a string contains digit characters. However, it does not guarantee that `int()` can convert the string. When validating user input for an integer, using `try` and `except ValueError` around `int()` is more reliable.
 
 ## Calling Methods One After Another
 

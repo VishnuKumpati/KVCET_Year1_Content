@@ -22,7 +22,7 @@ A set comprehension builds a set, so duplicate values are kept only once.
 
 **Example**
 
-This example takes a list of answers and builds a set of the languages, with each one capitalised.
+This example takes each answer, converts it to title case, and adds it to a set. Duplicate languages are stored only once.
 
 ```python
 answers = ["tamil", "hindi", "tamil", "telugu"]
@@ -160,6 +160,6 @@ With curly braces, no colon means a set; a `key: value` pair means a dictionary.
 - 📎 **Set comprehensions with worked examples** — https://www.programiz.com/python-programming/set-comprehension
 - 📎 **Official Python guide to data structures** — https://docs.python.org/3/tutorial/datastructures.html
 
-So far, our comprehensions have used simple expressions such as `len(name)` and `score + 5`. Python also lets us write a small function directly where we need it, without giving it a name.
+So far, our comprehensions have used simple expressions such as `len(name)` and `score + 5`. Python also lets us write a function directly where we need it, without defining it separately using `def`.
 
 Next, you will learn about lambda functions.
