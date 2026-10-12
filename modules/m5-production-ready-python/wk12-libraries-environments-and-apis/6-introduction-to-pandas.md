@@ -291,7 +291,7 @@ The index came along — row `1` is still row `1`. Like `sorted()`, this returns
 
 ## Grouping
 
-`groupby` is where pandas earns its place. The grouping loop with `setdefault()` becomes:
+`groupby` is where pandas earns its place. A grouping loop, with an `if` check to create each group's list, becomes:
 
 ```python
 print(students.groupby("course")["mark"].mean())

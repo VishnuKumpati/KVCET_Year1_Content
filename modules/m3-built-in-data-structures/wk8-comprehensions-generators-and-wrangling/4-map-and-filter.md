@@ -208,6 +208,6 @@ For simple transformations like this, a list comprehension is often clearer beca
 - 📎 **map() and filter() with worked examples** — https://www.programiz.com/python-programming/methods/built-in/map
 - 📎 **Official Python reference for built-in functions** — https://docs.python.org/3/library/functions.html
 
-`map()` and `filter()` produce results on demand instead of building a list immediately. This is the same iterator behaviour that makes them useful when processing data. Python also lets us create our own iterators using generators.
+`map()` and `filter()` pass each item to a function and use what it returns. `sorted()` can do the same, using the function's result to decide the order of the items.
 
-Next, you will learn about generators.
+Next, you will learn how to sort with a key.

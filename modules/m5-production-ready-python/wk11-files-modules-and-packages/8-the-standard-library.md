@@ -163,7 +163,7 @@ print(dict(grouped))
 {'CS': ['Anita', 'Meera'], 'Maths': ['Ravi']}
 ```
 
-`defaultdict(list)` creates an empty list the first time each key is used, so grouping needs no `setdefault()` and no check. `defaultdict(int)` starts counters at zero.
+`defaultdict(list)` creates an empty list the first time each key is used, so grouping needs no `if` check to create the list first. `defaultdict(int)` starts counters at zero.
 
 It is passed the **function** that makes the default — `list`, not `list()`.
 

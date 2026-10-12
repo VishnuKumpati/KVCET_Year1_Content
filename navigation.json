@@ -390,7 +390,7 @@
                                        {
                                            "id":  "adc76416-5614-4b83-8e20-93658a48924c",
                                            "title":  "Dictionary Methods",
-                                           "tooltip":  "Week 7 - Create, read, update, delete, keys, values, items, and setdefault",
+                                           "tooltip":  "Week 7 - get, keys, values, items, pop and update",
                                            "url":  "modules/m3-built-in-data-structures/wk7-strings-dictionaries-and-sets/6-dictionary-methods.md"
                                        },
                                        {
