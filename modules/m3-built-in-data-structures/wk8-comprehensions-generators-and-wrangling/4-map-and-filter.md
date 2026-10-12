@@ -1,8 +1,10 @@
 # map() and filter()
 
-A lambda becomes useful when we pass it to another function. Python's built-in `map()` and `filter()` functions are common examples of this.
+A `lambda` lets you write a small function without defining it separately using `def`. But writing a function is only part of the task — you also need a way to apply it to data.
 
-`map()` applies a function to every item in an iterable. `filter()` keeps the items for which a function returns `True`.
+Python provides two built-in functions for this: `map()` and `filter()`. Both functions can take a `lambda` directly as an argument, so you can define a small function and use it where needed without creating a separate function with `def`.
+
+`map()` applies the function to every item and produces the results. `filter()` uses the function to test each item and keeps only those whose result is truthy.
 
 ## The map() Function
 
@@ -68,9 +70,7 @@ print(type(bonus))
 <class 'map'>
 ```
 
-Use `list()` when you want to collect all the results into a list. You can also process the results one at a time using a `for` loop.
-
-A map object is an iterator. Once all its results have been consumed, there are no results left to retrieve from it.
+Use `list()` to collect all the results into a list, or process them one at a time with a `for` loop. A map object produces results as they are requested. Once all results have been consumed, that same map object cannot produce them again. You can create a new map object to process the items again.
 
 **Example**
 
@@ -92,7 +92,7 @@ The first `list()` used up the results. The second found nothing left.
 
 ## The filter() Function
 
-`filter()` also takes a function and an iterable. The function tests each item. `filter()` keeps the items for which the function returns `True` in these examples.
+`filter()` also takes a function and an iterable. The function tests each item, and `filter()` keeps the items whose test result is truthy.
 
 **Syntax**
 
@@ -154,10 +154,9 @@ Both take a function and an iterable, and what the function returns is what sepa
 
 | `map()` | `filter()` |
 | --- | --- |
-| Applies a function to each item to produce a result. | Tests each item to decide whether to keep it. |
-| Produces one result per input item. | Keeps only items whose test result is truthy. |
-| With one input iterable, produces the same number of results as input items. | Produces the same number of items or fewer. |
-| The results may differ from the original items. | Keeps the original items; it does not transform them. |
+| Transforms each input item. | Tests each input item. |
+| Produces one result per input item when using one iterable. | Keeps only items whose test result is truthy. |
+| Results can differ from the original items. | Retains the original items without transforming them. |
 
 ## Using Them Together
 
@@ -202,9 +201,7 @@ print([score + 5 for score in scores])
 [92, 77, 100]
 ```
 
-The comprehension needs no lambda and no `list()`, which is why it is the more common choice in Python for this kind of work.
-
-`map()` and `filter()` are still worth knowing. They appear in existing code, and they are useful when the function already has a name and does not need a lambda at all.
+For simple transformations like this, a list comprehension is often clearer because it avoids both the lambda and the `list()` conversion. `map()` and `filter()` are still useful when you already have a named function to apply.
 
 ## Further Reading
 

@@ -81,6 +81,8 @@ A dictionary comprehension builds pairs, so the expression has two parts separat
 
 The part before the colon becomes the key. The part after it becomes the value.
 
+If the same key is produced more than once, the later value replaces the earlier value.
+
 **Example**
 
 This example builds a dictionary in which each name is a key and the length of that name is its value.
@@ -152,6 +154,34 @@ print(passed)
 - `Asha` has 87, so `Asha: 87` is added
 - `Ravi` has 30, so the pair is skipped
 - `Meera` has 95, so `Meera: 95` is added
+
+## Using a List Comprehension with a Dictionary
+
+A comprehension can read values from a dictionary and build a different type of collection. The output depends on the brackets you use.
+
+**Example**
+
+This example builds a list of the names whose scores are passing marks.
+
+```python
+results = {"Asha": 87, "Ravi": 30}
+passed = [name for name, score in results.items() if score >= 35]
+print(passed)
+```
+
+**Output:**
+
+```
+['Asha']
+```
+
+**Explanation:**
+
+- `items()` provides each name and its score
+- `score >= 35` keeps only entries with passing scores
+- the expression `name` puts only the name into the resulting list
+
+Notice that the input is a dictionary, but the output is a list because the comprehension uses square brackets.
 
 With curly braces, no colon means a set; a `key: value` pair means a dictionary.
 

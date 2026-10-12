@@ -1,10 +1,8 @@
 # Sorting with a Key
 
-`sorted()` on its own compares the items directly. Numbers sort by value and strings sort alphabetically.
+Python's `sorted()` function arranges items in ascending order by default. When working with structured data, however, the order may need to depend on a specific field rather than the item itself.
 
-That works until each item contains multiple values. For example, when sorting students represented as dictionaries, should Python compare their names or their scores? The `key` argument lets us choose which field determines the order.
-
-It takes a function, and `sorted()` sorts by whatever that function returns.
+The `key` argument lets you define what value Python should use for sorting. It accepts a function, including a `lambda`, that receives each item and returns the value to compare.
 
 **Syntax**
 
@@ -14,7 +12,7 @@ sorted(iterable, key=function)
 
 ## Sorting a List of Dictionaries
 
-The function receives one item at a time and returns the field to sort by.
+The `key` function receives each dictionary and returns the score that should determine its position in the sorted list.
 
 **Example**
 
@@ -64,11 +62,13 @@ print([student["name"] for student in ordered])
 ['Meera', 'Asha', 'Ravi']
 ```
 
-The highest score now comes first.
+Setting `reverse=True` sorts by score in descending order, placing the highest score first.
 
 ## Sorting a Dictionary by Value
 
 By default, iterating over a dictionary gives its keys. To sort by value, use `items()` to get its key-value pairs, then pass a `key` function to `sorted()`.
+
+`items()` produces each pair as a tuple, with the key at position `0` and the value at position `1`. That is why `pair[1]` refers to the score.
 
 **Example**
 
@@ -90,7 +90,7 @@ The result is a list of tuples, not a dictionary.
 
 ## Sorting by Two Fields
 
-When the key function returns a tuple, Python compares the first values. If they are equal, it compares the second values, and continues if needed.
+The `key` function can return a tuple containing multiple values. Python compares them from left to right: it compares the first value, then uses the second to break ties, and so on.
 
 **Example**
 
@@ -119,7 +119,7 @@ Meera is first because class 6 comes before class 7. Asha and Ravi are both in c
 
 ## Ignoring Capital Letters
 
-Sorting strings puts capital letters before lowercase ones. A `key` can remove that difference.
+By default, Python sorts strings by their character values, so uppercase and lowercase letters can affect the order. A `key` can remove that difference.
 
 **Example**
 
@@ -165,6 +165,6 @@ The lambda returned `-87`, `-30` and `-95`, which sorted the values from highest
 - 📎 **Sorting with key explained** — https://docs.python.org/3/howto/sorting.html
 - 📎 **Official Python reference for sorted()** — https://docs.python.org/3/library/functions.html#sorted
 
-A `key` function tells Python what value to compare for each item. Python also lets us produce values one at a time without creating an entire list in advance.
+`sorted()` returns a new list containing all the items in their sorted order. Generators offer a different approach: they produce values one at a time as needed.
 
 Next, you will learn about generators.

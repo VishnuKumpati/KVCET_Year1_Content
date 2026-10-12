@@ -1,357 +1,274 @@
 # Data Wrangling
 
-Nothing new is introduced here. One set of records is carried through a complete piece of work, and at each step the tool that fits best is the one used.
+Data arriving from a file, a form or another program is rarely in the shape a program needs. Names carry stray spaces, capitals are inconsistent, numbers arrive as text, records repeat, and some values are missing altogether.
 
-**Data wrangling** is the work between receiving data and being able to answer a question with it: finding out what shape it is in, correcting what is wrong with it, selecting what matters, reshaping it, and summarising it. In practice it takes far more of a programmer's time than the calculation at the end.
+> **Data wrangling is the work of cleaning raw data and reshaping it into a form a program can use.** It combines the string methods, lists, dictionaries and comprehensions already covered, applied in a particular order.
 
-## The Data
-
-A list of dictionaries, as records arrive from a file or an API — and as messy as they usually are:
+Here is a typical set of records, each one a line of text.
 
 ```python
-orders = [
-    {"id": 1, "customer": "Anita ", "region": "North", "amount": 1200, "status": "shipped"},
-    {"id": 2, "customer": "ravi", "region": "south", "amount": 450, "status": "pending"},
-    {"id": 3, "customer": "Meera", "region": "North", "amount": None, "status": "shipped"},
-    {"id": 4, "customer": "  Sunil", "region": "East", "amount": 890, "status": "cancelled"},
-    {"id": 5, "customer": "anita", "region": "NORTH", "amount": 300, "status": "shipped"},
-    {"id": 6, "customer": "Ravi", "region": "South", "amount": 2100, "status": "shipped"},
-    {"id": 7, "customer": "Meera", "region": "east", "status": "shipped"},
+raw = ["  asha , 87 ", "RAVI,30", "meera , 95 "]
+```
+
+Across these lines, the problems include extra spaces around some values, inconsistent capitals, and scores stored as text rather than numbers.
+
+## Splitting a Line into Parts
+
+The `split()` method breaks a line at a chosen separator and returns the pieces as a list.
+
+```python
+line = "  asha , 87 "
+parts = line.split(",")
+print(parts)
+```
+
+**Output:**
+
+```
+['  asha ', ' 87 ']
+```
+
+The line is now two pieces, and both still carry their spaces. `split(",")` separates at the comma and leaves everything else untouched.
+
+## Cleaning Each Part
+
+Each piece needs different treatment. The name needs its spaces removed and its capitals fixed. The score needs its surrounding whitespace removed and then must be converted to a number.
+
+```python
+line = "  asha , 87 "
+parts = line.split(",")
+
+name = parts[0].strip().title()
+score = int(parts[1].strip())
+
+print(name, score)
+print(type(score))
+```
+
+**Output:**
+
+```
+Asha 87
+<class 'int'>
+```
+
+**Explanation:**
+
+- `parts[0]` is `"  asha "`. `strip()` removes the whitespace at both ends, giving `"asha"`.
+- `title()` then capitalises it to give `"Asha"`.
+- `parts[1]` is `" 87 "`. `strip()` removes the whitespace at both ends, giving `"87"`.
+- `int()` converts that text into the number `87`.
+
+`int()` converts the score from text into a number. Without it, `score` would remain text, and `score + 5` would raise a `TypeError` because Python cannot add a string and an integer.
+
+## Building Records from Raw Lines
+
+A loop applies the same cleaning to every line and collects the results as a list of dictionaries.
+
+```python
+raw = ["  asha , 87 ", "RAVI,30", "meera , 95 "]
+
+students = []
+for line in raw:
+    parts = line.split(",")
+    students.append({
+        "name": parts[0].strip().title(),
+        "score": int(parts[1].strip())
+    })
+
+for student in students:
+    print(student)
+```
+
+**Output:**
+
+```
+{'name': 'Asha', 'score': 87}
+{'name': 'Ravi', 'score': 30}
+{'name': 'Meera', 'score': 95}
+```
+
+The three messy lines are now three clean records. `RAVI` became `Ravi`, the extra spaces around the values were removed, and each score is a number.
+
+## Handling Values That Cannot Be Converted
+
+Real data contains values that do not convert. A blank entry or a word such as `absent` makes `int()` raise a `ValueError`.
+
+Wrapping the conversion in `try` and `except` lets the program skip those values and continue.
+
+```python
+raw = ["87", "absent", "95", "", "72"]
+
+scores = []
+for value in raw:
+    try:
+        scores.append(int(value))
+    except ValueError:
+        pass
+
+print(scores)
+```
+
+**Output:**
+
+```
+[87, 95, 72]
+```
+
+`absent` and the empty string both raise a `ValueError`, so `except` catches them and the loop moves on. The three valid scores are collected.
+
+`pass` means do nothing. It is used here because the invalid values simply need skipping, with no action taken.
+
+This example silently skips invalid values. In real data-cleaning tasks, you may need to record or inspect invalid entries instead of discarding them, especially when the missing data matters.
+
+## Removing Duplicate Values
+
+The same value can appear more than once in raw data. A set keeps only one copy of each distinct value, such as a name or number.
+
+```python
+names = ["Asha", "Ravi", "Asha", "Meera"]
+
+print(len(names))
+print(len(set(names)))
+print(sorted(set(names)))
+```
+
+**Output:**
+
+```
+4
+3
+['Asha', 'Meera', 'Ravi']
+```
+
+The list contains four names, but only three are unique. A set removes the duplicate, and `sorted()` returns the unique names in alphabetical order because a set does not guarantee their order.
+
+This example removes duplicate names, not complete records. To remove duplicate records, you first need a rule for deciding when two records count as duplicates, such as having the same ID.
+
+## Calculating Totals and Averages
+
+Once the records are clean, the numbers can be used.
+
+```python
+students = [
+    {"name": "Asha", "score": 87},
+    {"name": "Ravi", "score": 30},
+    {"name": "Meera", "score": 95}
 ]
-```
 
-Four problems are already visible, and finding them is the first job rather than something to assume.
-
-## Step 1: Survey
-
-Before anything else, find out what is there. How many records, and what fields does one have:
-
-```python
-print(len(orders))
-print(sorted(orders[0].keys()))
+total = sum(student["score"] for student in students)
+print("Total:", total)
+print(f"Average: {total / len(students):.2f}")
 ```
 
 **Output:**
 
 ```
-7
-['amount', 'customer', 'id', 'region', 'status']
+Total: 212
+Average: 70.67
 ```
 
-Never trust one record to describe them all:
+The `:.2f` part displays the average to two decimal places.
+
+The generator expression inside `sum()` provides one score at a time, so no separate list of scores is created.
+
+`max()` finds the highest record when given a `key` function.
 
 ```python
-print(sorted(orders[6].keys()))
+students = [
+    {"name": "Asha", "score": 87},
+    {"name": "Ravi", "score": 30},
+    {"name": "Meera", "score": 95}
+]
+
+top = max(students, key=lambda student: student["score"])
+print(top["name"])
 ```
 
 **Output:**
 
 ```
-['customer', 'id', 'region', 'status']
+Meera
 ```
 
-The last record has no `amount` at all. Fields that are optional in the source are the commonest cause of `KeyError` later, and the survey is where they should be discovered.
+`max()` compares the scores returned by the lambda, and gives back the whole dictionary that scored highest.
 
-A set comprehension over a field shows its distinct values, which is the quickest way to spot inconsistency:
+## Counting How Often Values Appear
+
+A dictionary counts occurrences, with `get()` supplying a starting value of zero for a value seen for the first time.
 
 ```python
-print(sorted({order["status"] for order in orders}))
-print(sorted({order["region"] for order in orders}))
+answers = ["tamil", "hindi", "tamil", "telugu", "tamil"]
+
+counts = {}
+for answer in answers:
+    counts[answer] = counts.get(answer, 0) + 1
+
+print(counts)
 ```
 
 **Output:**
 
 ```
-['cancelled', 'pending', 'shipped']
-['East', 'NORTH', 'North', 'South', 'east', 'south']
+{'tamil': 3, 'hindi': 1, 'telugu': 1}
 ```
 
-`status` is clean: three values, consistently spelled. `region` is not. Six distinct values for what are obviously three regions, differing only in case. Grouping by region as it stands would produce six groups and three wrong answers.
+**Explanation:**
 
-Finally, locate the missing values rather than just counting them:
+- `counts.get(answer, 0)` returns the current count, or `0` when the answer is not yet a key
+- adding `1` gives the new count
+- assigning it back stores the result under that key
+
+If we tried to read `counts[answer]` before that key existed, Python would raise a `KeyError`. `get(answer, 0)` avoids this by returning `0` when the key is missing.
+
+## Grouping Records Together
+
+Records can be grouped by a value they share, such as class. Each group is stored as a list under its own dictionary key.
 
 ```python
-print([order["id"] for order in orders if order.get("amount") is None])
+students = [
+    {"name": "Asha", "class": 7},
+    {"name": "Ravi", "class": 8},
+    {"name": "Meera", "class": 7}
+]
+
+groups = {}
+for student in students:
+    key = student["class"]
+    if key not in groups:
+        groups[key] = []
+    groups[key].append(student["name"])
+
+print(groups)
 ```
 
 **Output:**
 
 ```
-[3, 7]
+{7: ['Asha', 'Meera'], 8: ['Ravi']}
 ```
 
-`get()` is what makes this work. `order["amount"]` would raise `KeyError` on record 7 — the very record being looked for. `get()` returns `None` both for a field that is absent and for one explicitly set to `None`, which is what the question asks about.
+The `if` creates an empty list the first time each class is seen. Every name is then appended to the list for its class.
 
-## Step 2: Clean
+## The Order of the Steps
 
-Fix everything found in the survey, in one place. A named function per record keeps the rules visible and testable:
+A common data-wrangling workflow follows these steps.
 
-```python
-def clean(order):
-    return {
-        "id": order["id"],
-        "customer": order["customer"].strip().title(),
-        "region": order["region"].strip().title(),
-        "amount": order.get("amount") or 0,
-        "status": order["status"].strip().lower(),
-    }
+1. **Split** the raw text into its parts.
+2. **Clean** each part with `strip()`, `lower()` or `title()`.
+3. **Convert** text to numbers with `int()` or `float()`.
+4. **Handle missing or invalid values** by correcting, recording or skipping them, depending on the task.
+5. **Remove duplicates** when needed. Sets work for simple values such as strings and numbers; duplicate records may require a separate rule.
+6. **Reshape** the parts into dictionaries or lists.
+7. **Summarise** with totals, counts or groups.
 
-tidy = [clean(order) for order in orders]
-print(tidy[0])
-```
-
-**Output:**
-
-```
-{'id': 1, 'customer': 'Anita', 'region': 'North', 'amount': 1200, 'status': 'shipped'}
-```
-
-Three decisions are worth naming.
-
-`strip().title()` chains two string methods, each returning a new string for the next to work on. `"  Sunil"` and `"anita"` both become `"Anita"`-style text, so the same person is no longer two people.
-
-`order.get("amount") or 0` handles the missing field and the explicit `None` with one expression. `get()` returns `None` in both cases, and `or` yields the right-hand side when the left is falsy. Note the side effect: an amount of `0` is also falsy, so it too becomes `0`. That is harmless here and would not be if the default were something other than zero — in which case `order.get("amount")` compared against `None` explicitly is the safer form.
-
-The original list is untouched. `clean()` builds a new dictionary rather than modifying the one passed in, so `orders` still holds the raw data if the cleaning rules turn out to be wrong.
-
-The survey, run again, confirms the fix:
-
-```python
-print(sorted({order["region"] for order in tidy}))
-print(sorted({order["customer"] for order in tidy}))
-```
-
-**Output:**
-
-```
-['East', 'North', 'South']
-['Anita', 'Meera', 'Ravi', 'Sunil']
-```
-
-Six regions became three and the duplicate customers merged.
-
-## Step 3: Filter
-
-Keep the records the question is about. A list comprehension with a condition:
-
-```python
-shipped = [order for order in tidy if order["status"] == "shipped"]
-print(len(shipped))
-print([order["id"] for order in shipped])
-```
-
-**Output:**
-
-```
-5
-[1, 3, 5, 6, 7]
-```
-
-Five of seven. The pending and cancelled orders are gone.
-
-Filtering after cleaning is deliberate. `order["status"] == "shipped"` is a reliable test only because `status` was already lowercased and stripped; against the raw data a stray capital would have silently dropped a record.
-
-## Step 4: Sort
-
-`sorted()` with a key, largest first:
-
-```python
-by_amount = sorted(shipped, key=lambda order: order["amount"], reverse=True)
-for order in by_amount:
-    print(f"{order['id']:>3}  {order['customer']:<10}{order['region']:<8}{order['amount']:>8,}")
-```
-
-**Output:**
-
-```
-  6  Ravi      South      2,100
-  1  Anita     North      1,200
-  5  Anita     North        300
-  3  Meera     North          0
-  7  Meera     East           0
-```
-
-The whole records were sorted, not just the amounts, so every field is still available for the report. The `,` in the format specification groups the thousands, and the widths line the columns up.
-
-## Step 5: Group
-
-Splitting records into groups is the one step with no comprehension form, because each group accumulates several records. A loop with `setdefault()` does it:
-
-```python
-by_region = {}
-for order in shipped:
-    by_region.setdefault(order["region"], []).append(order)
-
-print({region: [order["id"] for order in group] for region, group in by_region.items()})
-```
-
-**Output:**
-
-```
-{'North': [1, 3, 5], 'South': [6], 'East': [7]}
-```
-
-A list of records went in and a dictionary of lists came out, keyed by region. `setdefault(region, [])` returned the existing list for a region already seen and created an empty one otherwise, so no check for a first occurrence was needed.
-
-The `print()` uses a dictionary comprehension purely to make the output readable — the groups themselves hold whole records, not ids.
-
-## Step 6: Summarise
-
-With the records grouped, totals and averages are dictionary comprehensions over the groups:
-
-```python
-totals = {region: sum(order["amount"] for order in group)
-          for region, group in by_region.items()}
-
-averages = {region: sum(order["amount"] for order in group) / len(group)
-            for region, group in by_region.items()}
-
-print(totals)
-print(averages)
-```
-
-**Output:**
-
-```
-{'North': 1500, 'South': 2100, 'East': 0}
-{'North': 500.0, 'South': 2100.0, 'East': 0.0}
-```
-
-Note the round brackets inside `sum()`. That is a generator expression, and it is the right choice here: the amounts are added up once and never looked at again, so there is no reason to build a list of them.
-
-`len(group)` as the divisor is safe because `setdefault()` only creates a key when a record is being appended to it. No group can be empty, so no division by zero is possible.
-
-Summarising by a different field does not need the grouping step at all, when only one number per key is wanted. The accumulator pattern with `get()` builds the totals directly:
-
-```python
-customer_totals = {}
-for order in shipped:
-    customer_totals[order["customer"]] = customer_totals.get(order["customer"], 0) + order["amount"]
-print(customer_totals)
-```
-
-**Output:**
-
-```
-{'Anita': 1500, 'Meera': 0, 'Ravi': 2100}
-```
-
-Anita's two orders combined, which they would not have done before the cleaning step.
-
-`max()` with a key finds the largest. Passing `customer_totals.get` as the key looks up each customer's total:
-
-```python
-best = max(customer_totals, key=customer_totals.get)
-print(best, customer_totals[best])
-```
-
-**Output:**
-
-```
-Ravi 2100
-```
-
-Looping over a dictionary gives keys, so `max()` would compare the customer names — and `key=customer_totals.get` tells it to compare their totals instead while still returning the name.
-
-## Step 7: Report
-
-f-strings with widths and format specifications turn the summaries into something readable:
-
-```python
-print(f"{'Region':<10}{'Orders':>8}{'Total':>12}{'Average':>12}")
-for region in sorted(totals):
-    print(f"{region:<10}{len(by_region[region]):>8}{totals[region]:>12,}{averages[region]:>12,.2f}")
-print(f"{'All':<10}{len(shipped):>8}{sum(totals.values()):>12,}{sum(totals.values()) / len(shipped):>12,.2f}")
-```
-
-**Output:**
-
-```
-Region      Orders       Total     Average
-East             1           0        0.00
-North            3       1,500      500.00
-South            1       2,100    2,100.00
-All              5       3,600      720.00
-```
-
-`sorted(totals)` orders the report by region name without disturbing the dictionary. Text is left-aligned, numbers right-aligned, and the totals row recomputes from the same data rather than being accumulated separately.
-
-## The Whole Thing as a Pipeline
-
-Each step above used one tool for one job. Written together, with the cleaning already done, a complete query is three lines:
-
-```python
-result = sorted(
-    ({"customer": order["customer"], "amount": order["amount"]}
-     for order in tidy
-     if order["status"] == "shipped" and order["amount"] > 0),
-    key=lambda order: order["amount"],
-    reverse=True,
-)
-print(result)
-```
-
-**Output:**
-
-```
-[{'customer': 'Ravi', 'amount': 2100}, {'customer': 'Anita', 'amount': 1200}, {'customer': 'Anita', 'amount': 300}]
-```
-
-A generator expression filters and reshapes, `sorted()` with a key orders the result, and `sorted()` consumes the generator once — so nothing but the final list is ever held.
-
-Questions about it are one line each:
-
-```python
-print(sum(order["amount"] for order in result))
-print(any(order["amount"] > 2000 for order in result))
-print(all(order["amount"] > 100 for order in result))
-```
-
-**Output:**
-
-```
-3600
-True
-True
-```
-
-Write it this way when the pipeline is short and each step is obvious. Write it as separate named steps when it is not — `shipped`, `by_region` and `totals` each name something a reader can check, and a bug in a three-line expression is much harder to find than a bug in one of six lines.
-
-## Choosing the Tool for the Step
-
-| Step | Tool |
-| --- | --- |
-| Survey distinct values | a set comprehension |
-| Find missing fields | `get()` in a comprehension's condition |
-| Clean each record | a named function, applied by a list comprehension |
-| Filter | a list comprehension with `if` |
-| Transform a field | a comprehension's expression |
-| Sort | `sorted()` with `key=` |
-| Group | a loop with `setdefault()` |
-| Total or average | a dictionary comprehension over the groups |
-| Aggregate one number | `sum()`, `max()` or `len()` over a generator expression |
-| Test a condition across records | `any()` or `all()` over a generator expression |
-| Report | f-strings with widths and format specifications |
-
-Two entries are worth remembering because they are the ones people reach for wrongly. Grouping needs a loop — a comprehension produces one value per item and has nowhere to accumulate. Sorting needs `key=` — no comprehension reorders anything.
-
-## Handling What Is Wrong with Real Data
-
-Four faults appeared in seven records, and they are the four that appear in almost any dataset.
-
-**A missing field.** Use `get()` with a default that behaves sensibly in the code that follows — `0` for a number to be summed, `[]` for something to be looped over, `""` for text. A default chosen this way removes every downstream check.
-
-**An explicit null.** `None` is not the same as absent, and `get()` returns it as a real value. `order.get("amount") or 0` covers both; comparing against `None` covers both while leaving a genuine `0` alone.
-
-**Inconsistent formatting.** Case and stray whitespace are the usual offenders, and they matter because every grouping, matching and counting operation compares exact values. Normalise once, at the cleaning step, and everything afterwards can assume it.
-
-**Duplicates that are not identical.** `"Anita "`, `"anita"` and `"Anita"` are three strings and one customer. Normalising is what makes them one, and the set comprehension in the survey is what reveals the problem in the first place.
-
-The order matters. Survey, then clean, then everything else. Filtering or grouping before cleaning gives answers that look reasonable and are wrong, which is worse than an error.
+Cleaning text before conversion can make values consistent. However, `int()` accepts surrounding whitespace, so `int("87\n")` returns `87`. Using `strip()` is still useful for removing unwanted whitespace before further processing.
 
 ## Further Reading
 
-- **Official Python guide to data structures** — https://docs.python.org/3/tutorial/datastructures.html
-- **Official Python sorting guide** — https://docs.python.org/3/howto/sorting.html
+- 📎 **String methods with worked examples** — https://www.programiz.com/python-programming/methods/string
+- 📎 **Official Python guide to data structures** — https://docs.python.org/3/tutorial/datastructures.html
 
-Comprehensions filter and reshape, `sorted()` with a key orders, `setdefault()` groups, generator expressions aggregate without building anything, and f-strings present the result. Together they take raw records to a finished answer, and the same sequence applies whatever the records happen to be.
+That completes comprehensions, generators and data wrangling. You can now transform collections in a single line, produce values on demand, and clean raw data into a shape a program can use.
+
+Next week you will learn how to build your own data types, using classes and objects.

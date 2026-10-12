@@ -1,27 +1,21 @@
 # Lambda Functions
 
-A common way to define a function is with `def`, a name, and a `return` statement:
+In comprehensions, you used expressions such as `score + 5` to transform values. Sometimes, another function needs a function as input. You could define that function separately using `def`, but for a simple calculation used in one place, that can mean extra code.
 
-```python
-def add_bonus(score):
-    return score + 5
-
-def double(number):
-    return number * 2
-```
-
-Both of these do one calculation and return the result. For these simple functions, we need a function definition with a name and a `return` statement, even when the function performs just one calculation.
-
-Python gives us a shorter way to write a function like this.
+Python's `lambda` keyword lets you write the function directly where it is needed.
 
 ```python
 add_bonus = lambda score: score + 5
-double = lambda number: number * 2
+print(add_bonus(87))
 ```
 
-Each one is still a function, and calling it works exactly as before. Only the form has changed.
+**Output:**
 
-> **A lambda function is a function defined using the `lambda` keyword instead of `def`.** It can have any number of parameters but contains only one expression. The expression is evaluated, and its value is returned automatically, so no `return` statement is needed.
+```
+92
+```
+
+> **A lambda function is a function defined using the `lambda` keyword.** It can accept multiple parameters but contains only one expression, whose value is returned automatically.
 
 ## Syntax of a Lambda Function
 
@@ -30,16 +24,6 @@ lambda parameters: expression
 ```
 
 Every part of the line has a job.
-
-```python
-square = lambda x: x * x
-```
-
-- `square` is the variable the function is stored in, so it can be called later
-- `lambda` is the keyword that defines the function
-- `x` is the parameter that receives the input
-- `:` separates the parameters from the expression
-- `x * x` is the expression whose value is returned
 
 **Example**
 
@@ -54,7 +38,22 @@ print(square(5))
 25
 ```
 
+- `square` is the variable the function is stored in, so it can be called later
+- `lambda` is the keyword that defines the function
+- `x` is the parameter that receives the input
+- `:` separates the parameters from the expression
+- `x * x` is the expression whose value is returned
+
 The call `square(5)` passes `5` as the argument, so `x` receives `5`. The expression `x * x` gives `25`, and that value is returned.
+
+The same function can be written with `def`.
+
+```python
+def square(x):
+    return x * x
+```
+
+Both create the same function. The lambda version is shorter, but `def` is generally clearer when a function needs a meaningful name for reuse or more complex logic.
 
 ## Lambda with Multiple Parameters
 
@@ -106,7 +105,7 @@ Fail
 
 This is where lambdas become especially useful.
 
-`sorted()` takes a `key` argument, which is a function. `sorted()` calls that function on every item and sorts by what comes back.
+`sorted()` takes a `key` argument, which is a function. `sorted()` calls that function on every item and sorts using the value returned by the key function.
 
 ```python
 names = ["Meera", "Asha", "Ravi"]
@@ -131,9 +130,11 @@ For each name, the lambda returns its length:
 
 `sorted()` then sorts the names using those lengths.
 
+`Asha` and `Ravi` both have four letters. When two items compare equal, `sorted()` keeps them in the order they appeared in the original list.
+
 We could define a separate function using `def` and pass its name to `sorted()`. Here, the lambda lets us write the sorting logic directly inside the `key` argument.
 
-## Choosing Between def and lambda
+## Choosing Between `def` and `lambda`
 
 Use `def` when you need a named function that can be reused or needs more logic.
 
@@ -144,6 +145,6 @@ Use `lambda` when you need a simple function directly inside another expression,
 - 📎 **Lambda functions with worked examples** — https://www.programiz.com/python-programming/anonymous-function
 - 📎 **Official Python guide to lambda expressions** — https://docs.python.org/3/tutorial/controlflow.html#lambda-expressions
 
-A lambda is most useful when passed to a function that accepts another function. Two built-in functions are commonly used with lambdas: `map()` applies a function to every item, while `filter()` keeps the items for which the function returns `True`.
+A lambda is especially useful when passed to a function that accepts another function. Two built-in functions commonly used this way are `map()`, which applies a function to each item, and `filter()`, which keeps items for which the function returns a truthy value.
 
 Next, you will learn `map()` and `filter()`.

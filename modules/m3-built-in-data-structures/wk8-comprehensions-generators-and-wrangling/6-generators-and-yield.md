@@ -1,297 +1,224 @@
 # Generators and yield
 
-A list comprehension builds every value and holds all of them at once. For a few hundred items that is invisible. For a large enough number it is the whole problem:
+A function can return a list containing several values at once. A generator produces values one at a time, as they are requested.
+
+> **A generator is an object that provides values one at a time when requested.**
+>
+> A generator function uses the `yield` keyword to produce values one at a time. When a value is requested, the function runs until the next `yield`, provides that value, and pauses. It continues from where it stopped when another value is requested.
+
+## Producing Values One at a Time
+
+A function can already return many values by putting them in a list.
 
 ```python
-import sys
+def get_scores():
+    print("Preparing scores")
+    return [87, 72, 95]
 
-squares = [number * number for number in range(100000)]
-print(sys.getsizeof(squares), "bytes")
+scores = get_scores()
+
+for score in scores:
+    print(score)
 ```
 
 **Output:**
 
 ```
-800984 bytes
+Preparing scores
+87
+72
+95
 ```
 
-Eight hundred kilobytes for a hundred thousand numbers, and every one of them computed before the first is used. A million items would take ten times that. A file with a hundred million lines would not fit at all.
+`Preparing scores` printed first. The function built the complete list and returned it before the loop processed a single value.
 
-Often none of it is necessary. Code that loops over the values once and discards them needs only one value at a time.
+For three scores, the list uses little memory. For a million scores, Python must create and store all one million list elements before the loop processes the first score.
 
-## Iterable and Iterator
+A generator can produce these scores one at a time without building a separate list to hold all the results.
 
-Two words are used loosely in conversation and mean different things.
+## The yield Keyword
 
-An **iterable** is anything a `for` loop can walk through: a list, a tuple, a string, a set, a dictionary, a `range`. It can be walked repeatedly, and it knows all its items.
-
-An **iterator** is something that produces values one at a time and remembers where it has got to. It can be walked through **once**. `map()` and `filter()` return iterators, which is why their results empty after one pass.
-
-`iter()` turns an iterable into an iterator, and `next()` asks an iterator for its next value:
+Here is the same function with `yield` in place of `return`.
 
 ```python
-numbers = [1, 2, 3]
-values = iter(numbers)
+def get_scores():
+    print("Preparing first score")
+    yield 87
 
-print(next(values))
-print(next(values))
-print(next(values))
+    print("Preparing second score")
+    yield 72
+
+    print("Preparing third score")
+    yield 95
+```
+
+`return` sends back a result and ends the function. `yield` provides a value and pauses the function's execution. When another value is requested, the function continues from the statement after `yield`.
+
+This function produces nothing yet. The next section shows why.
+
+## Calling a Generator Function
+
+A normal function starts running when it is called. A generator function instead returns a generator object without running its body.
+
+```python
+result = get_scores()
+print("Generator created")
 ```
 
 **Output:**
 
 ```
-1
-2
-3
+Generator created
 ```
 
-Asking once more raises an error:
+`Preparing first score` did not appear. The call created a **generator object**, which is stored in `result`, and the function has not started running.
+
+## Requesting Values with next()
+
+The `next()` function requests one value from a generator object.
 
 ```python
-print(next(values))
+result = get_scores()
+
+print(next(result))
+print(next(result))
+print(next(result))
 ```
 
 **Output:**
 
 ```
-StopIteration
+Preparing first score
+87
+Preparing second score
+72
+Preparing third score
+95
 ```
 
-`StopIteration` is the signal that there is nothing left. It is not a bug — it is how an iterator says it has finished, and it is exactly what a `for` loop watches for. Every `for` loop you have ever written calls `iter()` on its sequence and then `next()` repeatedly until `StopIteration` arrives.
+The first `next()` starts the generator and runs it until the first `yield`. Each later call resumes the generator from where it paused and runs until the next `yield`. The `yield` statement provides a value to the generator's caller. Here, `next()` returns that value to `print()` for display. The generator then pauses until another value is requested.
 
-The list itself is untouched by all this. `numbers` can still be looped over again; it is `values`, the iterator over it, that is spent.
+Once no values remain, `next()` raises `StopIteration`.
 
-## A Generator Function
+The generator remembers its local variables and where it paused, so each request continues from that point rather than starting over.
 
-A **generator function** is written like an ordinary function, with `yield` where `return` would go:
+## Using a Generator in a Loop
+
+Calling `next()` by hand shows the mechanism. In practice, a `for` loop requests the values for you.
 
 ```python
-def countdown(start):
-    while start > 0:
-        yield start
-        start = start - 1
+def add_bonus(scores):
+    for score in scores:
+        yield score + 5
 
-for number in countdown(3):
-    print(number)
+for score in add_bonus([87, 72, 95]):
+    print(score)
 ```
 
 **Output:**
 
 ```
-3
-2
-1
+92
+77
+100
 ```
 
-No list was built. Each number was produced when the loop asked for it.
+The generator takes each score from the input list, adds five, and yields the result. The outer loop requests each result as needed, so the generator does not create a separate list to store all the bonus scores.
 
-The presence of `yield` anywhere in the body is what makes it a generator function. Calling it does not run the body at all — it hands back a generator object:
+When all the values are wanted together, `list()` collects them.
 
 ```python
-def countdown(start):
-    while start > 0:
-        yield start
-        start = start - 1
-
-counter = countdown(3)
-print(type(counter))
+print(list(add_bonus([87, 72, 95])))
 ```
 
 **Output:**
 
 ```
-<class 'generator'>
+[92, 77, 100]
 ```
 
-A generator is an iterator, so `next()` works on it and a `for` loop consumes it.
+This stores all the generated values in memory, so you no longer save memory by avoiding a list of results.
 
-## What yield Does That return Does Not
+## When the Values Run Out
 
-`return` ends a function. Its local variables are discarded, and calling it again starts from the top.
-
-`yield` **pauses** the function. It hands a value back and freezes everything — the local variables, the position in the loop, the whole state of the call. The next request resumes it from exactly that point.
-
-Printing from inside makes the pausing visible:
+A `for` loop stops because the generator eventually has nothing left to produce. Calling `next()` at that point raises `StopIteration`.
 
 ```python
-def steps():
-    print("-- running to the first yield")
-    yield 1
-    print("-- resumed, running to the second yield")
-    yield 2
-    print("-- resumed, function ends")
+def get_scores():
+    yield 87
 
-generator = steps()
-print("generator created")
-print(next(generator))
-print(next(generator))
+result = get_scores()
+print(next(result))
+
+try:
+    print(next(result))
+except StopIteration:
+    print("No more scores")
 ```
 
 **Output:**
 
 ```
-generator created
--- running to the first yield
-1
--- resumed, running to the second yield
-2
+87
+No more scores
 ```
 
-`generator created` printed first. Nothing inside the function ran until `next()` was called, and the body then ran only as far as the first `yield`. The second `next()` picked up immediately after it.
+A `for` loop handles `StopIteration` for you, which is why the earlier loops ended without an error.
 
-One more request runs the rest of the body and raises:
+## Reusing a Generator
+
+A generator object can be consumed until it is exhausted. Once that happens, it cannot be restarted.
 
 ```python
-print(next(generator))
+def get_scores():
+    yield 87
+    yield 72
+
+result = get_scores()
+
+print(list(result))
+print(list(result))
 ```
 
 **Output:**
 
 ```
--- resumed, function ends
-StopIteration
-```
-
-Reaching the end of the body is what raises `StopIteration`, so a `for` loop over `steps()` would simply end at that point.
-
-| | `return` | `yield` |
-| --- | --- | --- |
-| Effect on the function | ends it | pauses it |
-| Local variables | discarded | kept |
-| Values per call | one | as many as asked for |
-| Calling the function | runs the body | builds a generator |
-
-A `return` inside a generator is still allowed, and it stops the generator early rather than producing a value.
-
-## Generators Are Single-Use
-
-A generator is an iterator, so the one-pass rule applies:
-
-```python
-def countdown(start):
-    while start > 0:
-        yield start
-        start = start - 1
-
-counter = countdown(3)
-print(list(counter))
-print(list(counter))
-```
-
-**Output:**
-
-```
-[3, 2, 1]
+[87, 72]
 []
 ```
 
-The generator was exhausted by the first `list()`. To walk the values again, call the function again — `countdown(3)` produces a fresh generator each time.
+The first `list()` collected both scores and exhausted the generator. The second found none remaining.
 
-This is the trade. A list can be read any number of times and costs memory proportional to its length. A generator costs almost nothing and can be read once.
-
-## The Memory Difference
-
-The same hundred thousand squares, as a generator function:
+To get the values again, call the generator function again. This creates a new generator object, starting from the beginning.
 
 ```python
-import sys
-
-def squares(limit):
-    for number in range(limit):
-        yield number * number
-
-print(sys.getsizeof(squares(100000)), "bytes")
+result = get_scores()
+print(list(result))
 ```
 
 **Output:**
 
 ```
-200 bytes
+[87, 72]
 ```
 
-Two hundred bytes against eight hundred thousand, and the figure does not change with the limit. A generator holds a paused function, not values, so its size is the same whether it will produce ten items or ten million.
+A list, in contrast, can be read any number of times.
 
-Summing them works identically either way, and the generator never holds more than one value at a time:
+## Generators and Lists
 
-```python
-def squares(limit):
-    for number in range(limit):
-        yield number * number
+| List | Generator |
+| --- | --- |
+| Stores all its elements in memory. | Produces values as they are requested. |
+| Can be reused, indexed, and measured with `len()`. | Is consumed as values are requested; does not directly support indexing or `len()`. |
+| Useful when you need to access stored values repeatedly. | Useful when you can process values one at a time. |
 
-print(sum(squares(100000)))
-```
-
-**Output:**
-
-```
-333328333350000
-```
-
-## Values Without End
-
-A generator can produce values forever, which no list can do. The loop inside it simply never finishes:
-
-```python
-def naturals():
-    number = 1
-    while True:
-        yield number
-        number = number + 1
-
-for value in naturals():
-    if value > 5:
-        break
-    print(value)
-```
-
-**Output:**
-
-```
-1
-2
-3
-4
-5
-```
-
-`while True` would be an infinite loop in an ordinary function. Here it is not, because the function only runs when a value is requested and spends the rest of its existence paused. The consumer decides when to stop.
-
-The consumer must decide, though. `list(naturals())` would ask for values until the program ran out of memory, and there is nothing Python can do to prevent that.
-
-A more useful endless generator produces a sequence with no natural limit:
-
-```python
-def fibonacci():
-    current, following = 0, 1
-    while True:
-        yield current
-        current, following = following, current + following
-
-for number in fibonacci():
-    if number > 100:
-        break
-    print(number, end=" ")
-print()
-```
-
-**Output:**
-
-```
-0 1 1 2 3 5 8 13 21 34 55 89 
-```
-
-The state — two numbers — lives in the paused function between requests, and the swap in the last line is tuple packing and unpacking doing the work of a temporary variable.
-
-## When to Use One
-
-Use a generator when the values are consumed once, when there are many of them, or when there is no sensible limit on how many there might be. Reading a large file line by line, producing an endless sequence, or feeding a pipeline that ends in `sum()` or `max()` are all cases where holding the values would be waste.
-
-Use a list when the values are needed more than once, when their number is known and modest, or when indexing, slicing, sorting or `len()` are required — none of which a generator supports.
+A generator is not automatically better than a list. Choose a generator when producing values on demand is useful; choose a list when you need to store and revisit the complete collection.
 
 ## Further Reading
 
-- **Official Python guide to generators** — https://docs.python.org/3/tutorial/classes.html#generators
-- **Generators explained** — https://realpython.com/introduction-to-python-generators/
+- 📎 **Generators with worked examples** — https://www.programiz.com/python-programming/generator
+- 📎 **Official Python guide to generators** — https://docs.python.org/3/tutorial/classes.html#generators
 
-A generator function pauses at each `yield` and resumes on request, producing values one at a time without holding any of them. Next, the same idea in comprehension form.
+Python also provides a shorter way to create a generator without defining a separate generator function. This is called a generator expression.
+
+Next, you will learn about generator expressions.

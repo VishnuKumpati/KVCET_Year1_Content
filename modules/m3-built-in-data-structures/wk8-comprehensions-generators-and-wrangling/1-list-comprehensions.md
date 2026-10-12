@@ -108,7 +108,7 @@ print(passed)
 
 - `score` takes each value from the list
 - `score >= 35` decides whether it is kept
-- `32` and `25` fail the condition, so they are skipped
+- `32` and `25` do not satisfy the condition, so they are skipped
 - the expression is just `score`, so the values that pass are stored unchanged
 
 ## Filtering and Transforming Together
@@ -178,34 +178,6 @@ These two forms do different jobs:
 
 `if/else` before the `for` chooses the result for each item.
 
-## Using a Comprehension with a Dictionary
-
-`items()` gives a key and value on each pass, so we can unpack them into two variables.
-
-**Example**
-
-This example builds a list of the names whose score is a pass.
-
-```python
-results = {"Asha": 87, "Ravi": 30}
-passed = [name for name, score in results.items() if score >= 35]
-print(passed)
-```
-
-**Output:**
-
-```
-['Asha']
-```
-
-**Explanation:**
-
-- `items()` gives one `name` and one `score` on each pass
-- `score >= 35` decides whether the name is kept
-- `Asha` has 87, so `Asha` is added
-- `Ravi` has 30, so he is skipped
-- the expression is `name`, so only the names appear in the result
-
 ## When Not to Use a Comprehension
 
 Use a list comprehension when you are building a new list and the logic remains easy to read. If the loop has several steps or becomes difficult to understand, use a normal `for` loop instead.
@@ -215,6 +187,6 @@ Use a list comprehension when you are building a new list and the logic remains 
 - 📎 **List comprehensions with worked examples** — https://www.programiz.com/python-programming/list-comprehension
 - 📎 **Official Python guide to list comprehensions** — https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
 
-The same idea can also be used to build sets and dictionaries.
+The same idea can build other collections too. Set comprehensions create sets, while dictionary comprehensions create key-value pairs.
 
-Next, you will learn set and dictionary comprehensions.
+Next, you will learn both.
