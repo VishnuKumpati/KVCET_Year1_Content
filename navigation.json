@@ -470,7 +470,7 @@
                                        {
                                            "id":  "6fb261b5-7b85-49d6-802f-1f0027cef60c",
                                            "title":  "Introduction to Object-Oriented Programming",
-                                           "tooltip":  "Week 9 - The limits of loose functions and data, and what objects solve",
+                                           "tooltip":  "Week 9 - What OOP is, its key terms, and the objects already used in Python",
                                            "url":  "modules/m4-object-oriented-programming/wk9-classes-and-objects/1-introduction-to-object-oriented-programming.md"
                                        },
                                        {
@@ -481,39 +481,27 @@
                                        },
                                        {
                                            "id":  "2348cf23-6236-49f3-8cd2-f74d03993885",
-                                           "title":  "Attributes",
-                                           "tooltip":  "Week 9 - Data belonging to an object, dot notation, and AttributeError",
-                                           "url":  "modules/m4-object-oriented-programming/wk9-classes-and-objects/3-attributes.md"
-                                       },
-                                       {
-                                           "id":  "5400fc42-e699-4dbb-9eea-fc96e2ccbd97",
-                                           "title":  "The __init__ Method",
-                                           "tooltip":  "Week 9 - Initializing state automatically when an object is created",
-                                           "url":  "modules/m4-object-oriented-programming/wk9-classes-and-objects/4-the-init-method.md"
-                                       },
-                                       {
-                                           "id":  "1638008d-33ef-4c1c-8956-2807647d54e0",
-                                           "title":  "self",
-                                           "tooltip":  "Week 9 - The object a method was called on, and why it is never passed",
-                                           "url":  "modules/m4-object-oriented-programming/wk9-classes-and-objects/5-self.md"
+                                           "title":  "Attributes and the __init__ Method",
+                                           "tooltip":  "Week 9 - Instance attributes, __init__, and self as the object being created",
+                                           "url":  "modules/m4-object-oriented-programming/wk9-classes-and-objects/3-attributes-and-the-init-method.md"
                                        },
                                        {
                                            "id":  "2d6a9322-2ac4-4022-929a-68ad6146f7fc",
                                            "title":  "Methods",
-                                           "tooltip":  "Week 9 - Functions in a class, reading and changing state, and docstrings",
-                                           "url":  "modules/m4-object-oriented-programming/wk9-classes-and-objects/6-methods.md"
+                                           "tooltip":  "Week 9 - Instance methods, calling them on an object, and self inside methods",
+                                           "url":  "modules/m4-object-oriented-programming/wk9-classes-and-objects/4-methods.md"
                                        },
                                        {
                                            "id":  "e2ee329b-6468-4016-aa18-dbd5b0554af3",
-                                           "title":  "Instance and Class Attributes",
-                                           "tooltip":  "Week 9 - Data belonging to one object against data shared by all",
-                                           "url":  "modules/m4-object-oriented-programming/wk9-classes-and-objects/7-instance-and-class-attributes.md"
+                                           "title":  "Class Attributes and Class Methods",
+                                           "tooltip":  "Week 9 - Data shared by all objects of a class, and methods that work with it",
+                                           "url":  "modules/m4-object-oriented-programming/wk9-classes-and-objects/5-class-attributes-and-class-methods.md"
                                        },
                                        {
                                            "id":  "d27ee8fd-f7e5-41eb-b9fa-fe7b60fd7279",
                                            "title":  "Encapsulation",
-                                           "tooltip":  "Week 9 - Underscore conventions, name mangling, and properties",
-                                           "url":  "modules/m4-object-oriented-programming/wk9-classes-and-objects/8-encapsulation.md"
+                                           "tooltip":  "Week 9 - Access levels, private attributes, and getter and setter methods",
+                                           "url":  "modules/m4-object-oriented-programming/wk9-classes-and-objects/6-encapsulation.md"
                                        },
                                        {
                                            "id":  "df722487-6e4f-47ff-be63-ef027cdb341d",

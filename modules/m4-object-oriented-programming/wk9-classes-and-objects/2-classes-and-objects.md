@@ -1,243 +1,72 @@
 # Classes and Objects
 
-Two words are used constantly and mean different things.
+A college application has to manage hundreds of students. Every student has the same kind of information, such as a name and marks, so the application needs **one common definition** that applies to all of them.
 
-A **class** is a definition: what this kind of thing has, and what it can do. It describes, and it holds no data of its own.
+Think about how a college handles admission forms. The college designs the form format once and uses it for every student. All the forms follow the same format, yet each form is a separate document belonging to a different student.
 
-An **object** is one actual thing built from that definition. It has its own data. An object is also called an **instance** of its class.
-
-One class, any number of objects. `BankAccount` is written once; a bank has millions of accounts, each with its own owner and balance, all built from that one definition.
+Python follows the same idea. The common definition is called a **class**, and each separate item created from it is called an **object**.
 
 ## Defining a Class
 
-The `class` keyword, a name, a colon, and an indented body:
+> **A class is a template that defines the data and behaviour associated with its objects.**
 
-```
-class ClassName:
-    body
-```
-
-The body cannot be empty, so a class with nothing in it yet needs `pass`:
+A class is created using the **`class`** keyword, followed by the class name and a colon.
 
 ```python
-class Dog:
-    pass
-```
-
-That is a complete, working class. It defines a new type that holds nothing and does nothing, which is enough to demonstrate what a class and an object are.
-
-Class names are written in **PascalCase** — each word capitalised, no underscores:
-
-```python
-class BankAccount:
-    pass
-
 class Student:
     pass
 ```
 
-This is not enforced, and it matters anyway. Functions and variables use `snake_case`, so the capital letter is how a reader tells `BankAccount` (a class) from `bank_account` (a variable holding one). Follow it.
+This code defines a class named `Student`. Running it produces **no output**, because defining a class does not create any object.
 
-## Creating an Object
+**A class body cannot be empty.** The **`pass`** statement is a placeholder that does nothing. It keeps the class valid until real content is added. Without it, Python raises an error because the class body is missing.
 
-Call the class as though it were a function:
+### Naming a Class
+
+A class name is an **identifier**, which is a name given to an item in a program, such as a variable, a function or a class. Like every identifier, a class name must follow these key rules:
+
+- It **cannot start with a digit**, so `1Student` is invalid.
+- It **cannot contain spaces or hyphens**, so `Student Record` and `Student-Record` are invalid.
+- It **cannot be a Python keyword**, such as `class` or `def`.
+- It is **case-sensitive**, so `Student` and `student` are two different names.
+
+In addition, according to Python standards, class names follow the **CapWords** convention, where each word starts with a capital letter, such as `Student` and `BankAccount`. This is a convention, not a rule.
+
+## Creating Objects
+
+> **An object is an individual item created from a class, and it is called an instance of that class.**
+
+Creating an object from a class is called **instantiation**. An object is created by writing the class name followed by **parentheses**.
 
 ```python
-class Dog:
+class Student:
     pass
 
-first = Dog()
-```
+student1 = Student()
+student2 = Student()
 
-`Dog()` builds a new object and hands it back. `first` now refers to one Dog.
-
-The brackets are what makes the difference. `Dog` is the class itself; `Dog()` is a new object built from it:
-
-```python
-class Dog:
-    pass
-
-print(type(Dog))
-print(type(Dog()))
+print(type(student1))
+print(student1 is student2)
 ```
 
 **Output:**
 
 ```
-<class 'type'>
-<class '__main__.Dog'>
-```
-
-The class itself is an object too — an object of type `type`. That is a fact worth knowing and not one to dwell on.
-
-`__main__` in the second line is the name Python gives to the file being run directly. A class's full name includes where it was defined, so a `Dog` defined in the file you ran is `__main__.Dog`. The part that matters is `Dog`.
-
-## Every Object Is Separate
-
-Each call to the class produces a new object:
-
-```python
-class Dog:
-    pass
-
-first = Dog()
-second = Dog()
-
-print(first is second)
-print(first == second)
-```
-
-**Output:**
-
-```
-False
+<class '__main__.Student'>
 False
 ```
 
-Two separate objects. `is` reports that they are different objects, as expected. `==` also reports `False`, which is worth noting: by default, two objects of a class you define are equal only if they are the *same* object. Comparing their contents is behaviour a class has to be given.
+Each call to `Student()` creates a **new instance** of the `Student` class. Assigning it to a variable such as `student1` lets the program refer to that instance later. **The parentheses are required**, because `Student` alone refers to the class itself, not a new instance.
 
-Assignment does not copy an object, exactly as it does not copy a list:
+The first output line confirms that `student1` is an instance of the `Student` class. The `__main__` part identifies the module in which the class was defined; you can ignore it for now.
 
-```python
-class Dog:
-    pass
+The second output line comes from the **`is`** operator, which checks whether two variables refer to the **same object**. The result is `False` because `student1` and `student2` are two separate objects, even though both were created from the same class.
 
-first = Dog()
-third = first
-
-print(first is third)
-```
-
-**Output:**
-
-```
-True
-```
-
-One object, two names.
-
-## Checking the Type
-
-`type()` reports an object's class:
-
-```python
-class Dog:
-    pass
-
-class Cat:
-    pass
-
-pet = Dog()
-print(type(pet))
-```
-
-**Output:**
-
-```
-<class '__main__.Dog'>
-```
-
-For testing rather than displaying, `isinstance()` is the right tool. It takes an object and a class and returns `True` or `False`:
-
-```python
-class Dog:
-    pass
-
-class Cat:
-    pass
-
-pet = Dog()
-print(isinstance(pet, Dog))
-print(isinstance(pet, Cat))
-```
-
-**Output:**
-
-```
-True
-False
-```
-
-`isinstance()` works on built-in types too, which is the usual way to check what something is:
-
-```python
-print(isinstance(5, int))
-print(isinstance("hello", str))
-print(isinstance([1, 2], list))
-print(isinstance(5, str))
-```
-
-**Output:**
-
-```
-True
-True
-True
-False
-```
-
-Prefer `isinstance(value, int)` to `type(value) == int`. The two agree here, and `isinstance()` behaves correctly in cases the next week introduces, where one class is built from another.
-
-## A Class with Something in It
-
-A class body can contain function definitions, written with `def` as usual:
-
-```python
-class Dog:
-    def bark(self):
-        print("Woof")
-
-pet = Dog()
-pet.bark()
-```
-
-**Output:**
-
-```
-Woof
-```
-
-A function defined inside a class is called a **method**, and it is called on an object with a dot. `pet.bark()` is the same shape as `marks.append(64)` — an operation belonging to a value, called on that value.
-
-The `self` parameter appears in every method and is the subject of its own chapter. For now: it is required, and nothing is passed for it at the call.
-
-Two objects of the same class share the definition, so both can do the same things:
-
-```python
-class Dog:
-    def bark(self):
-        print("Woof")
-
-first = Dog()
-second = Dog()
-first.bark()
-second.bark()
-```
-
-**Output:**
-
-```
-Woof
-Woof
-```
-
-One `bark` was written. Both objects have it, because both were built from the same class.
-
-## Class Against Object
-
-| | Class | Object |
-| --- | --- | --- |
-| What it is | a definition | one thing built from it |
-| Written with | `class Name:` | `Name()` |
-| How many | one | as many as needed |
-| Holds data | no | yes, its own |
-| Also called | type | instance |
-
-The blueprint comparison is the usual one and it is reasonably accurate: a blueprint describes a house, is drawn once, and any number of houses are built from it, each with its own address and its own occupants. The blueprint is not a house, and you cannot live in it.
+This is how classes and objects solve the college application problem. The application defines the `Student` class **once** and creates **one object for each student**, so 500 students need only one class and 500 objects.
 
 ## Further Reading
 
-- **Official Python guide to classes** — https://docs.python.org/3/tutorial/classes.html
-- **Classes and objects explained** — https://www.programiz.com/python-programming/class
+- 📎 **Official Python guide to class definition syntax** — https://docs.python.org/3/tutorial/classes.html#class-definition-syntax
+- 📎 **Python standard naming convention for classes** — https://peps.python.org/pep-0008/#class-names
 
-A class defines a type, and calling it produces an object of that type. Next, giving those objects data of their own.
+The `Student` objects do not hold any student details yet. In the next topic, **Attributes and the `__init__` Method**, you'll learn how to give each object its own name and marks.
