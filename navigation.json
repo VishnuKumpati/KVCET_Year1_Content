@@ -506,62 +506,56 @@
                                        {
                                            "id":  "df722487-6e4f-47ff-be63-ef027cdb341d",
                                            "title":  "Inheritance",
-                                           "tooltip":  "Week 10 - Deriving a class from another and reusing its behaviour",
+                                           "tooltip":  "Week 10 - Parent and child classes, reusing attributes and methods",
                                            "url":  "modules/m4-object-oriented-programming/wk10-inheritance-and-polymorphism/1-inheritance.md"
                                        },
                                        {
                                            "id":  "4d1cc0b2-f40a-4385-a181-313299576ab3",
                                            "title":  "Method Overriding",
-                                           "tooltip":  "Week 10 - Replacing an inherited method, and the __init__ trap",
+                                           "tooltip":  "Week 10 - Replacing a parent method in a child class",
                                            "url":  "modules/m4-object-oriented-programming/wk10-inheritance-and-polymorphism/2-method-overriding.md"
                                        },
                                        {
                                            "id":  "fbc20ce6-cfcd-46d1-871e-0b400f56e261",
                                            "title":  "The super() Function",
-                                           "tooltip":  "Week 10 - Delegating to a parent implementation correctly",
+                                           "tooltip":  "Week 10 - Calling the parent's __init__ and methods from a child class",
                                            "url":  "modules/m4-object-oriented-programming/wk10-inheritance-and-polymorphism/3-the-super-function.md"
                                        },
                                        {
                                            "id":  "c1d413f1-da17-4669-bb77-53976598ac41",
                                            "title":  "Types of Inheritance",
-                                           "tooltip":  "Week 10 - Single, multilevel, hierarchical, multiple, and the MRO",
+                                           "tooltip":  "Week 10 - Single, multiple, multilevel, hierarchical and hybrid inheritance",
                                            "url":  "modules/m4-object-oriented-programming/wk10-inheritance-and-polymorphism/4-types-of-inheritance.md"
                                        },
                                        {
                                            "id":  "ee49ca32-7873-42ee-8a6d-58c38a26f57c",
                                            "title":  "Polymorphism",
-                                           "tooltip":  "Week 10 - One interface serving several concrete types, and duck typing",
+                                           "tooltip":  "Week 10 - Same method name, different behaviour, and why Python has no method overloading",
                                            "url":  "modules/m4-object-oriented-programming/wk10-inheritance-and-polymorphism/5-polymorphism.md"
-                                       },
-                                       {
-                                           "id":  "65aef0b6-7dab-42a2-9355-85408cc8225a",
-                                           "title":  "Method Overloading",
-                                           "tooltip":  "Week 10 - Why Python has none, and what it uses instead",
-                                           "url":  "modules/m4-object-oriented-programming/wk10-inheritance-and-polymorphism/6-method-overloading.md"
                                        },
                                        {
                                            "id":  "d3039526-fbd8-4989-b64a-2dfc57fa3a06",
                                            "title":  "Abstraction",
-                                           "tooltip":  "Week 10 - Abstract base classes and required interfaces",
-                                           "url":  "modules/m4-object-oriented-programming/wk10-inheritance-and-polymorphism/7-abstraction.md"
+                                           "tooltip":  "Week 10 - Abstract classes with ABC and @abstractmethod",
+                                           "url":  "modules/m4-object-oriented-programming/wk10-inheritance-and-polymorphism/6-abstraction.md"
                                        },
                                        {
                                            "id":  "34c91d05-3fde-4cf5-a829-acf0926e0996",
                                            "title":  "Dunder Methods",
-                                           "tooltip":  "Week 10 - Customizing built-in behaviour including operator overloading",
-                                           "url":  "modules/m4-object-oriented-programming/wk10-inheritance-and-polymorphism/8-dunder-methods.md"
+                                           "tooltip":  "Week 10 - Common special methods, including operator overloading",
+                                           "url":  "modules/m4-object-oriented-programming/wk10-inheritance-and-polymorphism/7-dunder-methods.md"
                                        },
                                        {
                                            "id":  "cc3a2916-72a5-4f6d-9226-faadde77b416",
                                            "title":  "Decorators",
-                                           "tooltip":  "Week 10 - Wrapping behaviour, and the built-in method decorators",
-                                           "url":  "modules/m4-object-oriented-programming/wk10-inheritance-and-polymorphism/9-decorators.md"
+                                           "tooltip":  "Week 10 - Writing decorators, plus @staticmethod, @property and @classmethod",
+                                           "url":  "modules/m4-object-oriented-programming/wk10-inheritance-and-polymorphism/8-decorators.md"
                                        },
                                        {
                                            "id":  "e08cb8a9-72af-460c-8ded-0007e7665aeb",
                                            "title":  "Context Managers",
-                                           "tooltip":  "Week 10 - Guaranteeing cleanup with __enter__, __exit__ and with",
-                                           "url":  "modules/m4-object-oriented-programming/wk10-inheritance-and-polymorphism/10-context-managers.md"
+                                           "tooltip":  "Week 10 - The with statement, __enter__ and __exit__",
+                                           "url":  "modules/m4-object-oriented-programming/wk10-inheritance-and-polymorphism/9-context-managers.md"
                                        }
                                    ]
                     },

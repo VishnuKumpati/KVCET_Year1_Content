@@ -1,255 +1,152 @@
 # Polymorphism
 
-**Polymorphism** is one operation working across several types, with each type responding in its own way. The word means "many forms".
-
-The practical benefit is that code can be written against *what* something does without knowing *what it is*.
-
-## It Is Already Everywhere
-
-Built-in operations behave this way:
+The built-in function `len()` works on a string, a list and a dictionary. Each type counts something different, but the same function name is used for all of them.
 
 ```python
-print(len("hello"))
-print(len([1, 2, 3]))
-print(len({"a": 1}))
+print(len("Ravi"))
+print(len([87, 72, 95]))
+print(len({"Ravi": 85, "Priya": 92}))
 ```
 
 **Output:**
 
 ```
-5
+4
 3
-1
+2
 ```
 
-One function, three types, three different pieces of work: counting characters, counting items, counting pairs. `len()` does not test what it was given and choose a branch. Each type knows its own length, and `len()` asks it.
+`len()` counts characters in a string, elements in a list and key-value pairs in a dictionary. This idea is called **polymorphism**.
 
-Operators do the same:
+## Polymorphism
+
+> **Polymorphism means the same method name behaves differently depending on the object it is called on.** The word means "many forms".
+
+The code that calls the method does not need to know which class the object belongs to. Each object responds in its own way.
+
+## Polymorphism with Inheritance
+
+Child classes that override the same parent method are the most common example of polymorphism.
 
 ```python
-print(2 + 3)
-print("ab" + "cd")
-print([1] + [2])
-```
-
-**Output:**
-
-```
-5
-abcd
-[1, 2]
-```
-
-Addition, concatenation and joining — one symbol, three behaviours, decided by the operands.
-
-## Polymorphism Through Inheritance
-
-Give several children the same method name, and code that uses it does not need to know which child it has:
-
-```python
-class Animal:
+class Person:
     def __init__(self, name):
         self.name = name
 
-    def speak(self):
-        print(f"{self.name} makes a sound")
+    def display_name(self):
+        print("Name:", self.name)
 
-class Dog(Animal):
-    def speak(self):
-        print(f"{self.name} says Woof")
+class Student(Person):
+    def display_name(self):
+        print("Student:", self.name)
 
-class Cat(Animal):
-    def speak(self):
-        print(f"{self.name} says Meow")
+class Teacher(Person):
+    def display_name(self):
+        print("Teacher:", self.name)
 
-class Bird(Animal):
-    def speak(self):
-        print(f"{self.name} says Tweet")
+people = [Student("Ravi"), Teacher("Meena"), Person("Asha")]
 
-for pet in [Dog("Rex"), Cat("Whiskers"), Bird("Tweety")]:
-    pet.speak()
+for person in people:
+    person.display_name()
 ```
 
 **Output:**
 
 ```
-Rex says Woof
-Whiskers says Meow
-Tweety says Tweet
+Student: Ravi
+Teacher: Meena
+Name: Asha
 ```
 
-The loop contains no conditions and mentions no specific class. Each object was asked to speak, and each knew how.
+The loop calls `person.display_name()` for every object, without checking its class. Each object runs its own version of `display_name()`.
 
-Compare the version without polymorphism:
+A new child class with its own `display_name()` method can be added to the list, and the loop works without any change.
 
-```python
-for pet in pets:
-    if isinstance(pet, Dog):
-        print(f"{pet.name} says Woof")
-    elif isinstance(pet, Cat):
-        print(f"{pet.name} says Meow")
-    elif isinstance(pet, Bird):
-        print(f"{pet.name} says Tweet")
-```
+## Polymorphism with Unrelated Classes
 
-This works and has to be edited every time an animal is added — and so does every other place that checks the type. The polymorphic version needs no edit at all: a new class with a `speak` method drops straight into the existing loop.
-
-That is the real argument for polymorphism. **A long chain of `if isinstance(...)` is usually polymorphism waiting to be written.**
-
-## Functions Taking Any Type
-
-A function benefits the same way:
+The classes do not need a common parent. Python only checks that the object **has** a method with that name when it is called.
 
 ```python
-class Dog:
-    def speak(self):
-        return "Woof"
+class Student:
+    def describe(self):
+        print("A student attends classes")
 
-class Cat:
-    def speak(self):
-        return "Meow"
+class Library:
+    def describe(self):
+        print("A library lends books")
 
-def make_it_speak(creature):
-    print(creature.speak())
-
-make_it_speak(Dog())
-make_it_speak(Cat())
+for item in [Student(), Library()]:
+    item.describe()
 ```
 
 **Output:**
 
 ```
-Woof
-Meow
+A student attends classes
+A library lends books
 ```
 
-`make_it_speak` names no class. It requires only that whatever it is given has a `speak` method.
+`Student` and `Library` are not related, but both have a `describe` method, so the same loop works on both. This style is called **duck typing**, from the saying "if it walks like a duck and quacks like a duck, it is a duck".
 
-Note that `Dog` and `Cat` here share no parent. They are unrelated classes that happen to offer the same method, and that was enough.
+If an object does not have the method, Python raises an `AttributeError` when the method is called.
 
-## Duck Typing
+## Method Overloading in Python
 
-That last point is Python's usual approach, and it has a name: **duck typing**, from the saying *if it walks like a duck and quacks like a duck, it is a duck*.
+> **Method overloading means defining several methods with the same name in one class, each taking a different number or type of parameters.** Some languages, such as Java and C++, support this.
 
-Python does not check an object's type before calling a method. It looks for the method, and calls it if it is there:
+**Python does not support traditional method overloading.** If a class defines two methods with the same name, the second definition replaces the first.
 
 ```python
-class Duck:
-    def speak(self):
-        return "Quack"
+class Calculator:
+    def add(self, a, b):
+        return a + b
 
-class Robot:
-    def speak(self):
-        return "Beep"
+    def add(self, a, b, c):
+        return a + b + c
 
-class Person:
-    def speak(self):
-        return "Hello"
-
-for thing in [Duck(), Robot(), Person()]:
-    print(thing.speak())
+calc = Calculator()
+print(calc.add(10, 20, 30))
+print(calc.add(10, 20))
 ```
 
 **Output:**
 
 ```
-Quack
-Beep
-Hello
+60
+TypeError: Calculator.add() missing 1 required positional argument: 'c'
 ```
 
-A robot is not an animal and does not inherit from one. It has a `speak` method, which is the only requirement.
+Only the second `add`, with three parameters, exists. The first one was replaced, so calling `add` with two numbers fails.
 
-In many languages, uniform treatment requires a shared base class or interface. In Python it requires a shared method name. That is more flexible and it is less enforced — nothing declares the requirement, and a missing method is found when it is called:
+Python achieves the same result with **default parameter values**. One method handles different numbers of arguments.
 
 ```python
-class Rock:
-    pass
+class Calculator:
+    def add(self, a, b, c=0):
+        return a + b + c
 
-print(Rock().speak())
+calc = Calculator()
+print(calc.add(10, 20))
+print(calc.add(10, 20, 30))
 ```
 
 **Output:**
 
 ```
-AttributeError: 'Rock' object has no attribute 'speak'
+30
+60
 ```
 
-Inheritance and duck typing are both routes to polymorphism, and they are not exclusive. Use a common parent when the classes genuinely share behaviour worth writing once; rely on duck typing when the only thing in common is the method name.
+When `c` is not passed, it takes its default value `0`. The same method name now works with two or three arguments.
 
-## A Worked Example
-
-Shapes are the standard illustration, because the calculation differs entirely between them while the question does not:
-
-```python
-class Circle:
-    def __init__(self, radius):
-        self.radius = radius
-
-    def area(self):
-        return 3.14159 * self.radius ** 2
-
-class Square:
-    def __init__(self, side):
-        self.side = side
-
-    def area(self):
-        return self.side ** 2
-
-class Rectangle:
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
-
-    def area(self):
-        return self.width * self.height
-
-shapes = [Circle(2), Square(3), Rectangle(2, 5)]
-
-for shape in shapes:
-    print(f"{type(shape).__name__:<10}{shape.area():>8.2f}")
-
-print(f"{'Total':<10}{sum(shape.area() for shape in shapes):>8.2f}")
-```
-
-**Output:**
-
-```
-Circle       12.57
-Square        9.00
-Rectangle    10.00
-Total        31.57
-```
-
-`type(shape).__name__` gets a class's name as a string, which is useful for reporting.
-
-The total is computed without knowing what any shape is. Adding a `Triangle` class with an `area` method requires no change to either the loop or the sum.
-
-## Polymorphism and Overriding
-
-The two are closely related and are not the same thing.
-
-**Overriding** is the mechanism: a child provides its own version of a method.
-
-**Polymorphism** is the result: calling that method on any object in the hierarchy does the right thing without the caller choosing.
-
-Overriding is what you write. Polymorphism is what you get.
-
-## Keeping the Interface Honest
-
-Polymorphism only works while the shared method behaves consistently. Three rules keep it usable:
-
-**Same name.** Obviously — but it is easy to end up with `speak` on one class and `make_sound` on another, and nothing will warn you until the loop fails.
-
-**Same parameters.** If `Dog.speak()` takes no arguments and `Cat.speak(volume)` requires one, code written for animals in general breaks on cats.
-
-**Same kind of result.** If one `area()` returns a number and another prints and returns `None`, `sum(shape.area() for shape in shapes)` fails on the second. Return types should match.
-
-Nothing in Python enforces any of this. The next chapter's subject is the tool that does.
+| | Method Overriding | Method Overloading |
+| --- | --- | --- |
+| Meaning | A child class redefines a method of its parent | One class has several methods with the same name and different parameters |
+| Classes involved | Parent and child | One class |
+| Supported in Python | Yes | No; default parameter values are used instead |
 
 ## Further Reading
 
-- **Official Python guide to classes** — https://docs.python.org/3/tutorial/classes.html
-- **Polymorphism and duck typing** — https://realpython.com/inheritance-composition-python/
+- 📎 **Official Python guide to classes** — https://docs.python.org/3/tutorial/classes.html
 
-One method name, several types, each with its own implementation — reached through a shared parent or simply through a shared name. Next, a related idea that Python deliberately does not have.
+Polymorphism works only if every class provides the method being called. Python does not check this in advance. In the next topic, **Abstraction**, you'll learn how a parent class can require its child classes to define certain methods.

@@ -1,401 +1,262 @@
 # Types of Inheritance
 
-Hierarchies take a small number of recognisable shapes. Each has a name, and the names come up often enough to be worth knowing.
+Classes can be connected through inheritance in several arrangements. Each arrangement has a name, based on how many parents and children are involved.
+
+| Type | Arrangement |
+| --- | --- |
+| Single | One child inherits from one parent. |
+| Multiple | One child inherits from two or more parents. |
+| Multilevel | A child inherits from a parent, which itself inherits from another parent. |
+| Hierarchical | Two or more children inherit from the same parent. |
+| Hybrid | A combination of two or more of the types above. |
 
 ## Single Inheritance
 
-One child, one parent. This is every example so far.
+> **In single inheritance, one child class inherits from one parent class.**
 
 ```mermaid
 flowchart TD
-    A["Animal"] --> B["Dog"]
+    A["Person"] --> B["Student"]
 ```
 
 ```python
-class Animal:
-    def eat(self):
-        print("Eating")
+class Person:
+    def introduce(self):
+        print("I am a person")
 
-class Dog(Animal):
-    def bark(self):
-        print("Woof")
+class Student(Person):
+    def study(self):
+        print("I am studying")
 
-pet = Dog()
-pet.eat()
-pet.bark()
+student1 = Student()
+student1.introduce()
+student1.study()
 ```
 
 **Output:**
 
 ```
-Eating
-Woof
+I am a person
+I am studying
 ```
 
-The commonest shape, and the one to prefer.
-
-## Multilevel Inheritance
-
-A child that is itself a parent — a chain.
-
-```mermaid
-flowchart TD
-    A["Animal"] --> B["Dog"]
-    B --> C["Puppy"]
-```
-
-```python
-class Animal:
-    def eat(self):
-        print("Eating")
-
-class Dog(Animal):
-    def bark(self):
-        print("Woof")
-
-class Puppy(Dog):
-    def weep(self):
-        print("Yip")
-
-pet = Puppy()
-pet.eat()
-pet.bark()
-pet.weep()
-```
-
-**Output:**
-
-```
-Eating
-Woof
-Yip
-```
-
-`Puppy` inherits from `Dog`, which inherits from `Animal`, so a Puppy has all three sets of methods. The lookup simply continues up the chain until it finds a match.
-
-Chains get hard to follow quickly. Finding where a method is actually defined means checking each level, and a change near the top reaches everything below it. Two or three levels is usually the practical limit.
-
-## Hierarchical Inheritance
-
-One parent, several children.
-
-```mermaid
-flowchart TD
-    A["Animal"] --> B["Dog"]
-    A --> C["Cat"]
-    A --> D["Bird"]
-```
-
-```python
-class Animal:
-    def __init__(self, name):
-        self.name = name
-
-    def eat(self):
-        print(f"{self.name} is eating")
-
-class Dog(Animal):
-    def speak(self):
-        print("Woof")
-
-class Cat(Animal):
-    def speak(self):
-        print("Meow")
-
-class Bird(Animal):
-    def speak(self):
-        print("Tweet")
-
-for pet in [Dog("Rex"), Cat("Whiskers"), Bird("Tweety")]:
-    pet.eat()
-    pet.speak()
-```
-
-**Output:**
-
-```
-Rex is eating
-Woof
-Whiskers is eating
-Meow
-Tweety is eating
-Tweet
-```
-
-Shared behaviour in the parent, differences in the children. This is inheritance working as intended, and it is the shape that makes the next chapter's subject possible.
+`Student` has one parent, `Person`. This is the simplest and most common type.
 
 ## Multiple Inheritance
 
-One child, several parents. Python allows it; many languages do not.
+> **In multiple inheritance, one child class inherits from two or more parent classes.**
+
+A teaching assistant studies like a student and teaches like a teacher.
 
 ```mermaid
 flowchart TD
-    A["Teacher"] --> C["TeachingAssistant"]
-    B["Student"] --> C
+    A["Student"] --> C["TeachingAssistant"]
+    B["Teacher"] --> C
+```
+
+**Syntax:**
+
+```python
+class ChildClass(ParentClass1, ParentClass2):
+    pass
 ```
 
 ```python
-class Teacher:
-    def teach(self):
-        print("Teaching a class")
-
 class Student:
     def study(self):
-        print("Studying for an exam")
+        print("I am studying")
 
-class TeachingAssistant(Teacher, Student):
+class Teacher:
+    def teach(self):
+        print("I am teaching")
+
+class TeachingAssistant(Student, Teacher):
     pass
 
-person = TeachingAssistant()
-person.teach()
-person.study()
+assistant1 = TeachingAssistant()
+assistant1.study()
+assistant1.teach()
 ```
 
 **Output:**
 
 ```
-Teaching a class
-Studying for an exam
+I am studying
+I am teaching
 ```
 
-Both parents are listed in the brackets, and the child gets everything from both.
+The parents are separated by commas inside the brackets. `TeachingAssistant` gets the methods of both `Student` and `Teacher`.
 
-The question this raises is what happens when both parents define the same method.
+### When Both Parents Have the Same Method
 
-## The Diamond Problem
+If both parents define a method with the same name, Python uses the version from the parent **listed first**.
 
-When two parents share a grandparent, the hierarchy forms a diamond:
+```python
+class Student:
+    def introduce(self):
+        print("I am a student")
+
+class Teacher:
+    def introduce(self):
+        print("I am a teacher")
+
+class TeachingAssistant(Student, Teacher):
+    pass
+
+assistant1 = TeachingAssistant()
+assistant1.introduce()
+```
+
+**Output:**
+
+```
+I am a student
+```
+
+`Student` is listed before `Teacher` in `TeachingAssistant(Student, Teacher)`, so Python finds `Student`'s `introduce` first.
+
+The order in which Python searches the classes is called the **Method Resolution Order (MRO)**. It can be displayed with the `mro()` method.
+
+```python
+print(TeachingAssistant.mro())
+```
+
+**Output:**
+
+```
+[<class '__main__.TeachingAssistant'>, <class '__main__.Student'>, <class '__main__.Teacher'>, <class 'object'>]
+```
+
+Python searches `TeachingAssistant`, then `Student`, then `Teacher`. The last class, `object`, is the built-in class that every Python class inherits from automatically.
+
+## Multilevel Inheritance
+
+> **In multilevel inheritance, a child class inherits from a parent class, which itself inherits from another class. The classes form a chain.**
 
 ```mermaid
 flowchart TD
-    A["A"] --> B["B"]
-    A --> C["C"]
-    B --> D["D"]
-    C --> D
+    A["Person"] --> B["Student"]
+    B --> C["ResearchStudent"]
 ```
 
-If `B` and `C` both define `show()`, which one does `D` get?
-
 ```python
-class A:
-    def show(self):
-        print("A")
+class Person:
+    def introduce(self):
+        print("I am a person")
 
-class B(A):
-    def show(self):
-        print("B")
+class Student(Person):
+    def study(self):
+        print("I am studying")
 
-class C(A):
-    def show(self):
-        print("C")
+class ResearchStudent(Student):
+    def research(self):
+        print("I am doing research")
 
-class D(B, C):
-    pass
-
-D().show()
+scholar1 = ResearchStudent()
+scholar1.introduce()
+scholar1.study()
+scholar1.research()
 ```
 
 **Output:**
 
 ```
-B
+I am a person
+I am studying
+I am doing research
 ```
 
-`B` wins, because it is listed first in `class D(B, C)`. Order in the brackets is significant.
+`ResearchStudent` inherits from `Student`, and `Student` inherits from `Person`. A `ResearchStudent` object therefore has the methods of all three classes.
 
-## The Method Resolution Order
+## Hierarchical Inheritance
 
-The rule behind that answer is the **method resolution order**, or **MRO**: the single sequence of classes Python searches, computed once per class.
+> **In hierarchical inheritance, two or more child classes inherit from the same parent class.**
+
+```mermaid
+flowchart TD
+    A["Person"] --> B["Student"]
+    A --> C["Teacher"]
+```
 
 ```python
-print([cls.__name__ for cls in D.__mro__])
+class Person:
+    def introduce(self):
+        print("I am a person")
+
+class Student(Person):
+    def study(self):
+        print("I am studying")
+
+class Teacher(Person):
+    def teach(self):
+        print("I am teaching")
+
+student1 = Student()
+teacher1 = Teacher()
+
+student1.introduce()
+student1.study()
+teacher1.introduce()
+teacher1.teach()
 ```
 
 **Output:**
 
 ```
-['D', 'B', 'C', 'A', 'object']
+I am a person
+I am studying
+I am a person
+I am teaching
 ```
 
-`D`, then `B`, then `C`, then `A`, then `object`. Every lookup walks this list and stops at the first match, which is why `show()` found `B`'s.
-
-Three rules determine the order:
-
-- a class always comes before any of its parents
-- parents stay in the order they were listed
-- every class appears exactly once
-
-That third rule is what resolves the diamond. `A` appears once, after both `B` and `C`, rather than being visited twice.
-
-Python refuses to build a class whose MRO cannot satisfy all three:
-
-```python
-class A:
-    pass
-
-class B(A):
-    pass
-
-class Broken(A, B):
-    pass
-```
-
-**Output:**
-
-```
-TypeError: Cannot create a consistent method resolution order (MRO) for bases A, B
-```
-
-`A` was listed before `B`, but `B` is a child of `A` and must come first. The two requirements contradict each other, and the error arrives at class definition rather than at some confusing moment later.
-
-## super() and the MRO
-
-This is what the previous chapter meant by `super()` following the search order rather than simply meaning "my parent".
-
-Each class calls `super()`, and Python walks the MRO once:
-
-```python
-class Base:
-    def __init__(self):
-        print("Base init")
-
-class Left(Base):
-    def __init__(self):
-        print("Left init")
-        super().__init__()
-
-class Right(Base):
-    def __init__(self):
-        print("Right init")
-        super().__init__()
-
-class Bottom(Left, Right):
-    def __init__(self):
-        print("Bottom init")
-        super().__init__()
-
-Bottom()
-```
-
-**Output:**
-
-```
-Bottom init
-Left init
-Right init
-Base init
-```
-
-`Base` ran once. Note what `super()` did inside `Left`: it went to `Right`, not to `Base`. `Left`'s parent is `Base`, but the next class after `Left` in `Bottom`'s MRO is `Right`:
-
-```python
-print([cls.__name__ for cls in Bottom.__mro__])
-```
-
-**Output:**
-
-```
-['Bottom', 'Left', 'Right', 'Base', 'object']
-```
-
-Each class hands on to the next in the list, wherever that leads, and every class is initialised exactly once.
-
-Hard-coded parent calls cannot do this:
-
-```python
-class Base:
-    def __init__(self):
-        print("Base init")
-
-class Left(Base):
-    def __init__(self):
-        print("Left init")
-        Base.__init__(self)
-
-class Right(Base):
-    def __init__(self):
-        print("Right init")
-        Base.__init__(self)
-
-class Bottom(Left, Right):
-    def __init__(self):
-        print("Bottom init")
-        Left.__init__(self)
-        Right.__init__(self)
-
-Bottom()
-```
-
-**Output:**
-
-```
-Bottom init
-Left init
-Base init
-Right init
-Base init
-```
-
-`Base` was initialised twice. Anything it does — opening a file, incrementing a counter, allocating a resource — happened twice too. This is the concrete reason `super()` is preferred, and it only shows up once a hierarchy has more than one parent.
+`Student` and `Teacher` share the `introduce` method from `Person`, and each adds its own method.
 
 ## Hybrid Inheritance
 
-Any combination of the above. The diamond is itself a hybrid: hierarchical at the top, multiple at the bottom.
+> **Hybrid inheritance is a combination of two or more types of inheritance in one set of classes.**
 
 ```mermaid
 flowchart TD
-    A["Animal"] --> B["Mammal"]
-    A --> C["WingedAnimal"]
-    B --> D["Bat"]
+    A["Person"] --> B["Student"]
+    A --> C["Teacher"]
+    B --> D["TeachingAssistant"]
     C --> D
 ```
 
-The name describes a shape rather than a feature. There is no separate syntax, and the MRO rules handle it like any other.
-
-## Summary
-
-| Type | Shape |
-| --- | --- |
-| Single | one parent, one child |
-| Multilevel | a chain of parents and children |
-| Hierarchical | one parent, several children |
-| Multiple | one child, several parents |
-| Hybrid | a combination of the above |
-
-## A Note on Restraint
-
-Multiple inheritance is powerful and easy to misuse. A class with several parents is harder to reason about, its MRO may surprise you, and a method's origin can be genuinely difficult to locate.
-
-Where it is used well, it is usually for **mixins** — small classes that add one capability and hold no state of their own, combined with a single real parent:
-
 ```python
-class JSONMixin:
-    def to_json(self):
-        return str(self.__dict__)
+class Person:
+    def introduce(self):
+        print("I am a person")
 
-class Animal:
-    def __init__(self, name):
-        self.name = name
+class Student(Person):
+    def study(self):
+        print("I am studying")
 
-class Dog(Animal, JSONMixin):
+class Teacher(Person):
+    def teach(self):
+        print("I am teaching")
+
+class TeachingAssistant(Student, Teacher):
     pass
 
-print(Dog("Rex").to_json())
+assistant1 = TeachingAssistant()
+assistant1.introduce()
+assistant1.study()
+assistant1.teach()
 ```
 
 **Output:**
 
 ```
-{'name': 'Rex'}
+I am a person
+I am studying
+I am teaching
 ```
 
-`JSONMixin` inherits from nothing, defines one method, and adds a capability to any class it is mixed into. That pattern stays comprehensible.
-
-Prefer single inheritance. When a class seems to need two parents, check whether one of them should be an attribute instead.
+`Student` and `Teacher` inheriting from `Person` is hierarchical inheritance. `TeachingAssistant` inheriting from both `Student` and `Teacher` is multiple inheritance. Together they form hybrid inheritance. No new syntax is needed; hybrid inheritance is only a name for this combined arrangement.
 
 ## Further Reading
 
-- **Official Python guide to multiple inheritance** — https://docs.python.org/3/tutorial/classes.html#multiple-inheritance
-- **The method resolution order** — https://docs.python.org/3/howto/mro.html
+- 📎 **Official Python guide to multiple inheritance** — https://docs.python.org/3/tutorial/classes.html#multiple-inheritance
 
-Hierarchies come in five recognisable shapes, and the MRO settles every lookup by searching one ordered list. Next, using a hierarchy to treat different types uniformly.
+In every arrangement, child classes can override the methods they inherit, so the same method call can behave differently for different objects. In the next topic, **Polymorphism**, you'll learn how one method name can work across many classes.

@@ -1,318 +1,171 @@
 # Inheritance
 
-Two classes often turn out to be mostly the same class:
+A college has both students and teachers. Every student and every teacher has a name, and both need a way to display it. Writing the same name-related code separately in a `Student` class and a `Teacher` class would repeat it. **Inheritance** lets both classes share that code from one common class.
+
+## Inheritance
+
+> **Inheritance allows a class to reuse the methods and attributes of another class, while also defining its own behaviour.**
+
+The two classes involved have specific names:
+
+| Term | Also Called | Meaning |
+| --- | --- | --- |
+| **Parent class** | Base class, superclass | The class whose methods and attributes are reused. |
+| **Child class** | Derived class, subclass | The class that reuses them. |
+
+Inheritance represents an **"is-a" relationship**. A student **is a** person, and a teacher **is a** person, so `Student` and `Teacher` can both be child classes of a `Person` parent class.
+
+## Creating a Child Class
+
+A child class is created by writing the parent class name inside parentheses after the child class name.
+
+**Syntax:**
 
 ```python
-class Dog:
-    def __init__(self, name):
-        self.name = name
-
-    def eat(self):
-        print(f"{self.name} is eating")
-
-    def sleep(self):
-        print(f"{self.name} is sleeping")
-
-    def bark(self):
-        print(f"{self.name} says Woof")
-
-class Cat:
-    def __init__(self, name):
-        self.name = name
-
-    def eat(self):
-        print(f"{self.name} is eating")
-
-    def sleep(self):
-        print(f"{self.name} is sleeping")
-
-    def meow(self):
-        print(f"{self.name} says Meow")
-```
-
-Three of the four methods are identical. Adding a `drink()` method means writing it twice, and fixing a bug in `eat()` means remembering to fix it in both places. A third animal makes it three.
-
-**Inheritance** removes the duplication. One class is defined with the shared parts, and others are built from it, keeping what it has and adding their own.
-
-## The Syntax
-
-The parent class is named in brackets after the child's name:
-
-```python
-class Animal:
-    def __init__(self, name):
-        self.name = name
-
-    def eat(self):
-        print(f"{self.name} is eating")
-
-    def sleep(self):
-        print(f"{self.name} is sleeping")
-
-class Dog(Animal):
-    def bark(self):
-        print(f"{self.name} says Woof")
-
-class Cat(Animal):
-    def meow(self):
-        print(f"{self.name} says Meow")
-```
-
-`Dog` defines one method and has four:
-
-```python
-pet = Dog("Rex")
-pet.eat()
-pet.sleep()
-pet.bark()
-```
-
-**Output:**
-
-```
-Rex is eating
-Rex is sleeping
-Rex says Woof
-```
-
-`eat` and `sleep` were never written in `Dog`. Neither was `__init__`, which is why `Dog("Rex")` works and why `self.name` exists for `bark` to use.
-
-The shared behaviour is written once. A bug fixed in `Animal.eat()` is fixed for every animal, and a new `drink()` method added to `Animal` appears on all of them at once.
-
-## The Terminology
-
-Three pairs of words mean the same thing, and all three are in common use:
-
-| The class being built from | The class being built |
-| --- | --- |
-| parent | child |
-| base class | derived class |
-| superclass | subclass |
-
-`Animal` is the parent, base class and superclass. `Dog` is the child, derived class and subclass. This chapter uses parent and child.
-
-## What Is Inherited
-
-A child gets the parent's methods and class attributes:
-
-```python
-class Animal:
-    kingdom = "Animalia"
-
-    def __init__(self, name):
-        self.name = name
-
-    def eat(self):
-        print(f"{self.name} is eating")
-
-class Dog(Animal):
+class ParentClass:
     pass
 
-pet = Dog("Rex")
-pet.eat()
-print(pet.kingdom)
-print(Dog.kingdom)
+class ChildClass(ParentClass):
+    pass
 ```
 
-**Output:**
-
-```
-Rex is eating
-Animalia
-Animalia
-```
-
-`Dog` has no body of its own beyond `pass`, and it is a complete working class.
-
-Instance attributes are not inherited, because they do not belong to a class at all — they are created on each object when `__init__` runs. What a child inherits is the `__init__` that creates them.
-
-Inheritance is one-way. The parent knows nothing about its children:
+**Example:**
 
 ```python
-class Animal:
+class Person:
     def __init__(self, name):
         self.name = name
 
-class Dog(Animal):
-    def bark(self):
-        print("Woof")
+    def display_name(self):
+        print("Name:", self.name)
 
-generic = Animal("Thing")
-generic.bark()
-```
-
-**Output:**
-
-```
-AttributeError: 'Animal' object has no attribute 'bark'
-```
-
-So does a sibling. A `Cat` does not get `Dog`'s methods:
-
-```python
-pet = Dog("Rex")
-pet.meow()
-```
-
-**Output:**
-
-```
-AttributeError: 'Dog' object has no attribute 'meow'
-```
-
-## How the Lookup Works
-
-Reading an attribute or calling a method searches the object, then its class, then that class's parent, and on upwards:
-
-```
-pet.eat()
-  │
-  ├── on the object itself?     no
-  ├── on Dog?                   no
-  ├── on Animal?                yes  →  use it
-  └── otherwise, AttributeError
-```
-
-This is the same rule as before with one extra step: after the class, the search continues to the parent. That single extension is all inheritance is at the mechanical level.
-
-The full search order is stored on the class as `__mro__`:
-
-```python
-class Animal:
+class Student(Person):
     pass
 
-class Dog(Animal):
+class Teacher(Person):
     pass
 
-print(Dog.__mro__)
+student1 = Student("Ravi")
+teacher1 = Teacher("Meena")
+
+student1.display_name()
+teacher1.display_name()
 ```
 
 **Output:**
 
 ```
-(<class '__main__.Dog'>, <class '__main__.Animal'>, <class 'object'>)
+Name: Ravi
+Name: Meena
 ```
 
-Dog, then Animal, then `object`. The direct parents alone are in `__bases__`:
+`Student` and `Teacher` contain no code of their own, yet both work. When Python looks up a method on an object, it **first checks the object's class. If the method isn't defined there, it searches the parent class.**
+
+- `Student` has no `__init__` method, so `Student("Ravi")` automatically runs the `__init__` method of `Person`. That method creates the `name` attribute on the new object.
+- `Student` has no `display_name()` method either, so `student1.display_name()` runs the one defined in `Person`.
+
+**Both child classes inherit the methods defined in `Person`**, so the name-related code is written only once.
+
+**If a child class does not define its own `__init__()`, Python uses the inherited one. If the child defines its own `__init__()`, that method runs instead.** The child can still call the parent's `__init__()` using `super()`, which is covered in **The `super()` Function**.
+
+## Adding Methods to a Child Class
+
+A child class can also define its own methods, in addition to the ones it inherits. These methods belong only to that child class.
 
 ```python
-print(Dog.__bases__)
+class Person:
+    def __init__(self, name):
+        self.name = name
+
+    def display_name(self):
+        print("Name:", self.name)
+
+class Student(Person):
+    def study(self):
+        print(self.name, "is studying")
+
+class Teacher(Person):
+    def teach(self):
+        print(self.name, "is teaching")
+
+student1 = Student("Ravi")
+teacher1 = Teacher("Meena")
+
+student1.display_name()
+student1.study()
+teacher1.display_name()
+teacher1.teach()
 ```
 
 **Output:**
 
 ```
-(<class '__main__.Animal'>,)
+Name: Ravi
+Ravi is studying
+Name: Meena
+Meena is teaching
 ```
 
-## object Is the Root
+`study()` uses `self.name`, which is set by the inherited `__init__` method. A child class can use inherited attributes in its own methods.
 
-`object` appears at the end of every search order because every class inherits from it, whether or not anything is written:
+The diagram shows what each class defines. The arrows point from each child class to its parent class.
+
+```mermaid
+classDiagram
+    Person <|-- Student
+    Person <|-- Teacher
+    class Person {
+        name
+        display_name()
+    }
+    class Student {
+        study()
+    }
+    class Teacher {
+        teach()
+    }
+```
+
+**Inheritance passes behaviour from parent to child, not from child to parent.** A `Student` object can use methods defined in `Person`, but a `Person` object cannot use `study()`, because that method is defined only in `Student`. Calling it raises an **`AttributeError`**. Similarly, `teach()` belongs only to `Teacher`.
+
+## Checking Inheritance Relationships
+
+Python provides two built-in functions to check how objects and classes are related:
+
+- **`isinstance(object, class)`** returns `True` if the object is an instance of the class or of any of its child classes.
+- **`issubclass(class1, class2)`** returns `True` if `class1` is the same as `class2` or inherits from it.
 
 ```python
-class Animal:
+class Person:
+    def __init__(self, name):
+        self.name = name
+
+class Student(Person):
     pass
 
-print(Animal.__bases__)
-print(issubclass(Animal, object))
-print(isinstance(5, object))
+student1 = Student("Ravi")
+
+print(isinstance(student1, Student))
+print(isinstance(student1, Person))
+print(issubclass(Student, Person))
+print(issubclass(Person, Student))
 ```
 
 **Output:**
 
 ```
-(<class 'object'>,)
 True
-True
-```
-
-`object` is where the default behaviour of every class comes from — the reason a new object can be created at all, the reason `==` compares identity by default, and the reason printing one shows a class name and an address. Overriding those defaults is what a later chapter is about.
-
-## Testing the Relationship
-
-`isinstance()` is true for an object's own class **and** every class above it:
-
-```python
-class Animal:
-    def __init__(self, name):
-        self.name = name
-
-class Dog(Animal):
-    pass
-
-class Cat(Animal):
-    pass
-
-pet = Dog("Rex")
-print(isinstance(pet, Dog))
-print(isinstance(pet, Animal))
-print(isinstance(pet, Cat))
-```
-
-**Output:**
-
-```
 True
 True
 False
 ```
 
-A Dog is an Animal. That is the point of the relationship, and it is why `isinstance()` is preferred over `type(pet) == Animal`, which would report `False` and be unhelpful about it.
+`student1` is an instance of both `Student` and `Person`, because a student **is a** person. `Student` inherits from `Person`, but `Person` does not inherit from `Student`.
 
-`issubclass()` asks the same question about two classes:
-
-```python
-print(issubclass(Dog, Animal))
-print(issubclass(Animal, Dog))
-print(issubclass(Dog, object))
-```
-
-**Output:**
-
-```
-True
-False
-True
-```
-
-## When Inheritance Is the Wrong Tool
-
-Inheritance says **is-a**. A Dog is an Animal, a Manager is an Employee, a SavingsAccount is a BankAccount. If that sentence is not true, inheritance is the wrong relationship.
-
-The alternative is **has-a**, where one object holds another as an attribute. This is called **composition**:
-
-```python
-class Engine:
-    def start(self):
-        print("Engine started")
-
-class Car:
-    def __init__(self):
-        self.engine = Engine()
-
-    def start(self):
-        self.engine.start()
-        print("Car ready")
-
-Car().start()
-```
-
-**Output:**
-
-```
-Engine started
-Car ready
-```
-
-A Car is not a kind of Engine, so `class Car(Engine)` would be wrong even though it would run. A Car *has* an Engine.
-
-Composition is the more flexible of the two and the one to reach for when neither obviously fits. Inheritance ties a child to its parent permanently: every change to the parent reaches every child, which is exactly what you want when the relationship is genuine and a liability when it is not.
-
-Two warning signs that inheritance is being misused: a child that overrides most of what it inherits, and a hierarchy more than two or three levels deep.
+Every class in Python ultimately inherits from the built-in **`object`** class, even when you don't explicitly write a parent class. That's why `isinstance(student1, object)` returns `True`.
 
 ## Further Reading
 
-- **Official Python guide to inheritance** — https://docs.python.org/3/tutorial/classes.html#inheritance
-- **Inheritance and composition compared** — https://realpython.com/inheritance-composition-python/
+- 📎 **Official Python guide to inheritance** — https://docs.python.org/3/tutorial/classes.html#inheritance
 
-A child class keeps everything its parent has and adds its own, with the attribute lookup continuing up the chain. Next, changing something a child inherited.
+`Student` inherits `display_name()` exactly as it is written in `Person`. Sometimes a child class needs an inherited method to behave differently, such as displaying `Student: Ravi` instead of `Name: Ravi`. In the next topic, **Method Overriding**, you'll learn how a child class can replace an inherited method with its own version.
