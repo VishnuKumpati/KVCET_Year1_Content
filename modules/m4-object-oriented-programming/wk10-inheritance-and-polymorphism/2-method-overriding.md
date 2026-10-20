@@ -59,6 +59,13 @@ When `student1.display_name()` runs, Python first looks inside the `Student` cla
 
 If a child class does not define its own version, Python looks inside the parent class and runs the inherited version.
 
+```mermaid
+flowchart TD
+    A["student1.display_name() is called"] --> B{"display_name() is defined in Student"}
+    B -->|Yes| C["Run the Student version"]
+    B -->|No| D["Run the inherited Person version"]
+```
+
 **Overriding does not change the parent's method.** `Person` still has its original `display_name()`, so `person1` still displays `Name: Arun`.
 
 ## Method Overriding and Polymorphism
@@ -73,11 +80,15 @@ Polymorphism is covered in detail in the **Polymorphism** topic.
 
 ## Rules for Overriding a Method
 
-- **The name must match exactly.** Method names are case-sensitive, so `display_Name` is a different name from `display_name`.
-- **The parameters can be different.** Python looks for a method by its name only. However, when you call the child's method, you must pass arguments it can accept. Otherwise, Python raises a **`TypeError`**.
-- **The child class must inherit from the parent class.** A method with the same name in an unrelated class does not override anything.
+Follow these rules when you override a method:
 
-A spelling mistake in the method name is a common error, and Python does not warn you about it.
+1. **The child class must inherit from the parent class.** Overriding happens only between a parent class and its child class. A method with the same name in an unrelated class does not override anything.
+2. **The method name must match exactly.** Method names are case-sensitive, so `display_Name` and `display_name` are two different names.
+3. **Keep the method compatible with how it is called.** Python does not require the overriding method to have exactly the same parameters. However, if the child method cannot accept arguments that existing code passes to the parent's method, the call may raise a **`TypeError`**.
+4. **Keep the method's purpose consistent.** The child can change how the method works, but it should still fulfil the same general responsibility as the parent's method.
+5. **Private methods are not overridden in the usual way.** Python renames a method whose name starts with two underscores, such as `__display()`, using **name mangling**. A child method with the same name gets a different internal name, so it does not replace the parent's method.
+
+Breaking rule 2 by mistake is common, and Python does not warn you about it.
 
 ```python
 class Person:
@@ -105,11 +116,15 @@ Name: Ravi
 
 ## Overriding the `__init__` Method
 
-`__init__` is often called a **constructor**, but in Python it is a method with a special name. When an object is created, Python looks for `__init__()` using the class's inheritance lookup order. If the child class defines its own `__init__()`, Python uses that version instead of automatically running the parent's version. This is why **a child class can override `__init__`**.
+`__init__` is often called a **constructor**, but in Python it is a method with a special name. When an object is created, Python calls the applicable `__init__()` method using the class's inheritance lookup order to initialise the object. If the child class defines its own `__init__()`, Python uses that version instead of automatically running the parent's version. This is why **a child class can override `__init__`**.
 
 In some other programming languages, such as Java, constructors cannot be overridden. Python is different, because `__init__` is inherited and looked up like any other method.
 
-A child class overrides `__init__` when its objects need different starting data. For example, a `Student` object needs both a `name` and a `roll_number`.
+### Importance of Overriding `__init__`
+
+- **A child object often needs more data than a parent object.** A `Person` needs only a name. A `Student` needs a name and a roll number. To accept additional data when an object is created, the child class can override `__init__`.
+- **The child becomes responsible for every attribute.** Once the child has its own `__init__`, the parent's `__init__` does not run automatically. The child must create every attribute the object needs, including the parent's attributes, such as `name`, unless it calls the parent's `__init__`.
+- **A missing attribute breaks inherited methods.** If the child does not create `name`, the inherited `display_name()` raises an **`AttributeError`**.
 
 ```python
 class Person:
@@ -137,11 +152,7 @@ Name: Ravi
 101
 ```
 
-`Student("Ravi", 101)` runs `Student.__init__()`, which stores `"Ravi"` in `self.name` and `101` in `self.roll_number`.
-
-Because the parent's `__init__()` does not run, **the child's `__init__()` must create every attribute the object needs**, unless it calls the parent's method.
-
-The inherited `display_name()` method still works, because `Student.__init__()` has already stored `self.name` on the object.
+`Student("Ravi", 101)` runs `Student.__init__()`, which stores `"Ravi"` in `self.name` and `101` in `self.roll_number`. The inherited `display_name()` method works, because `self.name` already exists on the object.
 
 ## Where Method Overriding Is Used
 
@@ -157,4 +168,4 @@ Method overriding is used whenever related classes share an action but perform i
 
 - 📎 **Official Python guide to inheritance and overriding** — https://docs.python.org/3/tutorial/classes.html#inheritance
 
-The `Student` class repeats `self.name = name`, even though `Person` already has this line. In the next topic, **The `super()` Function**, you'll learn how to reuse the parent's `__init__()` instead of repeating this code.
+The `Student` class sets up `self.name` again, even though `Person` already handles it. In the next topic, **The `super()` Function**, you'll learn how to reuse the parent's `__init__()` instead of repeating this setup.

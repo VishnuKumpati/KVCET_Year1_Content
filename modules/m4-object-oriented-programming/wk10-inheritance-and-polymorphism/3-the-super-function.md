@@ -1,25 +1,22 @@
-# The super() Function
+# The `super()` Function
 
-When a child class overrides `__init__`, the parent's `__init__` no longer runs, and the attributes it creates are missing. The child needs a way to run the parent's version as well as its own.
+When a child overrides a method, calling that method on a child object runs the child's version, not the parent's version automatically. Sometimes, the child still needs the parent's work.
 
-## The super() Function
+Without `super()`, the child might have to **copy the parent's code** into its own method. This creates duplication: if the parent's code changes, the copied code may need updating too.
 
-> **`super()` gives a child class access to the methods of its parent class.**
+The **`super()`** function lets a child **reuse the parent's method** instead of copying its code.
 
-`super().method_name()` calls the parent's version of a method, even when the child has overridden it.
+## The `super()` Function
 
-## Calling the Parent's __init__ Method
+>**`super()` allows a child class to call methods from its parent class, making it easier to reuse the parent's code without repeating it.**
 
-**Syntax:**
+`super().method_name()` calls the next version of `method_name()` in Python's inheritance lookup order. In these examples, that is the parent's version.
 
-```python
-class ChildClass(ParentClass):
-    def __init__(self, parent_parameters, child_parameters):
-        super().__init__(parent_parameters)
-        self.attribute = value
-```
+Although it is called the `super()` function, `super` is technically a built-in class. You use it in the same way as a function.
 
-**Example:**
+## Calling the Parent's `__init__` Method
+
+The most common use of `super()` is inside the child's `__init__()` method. The child calls the parent's `__init__()` to set up the attributes the parent already handles, and then adds its own attributes.
 
 ```python
 class Person:
@@ -30,35 +27,80 @@ class Person:
         print("Name:", self.name)
 
 class Student(Person):
-    def __init__(self, name, course):
+    def __init__(self, name, roll_number):
         super().__init__(name)
-        self.course = course
+        self.roll_number = roll_number
 
-student1 = Student("Ravi", "Python")
-print(student1.name)
-print(student1.course)
+student1 = Student("Ravi", 101)
+
 student1.display_name()
+print(student1.roll_number)
 ```
 
 **Output:**
 
 ```
-Ravi
-Python
 Name: Ravi
+101
 ```
 
-`super().__init__(name)` runs `Person`'s `__init__`, which sets `self.name`. `Student`'s `__init__` then sets `self.course`. The object has both attributes, and `self.name = name` is still written only once, in `Person`.
+Here is what happens when `Student("Ravi", 101)` runs:
 
-Three points about this call:
+1. Python runs the `__init__()` method of `Student`.
+2. The line `super().__init__(name)` calls the `__init__()` method of `Person`.
+3. `Person` stores the name `"Ravi"` in the object.
+4. `Student` then stores the roll number `101` in the object.
 
-- **`self` is not passed.** `super()` supplies the current object automatically.
-- **Only the parent's parameters are passed.** `Person`'s `__init__` takes `name`, so only `name` is passed. `course` belongs to `Student`.
-- **It is usually the first line** of the child's `__init__`, so the parent's attributes exist before the child adds its own.
+**The parent's `__init__()` sets up the name.** In this example, if `Student` does not call it or set `self.name` itself, `display_name()` raises an **`AttributeError`** because the object has no `name` attribute.
 
-## Calling the Parent's Other Methods
+**Do not write `self` inside `super().__init__()`.** Python adds it automatically.
 
-`super()` works with any method, not only `__init__`. This lets a child **extend** a parent's method: run the parent's version, then add to it.
+## Calling Other Parent Methods
+
+`super()` works with **any method** of the parent class, not only `__init__()`. This lets a child class **extend** a parent's method: the child runs the parent's version first, and then adds extra work of its own.
+
+```python
+class Person:
+    def __init__(self, name):
+        self.name = name
+
+    def display_details(self):
+        print("Name:", self.name)
+
+class Student(Person):
+    def __init__(self, name, roll_number):
+        super().__init__(name)
+        self.roll_number = roll_number
+
+    def display_details(self):
+        super().display_details()
+        print("Roll Number:", self.roll_number)
+
+student1 = Student("Ravi", 101)
+student1.display_details()
+```
+
+**Output:**
+
+```
+Name: Ravi
+Roll Number: 101
+```
+
+Here, `super().display_details()` runs the parent's method to print the name. The child then prints the roll number.
+
+## Replacing and Extending a Method
+
+When a child overrides a method, it decides whether to reuse the parent's behaviour.
+
+- **Replacing:** The child defines its own method without calling `super()`. Only the child's version runs.
+- **Extending:** The child calls `super()` inside its method, reusing the parent's version and adding its own behaviour.
+
+For example, `Student` can replace `display_details()` to print only the roll number, or extend it by calling `super().display_details()` to print both the name and the roll number.
+
+## Calling the Parent Class Directly
+
+A parent's method can also be called by writing the parent class name directly, such as `Person.__init__(self, name)`.
 
 ```python
 class Person:
@@ -69,59 +111,40 @@ class Person:
         print("Name:", self.name)
 
 class Student(Person):
-    def __init__(self, name, course):
-        super().__init__(name)
-        self.course = course
+    def __init__(self, name, roll_number):
+        Person.__init__(self, name)
+        self.roll_number = roll_number
 
-    def display_name(self):
-        super().display_name()
-        print("I study", self.course)
+student1 = Student("Ravi", 101)
 
-student1 = Student("Ravi", "Python")
 student1.display_name()
+print(student1.roll_number)
 ```
 
 **Output:**
 
 ```
 Name: Ravi
-I study Python
+101
 ```
 
-`Student`'s `display_name()` first calls `Person`'s `display_name()`, which prints the name. It then prints the course. Any change to `Person`'s `display_name()` automatically applies to students too.
+This gives the same result, but it has two differences from `super()`:
 
-| | Overriding Without `super()` | Overriding With `super()` |
+| | `super().__init__(name)` | `Person.__init__(self, name)` |
 | --- | --- | --- |
-| Parent's method | Does not run | Runs |
-| Result | The child **replaces** the parent's behaviour | The child **extends** the parent's behaviour |
+| Passing `self` | Done automatically | Must be written by hand |
+| Parent class name | Not written | Written inside the child class |
 
-## A Child Class Without __init__
+`super()` avoids naming the parent class in the method call, making the code easier to maintain when the inheritance structure changes. It is generally preferred over direct parent-class calls.
 
-A child class that has no extra attributes does not need its own `__init__`. It inherits the parent's `__init__` and works without `super()`.
+## Points to Remember
 
-```python
-class Person:
-    def __init__(self, name):
-        self.name = name
-
-class Teacher(Person):
-    def teach(self):
-        print(self.name, "is teaching")
-
-teacher1 = Teacher("Meena")
-teacher1.teach()
-```
-
-**Output:**
-
-```
-Meena is teaching
-```
-
-`super().__init__()` is needed only when the child **defines** its own `__init__`.
+- **Use `super()` without arguments inside an instance method or a class method.** Python uses the current class and the object or class associated with the method call to determine where method lookup should continue. It cannot be used on its own at the top level of a program.
+- **The parentheses are required.** The correct form is `super().method_name()`, not `super.method_name()`.
+- **When a class has more than one parent class**, `super()` follows the class's inheritance lookup order. This is covered in **Types of Inheritance**.
 
 ## Further Reading
 
 - 📎 **Official Python reference for `super()`** — https://docs.python.org/3/library/functions.html#super
 
-Each example so far has one parent and its children. Classes can also be connected in other arrangements. In the next topic, **Types of Inheritance**, you'll learn the different ways classes can inherit from one another.
+The examples in this topic use **single inheritance**, where a class has one parent class. In the next topic, **Types of Inheritance**, you'll explore other inheritance structures, including multiple inheritance.
