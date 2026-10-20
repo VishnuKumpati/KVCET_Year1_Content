@@ -1,194 +1,166 @@
 # Decorators
 
-`@classmethod` and `@abstractmethod` are written above a method to change how it behaves. Each of these lines is a **decorator**. Decorators work because of one fact about Python functions: **a function is an object**, just like a number or a list.
+Suppose you want to print a message before and after a function runs. You could add those lines to every function, but that means repeating the same code. **Decorators** solve this.
 
-## Functions Are Objects
+> **A decorator is a function that adds or changes a function's behaviour without requiring changes to the original function's code.**
 
-A function can be stored in a variable and passed to another function as an argument.
+In this topic, you'll build a decorator step by step. You've already seen decorators such as `@classmethod` in **Class Attributes and Class Methods** and `@abstractmethod` in **Abstraction**. Now, let's understand how they work.
+
+## Passing a Function to Another Function
+
+Decorators depend on one simple fact: in Python, **a function can be passed to another function**, just like a value.
 
 ```python
 def greet():
-    print("Welcome to City College")
+    print("Hello!")
 
-say_hello = greet
+def run_function(func):
+    func()
+
+run_function(greet)
+```
+
+**Output:**
+
+```
+Hello!
+```
+
+`greet` is passed to `run_function()` **without parentheses**:
+
+- `greet` refers to the function.
+- `greet()` calls the function.
+
+Inside `run_function()`, `func()` calls the function that was passed in. You'll use this idea to build a decorator that adds behaviour around another function.
+
+## Creating a Decorator
+
+A decorator takes the original function, creates a **wrapper** to run extra code around it, and returns the wrapper.
+
+```python
+def my_decorator(func):
+    def wrapper():
+        print("Before the function runs")
+        func()
+        print("After the function runs")
+    return wrapper
+
+def say_hello():
+    print("Hello!")
+
+say_hello = my_decorator(say_hello)
 say_hello()
-
-def run_twice(func):
-    func()
-    func()
-
-run_twice(greet)
 ```
 
 **Output:**
 
 ```
-Welcome to City College
-Welcome to City College
-Welcome to City College
+Before the function runs
+Hello!
+After the function runs
 ```
 
-`say_hello = greet` has no brackets after `greet`, so the function is **not called**. The variable `say_hello` now refers to the same function, and `say_hello()` calls it. `run_twice(greet)` passes the function itself to `run_twice`, which calls it twice.
+1. `func` refers to the original function, `say_hello`.
+2. `wrapper()` runs the extra code and calls `func()` in between.
+3. `return wrapper` gives the wrapper back. The line `say_hello = my_decorator(say_hello)` stores it in `say_hello`, so calling `say_hello()` now runs the wrapper.
 
-A function can also be defined inside another function and returned from it.
+Notice that `return wrapper` returns the function itself **without calling it**. The wrapper runs later, when you call `say_hello()`.
 
-## Decorators
+## The `@` Syntax
 
-> **A decorator is a function that takes another function, adds some behaviour to it, and returns the new version.** The original function's code does not change.
-
-**Syntax:**
+Python provides a shorter way to apply a decorator. Write `@` followed by the decorator's name directly above the function.
 
 ```python
-def decorator_name(func):
+def my_decorator(func):
     def wrapper():
-        # code that runs before the function
+        print("Before the function runs")
         func()
-        # code that runs after the function
-    return wrapper
-```
-
-- `func` is the function being decorated.
-- `wrapper` is a new function, defined inside the decorator. It runs extra code and calls `func`.
-- The decorator returns `wrapper` without calling it.
-
-## Writing a Decorator
-
-```python
-def show_border(func):
-    def wrapper():
-        print("----------")
-        func()
-        print("----------")
+        print("After the function runs")
     return wrapper
 
-def greet():
-    print("Welcome to City College")
+@my_decorator
+def say_hello():
+    print("Hello!")
 
-greet = show_border(greet)
-greet()
+say_hello()
 ```
 
 **Output:**
 
 ```
-----------
-Welcome to City College
-----------
+Before the function runs
+Hello!
+After the function runs
 ```
 
-`show_border(greet)` returns `wrapper`, and `greet = show_border(greet)` stores it back in the variable `greet`. Calling `greet()` now runs `wrapper`, which prints a line, calls the original `greet`, and prints another line.
+**Writing `@my_decorator` above a function is a shorter way of writing `say_hello = my_decorator(say_hello)`.** Python applies the decorator when the function is defined.
 
-## The @ Syntax
+## Decorating Functions with Arguments and Return Values
 
-Writing `greet = show_border(greet)` after every function is repetitive. Python provides a shorter form: the decorator's name with `@`, written directly above the function.
+Our first wrapper works only with functions that take no arguments. To support functions with different inputs, we use `*args` and `**kwargs` to accept arguments and pass them to the original function. The wrapper should also return the original function's result when the caller needs it.
 
 ```python
-def show_border(func):
-    def wrapper():
-        print("----------")
-        func()
-        print("----------")
+def show_message(func):
+    def wrapper(*args, **kwargs):
+        print("Starting the calculation")
+        result = func(*args, **kwargs)
+        return result
     return wrapper
 
-@show_border
-def greet():
-    print("Welcome to City College")
+@show_message
+def add(a, b):
+    return a + b
 
-greet()
+print(add(10, 20))
 ```
 
 **Output:**
 
 ```
-----------
-Welcome to City College
-----------
+Starting the calculation
+30
 ```
 
-`@show_border` above `def greet()` means exactly the same as `greet = show_border(greet)` after it. The decorator can be applied to any number of functions by adding the same line above each one.
+- `*args` accepts positional arguments, such as `10` and `20`. `**kwargs` accepts keyword arguments, such as `a=10` and `b=20`. Together, they let the wrapper handle different function arguments.
+- `return result` sends the answer back. Without it, `add(10, 20)` would give `None`.
 
-## Decorating a Function with Parameters
+## Decorators Used with Classes
 
-When the decorated function takes arguments, `wrapper` must accept the same arguments and pass them on to `func`.
+Python uses decorators to give methods special behaviour. You have already used two of them:
+
+- **`@classmethod`**, in **Class Attributes and Class Methods**, defines a method that receives the class as `cls`.
+- **`@abstractmethod`**, in **Abstraction**, marks a method that a concrete class must implement before its objects can be created.
+
+Two more are commonly used with classes.
+
+### `@staticmethod`
+
+`@staticmethod` defines a method that behaves like a regular function defined inside a class. It does not automatically receive the object (`self`) or the class (`cls`) as its first argument.
 
 ```python
-def show_border(func):
-    def wrapper(name):
-        print("----------")
-        func(name)
-        print("----------")
-    return wrapper
-
-@show_border
-def greet(name):
-    print("Welcome,", name)
-
-greet("Ravi")
-```
-
-**Output:**
-
-```
-----------
-Welcome, Ravi
-----------
-```
-
-`greet("Ravi")` calls `wrapper("Ravi")`, which passes `"Ravi"` on to the original `greet`.
-
-## Built-in Decorators for Methods
-
-Python provides built-in decorators that change how a method inside a class works. They are used as they are, without writing the decorator function.
-
-### @staticmethod
-
-> **A static method is a method that receives neither the object (`self`) nor the class (`cls`). It is a normal function placed inside a class because it is related to that class.**
-
-```python
-class Student:
-    def __init__(self, name, marks):
-        self.name = name
-        self.marks = marks
-
+class Calculator:
     @staticmethod
-    def is_valid_marks(marks):
-        return 0 <= marks <= 100
+    def add(a, b):
+        return a + b
 
-print(Student.is_valid_marks(85))
-print(Student.is_valid_marks(120))
+print(Calculator.add(10, 20))
 ```
 
 **Output:**
 
 ```
-True
-False
+30
 ```
 
-`is_valid_marks` only checks a number. It does not use any object's data or class attribute, so it needs neither `self` nor `cls`. It is called through the class name.
+| Method Type | Decorator | First Parameter |
+| --- | --- | --- |
+| **Instance method** | None | `self`, the object |
+| **Class method** | `@classmethod` | `cls`, the class |
+| **Static method** | `@staticmethod` | None |
 
-### @property
+### `@property`
 
-Getter and setter methods control access to a private attribute, but they are called like methods: `student1.get_marks()` and `student1.set_marks(90)`. The **`@property`** decorator gives the same control while letting the attribute be read and changed with normal attribute syntax.
-
-> **A property is a method that is accessed like an attribute.**
-
-**Syntax:**
-
-```python
-class ClassName:
-    @property
-    def attribute_name(self):
-        return self.__attribute_name
-
-    @attribute_name.setter
-    def attribute_name(self, value):
-        self.__attribute_name = value
-```
-
-- The method decorated with **`@property`** is the getter. It runs when the attribute is read.
-- The method decorated with **`@attribute_name.setter`** is the setter. It runs when a value is assigned to the attribute.
-- Both methods have the **same name**.
+`@property` lets you access a method **like an attribute**, without parentheses. A matching setter lets you control how the value is changed.
 
 ```python
 class Student:
@@ -208,8 +180,6 @@ class Student:
             print("Invalid marks")
 
 student1 = Student("Ravi", 85)
-
-student1.marks = 90
 print(student1.marks)
 
 student1.marks = -10
@@ -219,54 +189,24 @@ print(student1.marks)
 **Output:**
 
 ```
-90
+85
 Invalid marks
-90
+85
 ```
 
-`student1.marks = 90` looks like a normal assignment, but it runs the setter, which checks the value. `print(student1.marks)` runs the getter. The value `-10` fails the check, so the marks stay at 90.
+- `@property` makes `marks` a **getter**. Writing `student1.marks` runs the method automatically.
+- `@marks.setter` defines the **setter**. Writing `student1.marks = -10` runs the check, so the invalid value is rejected.
 
-### @classmethod
+All these decorators use the **same `@` syntax** you have just learned.
 
-**`@classmethod`** is also a built-in decorator. It changes a method so that its first argument is the **class** (`cls`) instead of the object (`self`).
+## Points to Remember
 
-```python
-class Student:
-    total_students = 0
-
-    def __init__(self, name, marks):
-        self.name = name
-        self.marks = marks
-        Student.total_students = Student.total_students + 1
-
-    @classmethod
-    def display_count(cls):
-        print("Total students:", cls.total_students)
-
-student1 = Student("Ravi", 85)
-student2 = Student("Priya", 92)
-
-Student.display_count()
-```
-
-**Output:**
-
-```
-Total students: 2
-```
-
-`display_count` works with the class attribute `total_students`, so it receives the class as `cls`.
-
-| Method Type | Decorator | First Parameter | Used For |
-| --- | --- | --- | --- |
-| Instance method | None | `self` (the object) | Working with one object's data |
-| Class method | `@classmethod` | `cls` (the class) | Working with class attributes |
-| Static method | `@staticmethod` | None | A related task that needs neither the object nor the class |
+- **A decorator is applied when the function is defined.** Its wrapper runs each time the decorated function is called.
+- **Use `*args` and `**kwargs`** when the wrapper needs to accept different arguments.
+- **Return the original function's result** from the wrapper when the caller needs that result.
 
 ## Further Reading
 
 - 📎 **Official Python glossary entry for decorators** — https://docs.python.org/3/glossary.html#term-decorator
-- 📎 **Official Python reference for `property`** — https://docs.python.org/3/library/functions.html#property
-- 📎 **Official Python reference for `staticmethod`** — https://docs.python.org/3/library/functions.html#staticmethod
 
-A decorator wraps extra code around a function. Some tasks need extra code to run before and after a block of statements, such as opening and closing a resource. In the next topic, **Context Managers**, you'll learn how the `with` statement handles this.
+Everything a program has stored so far exists only while it runs. Next week, you'll learn how to save data to files and read it back.

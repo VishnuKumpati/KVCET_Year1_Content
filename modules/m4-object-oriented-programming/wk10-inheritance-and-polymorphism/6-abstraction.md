@@ -1,56 +1,63 @@
 # Abstraction
 
-A list is sorted by calling `marks.sort()`. The method puts the elements in order, and using it requires no knowledge of how the sorting is done inside. Only **what** the method does matters, not **how** it does it.
+When a class is used in a program, the code using it usually needs to know **what** the class can do, not **how** it does it. Showing every internal detail makes a program harder to understand and use.
 
-## Abstraction
+In a group of related classes, every child class may also need to provide certain methods. Without a rule that enforces this, a child class can easily miss a required method. **Abstraction** solves both problems.
 
-> **Abstraction means showing only what an object does and hiding how it does it.**
+> **Abstraction means showing only the essential features of an object and hiding the details of how they work.**
 
-In a class hierarchy, abstraction is achieved by a parent class that lists the methods every child must have, without writing how they work. Each child class then provides the details.
+Think of a mobile phone. You press the call button to make a call. You do not need to know how the phone sends the signal. The call button is the essential feature, and the signal process is the hidden detail.
 
-## The Problem
+In Python, abstraction can also be achieved through ordinary functions, classes and public methods that hide internal details. **Abstract classes** are especially useful when related classes must follow a common design.
 
-A `Shape` parent class has an `area` method. Every shape should define its own version of `area`.
+## Why Abstract Classes Are Useful
+
+Imagine building a program that calculates the area of different shapes. Every shape should have an `area()` method, but each shape calculates its area differently.
+
+Without an abstract class, a child class might forget to implement `area()`:
 
 ```python
 class Shape:
     def area(self):
         pass
 
-class Square(Shape):
-    def __init__(self, side):
-        self.side = side
-
-    def area(self):
-        return self.side * self.side
-
 class Rectangle(Shape):
-    def __init__(self, length, width):
-        self.length = length
-        self.width = width
+    pass
 
-shapes = [Square(4), Rectangle(5, 3)]
-
-for shape in shapes:
-    print(shape.area())
+rectangle = Rectangle()
+print(rectangle.area())
 ```
 
 **Output:**
 
 ```
-16
 None
 ```
 
-`Rectangle` does not define `area`, so it inherits the empty method from `Shape`, which returns `None`. Python raises no error, so the mistake goes unnoticed. A plain `Shape()` object can also be created, although a shape without any measurements has no area.
+The program runs, but it does not calculate an area. `Rectangle` uses the inherited `area()`, which only contains `pass`, so it returns `None`. **Python does not warn us that `Rectangle` has not implemented the required method.**
 
-## Abstract Classes
+An abstract class helps prevent this problem. Python raises a **`TypeError`** if we try to create an object from a class that still has unimplemented abstract methods.
 
-> **An abstract class is a class that cannot be used to create objects. It exists only to be inherited from.**
+## Abstract Classes and Abstract Methods
 
-> **An abstract method is a method declared in an abstract class without a working body. Every child class must define it.**
+> **An abstract method is a method declared in an abstract class that a concrete class must implement if the method has not already been implemented by an inherited class.**
 
-Python provides abstract classes through the built-in **`abc`** module, short for Abstract Base Classes.
+A **concrete class** is a class that objects can be created from.
+
+> **An abstract class is a class that contains one or more abstract methods. Objects cannot be created from it while those abstract methods remain unimplemented.**
+
+An abstract class acts as a **plan** for its child classes. It declares methods that concrete child classes must implement, while allowing each class to decide how those methods work.
+
+Python provides abstract classes through its built-in **`abc` module**. The name `abc` stands for **Abstract Base Classes**. This module provides two things:
+
+| Name | Purpose |
+| --- | --- |
+| `ABC` | The base class used to create an abstract class in this pattern. |
+| `@abstractmethod` | A line written above a method to mark it as an abstract method. |
+
+The line `@abstractmethod` is a **decorator**. Decorators are covered in depth in **Decorators**. For now, use `@abstractmethod` as fixed syntax.
+
+## Creating an Abstract Class
 
 **Syntax:**
 
@@ -63,100 +70,16 @@ class ClassName(ABC):
         pass
 ```
 
-- `from abc import ABC, abstractmethod` makes `ABC` and `abstractmethod` available in the program.
-- Inheriting from **`ABC`** makes the class abstract.
-- The line **`@abstractmethod`**, written directly above a method, marks it as an abstract method. Use it as fixed syntax.
+- `from abc import ABC, abstractmethod` imports both names from the `abc` module.
+- `class ClassName(ABC):` makes the class an abstract class by inheriting from `ABC`.
+- `@abstractmethod` marks `method_name()` as an abstract method.
+- `pass` is a placeholder, because this example leaves the method's code to the child classes. Python also allows an abstract method to contain code, but a concrete child class must still provide its own version of it.
 
-## Creating an Abstract Class
+## Implementing Abstract Methods
 
-```python
-from abc import ABC, abstractmethod
+A child class must implement the abstract methods declared by its parent class before its objects can be created. An abstract class can also contain **concrete methods** that child classes can use directly.
 
-class Shape(ABC):
-    @abstractmethod
-    def area(self):
-        pass
-
-shape1 = Shape()
-```
-
-**Output:**
-
-```
-TypeError: Can't instantiate abstract class Shape without an implementation for abstract method 'area'
-```
-
-**To instantiate** a class means to create an object from it. Python refuses to create a `Shape` object, because `Shape` is abstract.
-
-## A Child Class Must Define Every Abstract Method
-
-A child class that does not define the abstract method also cannot be used to create objects.
-
-```python
-from abc import ABC, abstractmethod
-
-class Shape(ABC):
-    @abstractmethod
-    def area(self):
-        pass
-
-class Rectangle(Shape):
-    def __init__(self, length, width):
-        self.length = length
-        self.width = width
-
-rectangle1 = Rectangle(5, 3)
-```
-
-**Output:**
-
-```
-TypeError: Can't instantiate abstract class Rectangle without an implementation for abstract method 'area'
-```
-
-The error appears as soon as the object is created, and it names both the class and the missing method. Once `Rectangle` defines `area`, it works normally.
-
-```python
-from abc import ABC, abstractmethod
-
-class Shape(ABC):
-    @abstractmethod
-    def area(self):
-        pass
-
-class Square(Shape):
-    def __init__(self, side):
-        self.side = side
-
-    def area(self):
-        return self.side * self.side
-
-class Rectangle(Shape):
-    def __init__(self, length, width):
-        self.length = length
-        self.width = width
-
-    def area(self):
-        return self.length * self.width
-
-shapes = [Square(4), Rectangle(5, 3)]
-
-for shape in shapes:
-    print(shape.area())
-```
-
-**Output:**
-
-```
-16
-15
-```
-
-`Shape` states **what** every shape must do: calculate its area. `Square` and `Rectangle` define **how**.
-
-## Normal Methods in an Abstract Class
-
-An abstract class can also contain normal methods. Child classes inherit them as usual, and these methods can call the abstract methods.
+> **A concrete method is a normal method with complete code. Child classes inherit it and can use it directly.**
 
 ```python
 from abc import ABC, abstractmethod
@@ -169,6 +92,14 @@ class Shape(ABC):
     def describe(self):
         print("This shape has an area of", self.area())
 
+class Rectangle(Shape):
+    def __init__(self, length, width):
+        self.length = length
+        self.width = width
+
+    def area(self):
+        return self.length * self.width
+
 class Square(Shape):
     def __init__(self, side):
         self.side = side
@@ -176,25 +107,48 @@ class Square(Shape):
     def area(self):
         return self.side * self.side
 
-square1 = Square(4)
-square1.describe()
+shapes = [Rectangle(4, 5), Square(3)]
+
+for shape in shapes:
+    shape.describe()
 ```
 
 **Output:**
 
 ```
-This shape has an area of 16
+This shape has an area of 20
+This shape has an area of 9
 ```
 
-`describe` is written once in `Shape`. It calls `self.area()`, which runs the `Square` version. Because `area` is abstract, every shape object is guaranteed to have it.
+- `Shape` is the abstract class. It says that every shape **must** have an `area()` method, but it does not say how to calculate it.
+- `Rectangle` and `Square` each provide their own `area()` method.
+- `describe()` is a concrete method. It is written once in `Shape`, and both child classes inherit it.
+- When `describe()` calls `self.area()`, Python runs the `area()` method of the object's own class.
 
-| | Encapsulation | Abstraction |
+The code using these objects only calls `describe()`. It does not need to know how each shape calculates its area. This is abstraction.
+
+## Abstraction and Encapsulation
+
+Abstraction and encapsulation are often confused. They work together, but they have different goals.
+
+| | Abstraction | Encapsulation |
 | --- | --- | --- |
-| Hides | An object's **data** | **How** a method works |
-| Achieved with | Private attributes and getter and setter methods | Abstract classes and abstract methods |
+| Main goal | Hides the details of how something works and shows only what it does | Keeps data and methods together and helps control access to an object's data |
+| Focus | **What** an object can do, without the user needing to know how it works | **How** an object's data is managed |
+| Common Python techniques | Abstract classes and abstract methods | Naming conventions such as `_` and `__`, and methods that manage access to attributes, such as getters and setters |
+
+## Rules to Remember When Implementing Abstraction
+
+1. **Import the required names:** Use `from abc import ABC, abstractmethod`.
+2. **Create an abstract class:** Inherit from `ABC`.
+3. **Declare abstract methods:** Use `@abstractmethod` above each method that child classes must implement.
+4. **Implement the required methods:** A class must implement all inherited abstract methods that remain unimplemented before you can create objects from it.
+5. **Use concrete methods when needed:** An abstract class can also contain normal methods that child classes inherit and reuse.
+6. **Do not create objects from an incomplete abstract class:** Python raises a **`TypeError`** if abstract methods remain unimplemented.
 
 ## Further Reading
 
+- 📎 **Abstraction in Python with examples** — https://www.tutorialspoint.com/python/python_abstraction.htm
 - 📎 **Official Python reference for the `abc` module** — https://docs.python.org/3/library/abc.html
 
-`__init__` is one method Python calls automatically, without it being called by name. Python has many more such methods. In the next topic, **Dunder Methods**, you'll learn how they let objects work with built-in functions and operators.
+The child classes in this topic use `__init__()`, a method whose name starts and ends with two underscores. Python has many more of these special methods. In the next topic, **Dunder Methods**, you'll learn how they let your objects work with built-in functions and operators such as `print()` and `+`.

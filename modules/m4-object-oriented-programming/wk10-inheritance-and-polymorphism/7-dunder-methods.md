@@ -1,6 +1,33 @@
 # Dunder Methods
 
-Printing a list shows its elements. Printing a `Student` object shows something much less useful.
+Objects of built-in types work naturally with Python's built-in functions and operators. A string can be printed, a list can be measured with `len()`, and two numbers can be added with `+`. Objects of your own classes cannot do these things in a useful way until the class tells Python how. **Dunder methods** let a class define this behaviour.
+
+> **Dunder methods are special methods whose names start and end with two underscores. Python calls them automatically when an object is used with certain built-in functions or operators.**
+
+The word **dunder** is short for "**d**ouble **under**score". Dunder methods are also called **magic methods** or **special methods**. `__init__()` is one dunder method: Python calls it automatically to initialise an object when the object is created.
+
+## How Dunder Methods Work
+
+Many commonly used dunder methods follow this pattern:
+
+```mermaid
+flowchart LR
+    A["You perform an action"] --> B["Python looks for a matching dunder method"]
+    B --> C["Your object responds"]
+```
+
+For example:
+
+- `print(student1)` → Python looks for `__str__()`.
+- `len(room)` → Python looks for `__len__()`.
+- `trip1 + trip2` → Python looks for `__add__()`.
+- `trip1 == trip2` → Python looks for `__eq__()`.
+
+**The action gives you a clue to the dunder method.** You do not need to memorise every method at once. The sections below introduce each method at the moment it solves a problem.
+
+## Displaying an Object with `__str__()`
+
+Printing an object of your own class gives a surprising result.
 
 ```python
 class Student:
@@ -15,28 +42,14 @@ print(student1)
 **Output:**
 
 ```
-<__main__.Student object at 0x000001F3D7D61E80>
+<__main__.Student object at 0x7f40a11feed0>
 ```
 
-The output shows the class name and a memory address, which changes every time the program runs. A class can control what `print()` shows by defining a **dunder method**.
+Python shows only the class name and an identifier starting with `0x`. The exact output will be different on your computer. Python cannot display the name and marks, because the class has not told Python how to describe a student.
 
-## Dunder Methods
+The action here is `print()`, so Python looks for `__str__()`.
 
-> **A dunder method is a special method whose name starts and ends with two underscores, such as `__init__`. Python calls it automatically when a matching operation is used.** "Dunder" is short for **d**ouble **under**score.
-
-`__init__` is already a dunder method. It is never called by name; Python runs it when an object is created. Other dunder methods work the same way: each one connects a class to a built-in function or operator.
-
-| Operation | Dunder Method Python Calls |
-| --- | --- |
-| `Student("Ravi", 85)` | `__init__` |
-| `print(student1)` | `__str__` |
-| `len(course1)` | `__len__` |
-| `student1 == student2` | `__eq__` |
-| `point1 + point2` | `__add__` |
-
-## The __str__ Method
-
-`__str__` defines the text shown when an object is printed. It must **return** a string.
+> **`__str__()` returns a readable string that describes the object. Python calls it when the object is passed to `print()` or `str()`.**
 
 ```python
 class Student:
@@ -45,7 +58,7 @@ class Student:
         self.marks = marks
 
     def __str__(self):
-        return self.name + " scored " + str(self.marks)
+        return "Student: " + self.name + ", Marks: " + str(self.marks)
 
 student1 = Student("Ravi", 85)
 print(student1)
@@ -54,33 +67,68 @@ print(student1)
 **Output:**
 
 ```
-Ravi scored 85
+Student: Ravi, Marks: 85
 ```
 
-`print(student1)` calls `student1.__str__()` and prints the string it returns.
+You still write `print(student1)`. **Python calls `__str__()` behind the scenes** and displays the string it returns. `__str__()` must return a string.
 
-## The __len__ Method
+## Representing an Object with `__repr__()`
 
-`__len__` defines what `len()` returns for an object. It must return a whole number.
+Printing a list of students uses `__repr__()` for each object inside the list, rather than `__str__()`. Python also calls `__repr__()` when you use `repr()` directly.
+
+> **`__repr__()` returns a string that represents an object clearly for programmers. Ideally, the string should help them understand the object and, when practical, recreate it.**
+
+The string returned by `__repr__()` usually looks like the code used to create the object.
 
 ```python
-class Course:
-    def __init__(self, title):
-        self.title = title
-        self.students = []
+class Student:
+    def __init__(self, name, marks):
+        self.name = name
+        self.marks = marks
 
-    def add_student(self, name):
-        self.students.append(name)
+    def __str__(self):
+        return "Student: " + self.name
+
+    def __repr__(self):
+        return "Student('" + self.name + "', " + str(self.marks) + ")"
+
+student1 = Student("Ravi", 85)
+student2 = Student("Priya", 92)
+
+print(student1)
+print([student1, student2])
+```
+
+**Output:**
+
+```
+Student: Ravi
+[Student('Ravi', 85), Student('Priya', 92)]
+```
+
+- `print(student1)` uses `__str__()`, which is meant for **users**.
+- `print([student1, student2])` uses `__repr__()` for each object inside the list. This form is meant for **programmers**.
+
+If a class defines only `__repr__()`, Python also uses it for `print()`.
+
+## Measuring an Object with `__len__()`
+
+Passing an object of your own class to `len()` raises a **`TypeError`** if the class does not define a length.
+
+The action here is `len()`, so Python looks for `__len__()`.
+
+> **`__len__()` returns the length of an object. Python calls it when the object is passed to `len()`.**
+
+```python
+class Classroom:
+    def __init__(self, students):
+        self.students = students
 
     def __len__(self):
         return len(self.students)
 
-course1 = Course("Python")
-course1.add_student("Ravi")
-course1.add_student("Priya")
-course1.add_student("Meena")
-
-print(len(course1))
+room = Classroom(["Ravi", "Priya", "Arun"])
+print(len(room))
 ```
 
 **Output:**
@@ -89,29 +137,76 @@ print(len(course1))
 3
 ```
 
-`len(course1)` calls `course1.__len__()`, which returns the number of students in the course.
+`len(room)` calls `__len__()`, which returns the number of students in the classroom. `__len__()` must return a non-negative integer (0 or more).
 
-## The __eq__ Method
+## Operator Overloading
 
-By default, `==` on two objects is `True` only if they are the **same object**. Two separate objects with the same data are not equal.
+The same pattern works for many operators. Python provides corresponding dunder methods that let your class define how those operators behave with its objects.
 
-`__eq__` defines what `==` compares. Its second parameter, usually named `other`, is the object on the right side of `==`.
+> **Operator overloading means giving an operator, such as `+`, a meaning for objects of your own class.**
+
+### Overloading the `+` Operator
+
+Python cannot add two objects of your own class unless the class provides a suitable method. Without one, using `+` with those objects will generally raise a **`TypeError`**.
+
+The action here is `+`, so Python looks for `__add__()`.
 
 ```python
-class Student:
-    def __init__(self, name, marks):
-        self.name = name
-        self.marks = marks
+class Distance:
+    def __init__(self, km):
+        self.km = km
+
+    def __add__(self, other):
+        return Distance(self.km + other.km)
+
+    def __str__(self):
+        return str(self.km) + " km"
+
+trip1 = Distance(120)
+trip2 = Distance(80)
+total = trip1 + trip2
+
+print(total)
+```
+
+**Output:**
+
+```
+200 km
+```
+
+When Python runs `trip1 + trip2`, it calls `trip1.__add__(trip2)`:
+
+- `self` is `trip1`, the object on the left of `+`.
+- `other` is `trip2`, the object on the right of `+`.
+- The method returns a new `Distance` object with the total distance.
+
+Printing `total` then uses `__str__()`, so the result appears as `200 km`.
+
+### Overloading Comparison Operators
+
+By default, two separate objects of an ordinary user-defined class are **not equal** with `==`, even if they contain the same values. Defining `__eq__()` lets you compare objects by their values instead.
+
+The actions here are `==` and `<`, so Python looks for `__eq__()` and `__lt__()`.
+
+```python
+class Distance:
+    def __init__(self, km):
+        self.km = km
 
     def __eq__(self, other):
-        return self.name == other.name and self.marks == other.marks
+        return self.km == other.km
 
-student1 = Student("Ravi", 85)
-student2 = Student("Ravi", 85)
-student3 = Student("Priya", 92)
+    def __lt__(self, other):
+        return self.km < other.km
 
-print(student1 == student2)
-print(student1 == student3)
+trip1 = Distance(120)
+trip2 = Distance(80)
+trip3 = Distance(120)
+
+print(trip1 == trip3)
+print(trip1 == trip2)
+print(trip2 < trip1)
 ```
 
 **Output:**
@@ -119,62 +214,32 @@ print(student1 == student3)
 ```
 True
 False
+True
 ```
 
-`student1 == student2` calls `student1.__eq__(student2)`. Both objects have the same name and marks, so the result is `True`.
+`trip1` and `trip3` are separate objects, but `__eq__()` compares their `km` values, so `trip1 == trip3` is `True`.
 
-## Operator Overloading
+### Operator Overloading and Method Overloading
 
-> **Operator overloading means giving an operator, such as `+` or `<`, a meaning for objects of a class.** It is done by defining the matching dunder method.
+Python **supports operator overloading**, but it does **not support traditional method overloading**. Operator overloading gives an operator a new meaning for your class. Traditional method overloading means defining multiple methods with the same name but different parameter lists. Python does not support this in the same way as languages such as Java. If you define the same method name multiple times in a class, the later definition replaces the earlier one.
 
-The `+` operator already behaves differently for numbers, strings and lists. Defining `__add__` makes it work for a new class too.
+## Quick Reference
 
-```python
-class Point:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
+| What You Write | What Python Looks For | Memory Clue |
+| --- | --- | --- |
+| `print(obj)` | `__str__()` | Show it |
+| `repr(obj)` | `__repr__()` | Represent it |
+| `len(obj)` | `__len__()` | Measure it |
+| `a + b` | `__add__()` | Add it |
+| `a - b` | `__sub__()` | Subtract it |
+| `a * b` | `__mul__()` | Multiply it |
+| `a == b` | `__eq__()` | Check equality |
+| `a < b` | `__lt__()` | Compare it (less than) |
+| `a > b` | `__gt__()` | Compare it (greater than) |
 
-    def __add__(self, other):
-        return Point(self.x + other.x, self.y + other.y)
-
-    def __str__(self):
-        return "(" + str(self.x) + ", " + str(self.y) + ")"
-
-point1 = Point(2, 3)
-point2 = Point(4, 1)
-point3 = point1 + point2
-
-print(point3)
-```
-
-**Output:**
-
-```
-(6, 4)
-```
-
-`point1 + point2` calls `point1.__add__(point2)`. The method returns a **new** `Point` object, and `point1` and `point2` stay unchanged, just as `2 + 3` does not change `2` or `3`.
-
-Every arithmetic and comparison operator has its own dunder method.
-
-| Operator | Dunder Method |
-| --- | --- |
-| `+` | `__add__` |
-| `-` | `__sub__` |
-| `*` | `__mul__` |
-| `/` | `__truediv__` |
-| `==` | `__eq__` |
-| `!=` | `__ne__` |
-| `<` | `__lt__` |
-| `>` | `__gt__` |
-| `<=` | `__le__` |
-| `>=` | `__ge__` |
-
-Define an operator only when its meaning is obvious. Adding two points is clear. Adding two students is not.
 
 ## Further Reading
 
 - 📎 **Official Python reference for special method names** — https://docs.python.org/3/reference/datamodel.html#special-method-names
 
-The `@abstractmethod` and `@classmethod` lines placed above methods are called decorators. In the next topic, **Decorators**, you'll learn what a decorator is and how to write one.
+You've used special syntax such as `@classmethod` and `@abstractmethod`. This syntax uses **decorators**, which are different from dunder methods. In the next topic, **Decorators**, you'll learn how decorators work and how to create your own.

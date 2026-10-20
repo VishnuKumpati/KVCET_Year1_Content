@@ -323,4 +323,4 @@ The principle has a name — *easier to ask forgiveness than permission* — and
 - **Official reference for `pathlib`** — https://docs.python.org/3/library/pathlib.html
 - **Working with file paths in Python** — https://realpython.com/python-pathlib/
 
-Paths are relative to where the program was launched, `pathlib` builds them without separator trouble, and the file errors are specific enough to catch individually. Next, a file format with structure.
+Paths are relative to where the program was launched, `pathlib` builds them without separator trouble, and the file errors are specific enough to catch individually. Next, how the `with` statement guarantees that cleanup always runs.

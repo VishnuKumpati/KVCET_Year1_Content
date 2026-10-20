@@ -122,7 +122,7 @@ The error stopped the block, but `__exit__` still ran and the hall was closed be
 
 ## Where Context Managers Are Used
 
-Python's built-in `open()` function, used to work with files, returns a context manager. The `with` statement closes the file automatically when the block ends.
+`with open(...)` works because `open()` returns a context manager. Its `__enter__` returns the file object, and its `__exit__` closes the file, so the file is closed even if an error occurs while reading or writing.
 
 | Task | Setup | Cleanup Guaranteed by `with` |
 | --- | --- | --- |
@@ -135,4 +135,4 @@ Python's built-in `open()` function, used to work with files, returns a context 
 - 📎 **Official Python reference for the `with` statement** — https://docs.python.org/3/reference/compound_stmts.html#the-with-statement
 - 📎 **Official Python reference for context managers** — https://docs.python.org/3/reference/datamodel.html#context-managers
 
-Everything a program has stored so far exists only while it runs. In the next topic, **Reading and Writing Files**, you'll learn how to save data to files and read it back.
+Plain text files hold lines of text, but much real data is a table of rows and columns. In the next topic, **CSV Files**, you'll learn how to read and write tables stored in text files.
