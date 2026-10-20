@@ -1,138 +1,121 @@
 # Context Managers
 
-Some tasks come in pairs: a setup step at the start and a cleanup step at the end. An exam hall is opened before an exam and must be closed afterwards, even if something goes wrong during the exam.
+Imagine opening a file to save some data. Once you're done, you need to close it. If an error occurs before the line that closes the file, that line never runs, and the file stays open.
+
+You could try to remember to close the file in every situation. Python offers a simpler solution: **context managers** help ensure cleanup happens when the block ends, even if an error occurs inside it.
+
+> **A context manager manages setup and cleanup around a block of code, even if an error occurs inside it.**
+
+Python uses the **`with`** statement to work with context managers.
+
+## Working with a File without `with`
+
+A file opened with `open()` must be closed with `close()`.
 
 ```python
-class ExamHall:
-    def open_hall(self):
-        print("Hall opened")
-
-    def close_hall(self):
-        print("Hall closed")
-
-hall = ExamHall()
-hall.open_hall()
-print("Exam in progress")
-print(10 / 0)
-hall.close_hall()
+file = open("notes.txt", "w")
+file.write("Python is fun")
+file.close()
 ```
 
-**Output:**
+This code writes `Python is fun` into a file named `notes.txt` and produces no output.
 
-```
-Hall opened
-Exam in progress
-ZeroDivisionError: division by zero
-```
+Here, `close()` must be remembered every time, and it is skipped if an error happens before it.
 
-The error stopped the program before `hall.close_hall()` ran, so the hall was never closed. A **context manager** guarantees that the cleanup step always runs.
+## The `with` Statement
 
-## Context Managers
-
-> **A context manager is an object that runs setup code before a block of statements and cleanup code after it, even if an error occurs inside the block.** It is used with the **`with`** statement.
+The `with` statement closes the file **automatically** when the block ends.
 
 **Syntax:**
 
 ```python
-with context_manager as variable:
-    statements
+with open("notes.txt", "w") as file:
+    file.write("Python is fun")
 ```
 
-- The setup code runs when the `with` block starts.
-- The indented statements run next.
-- The cleanup code runs when the block ends, whether it finishes normally or stops because of an error.
-- `as variable` is optional. It stores the value returned by the setup code.
+- `open("notes.txt", "w")` returns a file object, which is the context manager.
+- `as file` stores the opened file in the variable `file`.
+- The indented lines are the **block**. The file can be used inside it.
+- When the block ends, Python closes the file automatically.
 
-## The __enter__ and __exit__ Methods
+**Example:**
 
-Any object can be used with `with` if its class defines two dunder methods:
+```python
+with open("notes.txt", "w") as file:
+    file.write("Python is fun")
 
-| Method | When Python Calls It | Purpose |
-| --- | --- | --- |
-| `__enter__(self)` | When the `with` block starts | Setup. Its return value is stored in the variable after `as`. |
-| `__exit__(self, exc_type, exc_value, traceback)` | When the `with` block ends, for any reason | Cleanup |
+with open("notes.txt", "r") as file:
+    print(file.read())
 
-The three extra parameters of `__exit__` describe an error, if one occurred inside the block. All three are `None` when the block finishes without an error. They must be included in the definition even when the method does not use them.
+print(file.closed)
+```
+
+**Output:**
+
+```
+Python is fun
+True
+```
+
+`file.closed` is `True`, which confirms that the file was closed automatically. No `close()` call was written.
+
+## How a Context Manager Works
+
+A context manager uses two dunder methods:
+
+| Method | When Python Calls It |
+| --- | --- |
+| `__enter__()` | At the start of the `with` block. Its return value is stored in the variable after `as`. |
+| `__exit__()` | At the end of the `with` block, even if an error occurs inside the block. |
+
+```mermaid
+flowchart LR
+    A["with statement starts"] --> B["__enter__() runs"]
+    B --> C["Code inside the block runs"]
+    C --> D["__exit__() runs"]
+```
 
 ## Creating a Context Manager
 
-```python
-class ExamHall:
-    def __init__(self, hall_name):
-        self.hall_name = hall_name
+You can create your own context manager by defining two methods: `__enter__()` and `__exit__()`.
 
+```python
+class ClassSession:
     def __enter__(self):
-        print(self.hall_name, "opened")
+        print("Class starts")
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        print(self.hall_name, "closed")
+        print("Class ends")
 
-with ExamHall("Hall A") as hall:
-    print("Exam in progress in", hall.hall_name)
-
-print("After the with block")
+with ClassSession() as session:
+    print("Learning Python")
 ```
 
 **Output:**
 
 ```
-Hall A opened
-Exam in progress in Hall A
-Hall A closed
-After the with block
+Class starts
+Learning Python
+Class ends
 ```
 
-1. `ExamHall("Hall A")` creates the object.
-2. `with` calls `__enter__`, which prints the opening message and returns the object itself. `as hall` stores that returned object in `hall`.
-3. The block runs.
-4. When the block ends, `with` calls `__exit__`, which prints the closing message.
+1. `with ClassSession() as session:` calls `__enter__()`, which prints `Class starts`. The object it returns is stored in `session`.
+2. The block runs and prints `Learning Python`.
+3. When the block ends, Python calls `__exit__()`, which prints `Class ends`.
 
-Neither `__enter__` nor `__exit__` is called by name. The `with` statement calls both automatically.
+`__exit__()` receives three parameters containing error details: `exc_type`, `exc_value` and `traceback`. If no error occurs, all three are `None`. **These parameters must be written in the method definition**, even if they are not used.
 
-## Cleanup Runs Even When an Error Occurs
+If an error occurs inside the block, Python still calls `__exit__()` before passing the error on. This allows the context manager to perform cleanup even when the block fails.
 
-```python
-class ExamHall:
-    def __init__(self, hall_name):
-        self.hall_name = hall_name
+## Points to Remember
 
-    def __enter__(self):
-        print(self.hall_name, "opened")
-        return self
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        print(self.hall_name, "closed")
-
-with ExamHall("Hall A") as hall:
-    print("Exam in progress")
-    print(10 / 0)
-```
-
-**Output:**
-
-```
-Hall A opened
-Exam in progress
-Hall A closed
-ZeroDivisionError: division by zero
-```
-
-The error stopped the block, but `__exit__` still ran and the hall was closed before the error was reported. This is the main purpose of a context manager: **the cleanup step can never be skipped**.
-
-## Where Context Managers Are Used
-
-`with open(...)` works because `open()` returns a context manager. Its `__enter__` returns the file object, and its `__exit__` closes the file, so the file is closed even if an error occurs while reading or writing.
-
-| Task | Setup | Cleanup Guaranteed by `with` |
-| --- | --- | --- |
-| Working with a file | Open the file | Close the file |
-| Using a database | Connect to the database | Close the connection |
-| Using a shared resource | Take control of it | Release it |
+- **Use `with` when working with files.** It closes the file automatically, so `close()` is not needed.
+- **`__enter__()` runs at the start of the block**, and its return value is stored in the variable after `as`.
+- **`__exit__()` runs at the end of the block**, even if an error occurs.
 
 ## Further Reading
 
-- 📎 **Official Python reference for the `with` statement** — https://docs.python.org/3/reference/compound_stmts.html#the-with-statement
-- 📎 **Official Python reference for context managers** — https://docs.python.org/3/reference/datamodel.html#context-managers
+- 📎 **Official Python documentation on context managers** — https://docs.python.org/3/reference/datamodel.html#context-managers
 
 Plain text files hold lines of text, but much real data is a table of rows and columns. In the next topic, **CSV Files**, you'll learn how to read and write tables stored in text files.
