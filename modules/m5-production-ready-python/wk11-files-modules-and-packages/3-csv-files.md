@@ -1,189 +1,102 @@
 # CSV Files
 
-**CSV** stands for comma-separated values. It is a plain text format for tables: one record per line, fields separated by commas, usually with a header row naming the columns.
+Programs often work with data arranged in rows and columns, such as the names and marks of many students. Saving this data as plain lines of text makes it hard to tell where one value ends and the next begins. **CSV files** store table-like data in a simple, standard format that both programs and spreadsheet applications, such as Microsoft Excel, can open.
+
+> **A CSV file is a text file that stores data in rows, usually separating values with commas.**
+
+**CSV** stands for **Comma-Separated Values**.
+
+## What a CSV File Looks Like
+
+A CSV file containing student marks looks like this:
 
 ```
-name,course,mark
-Anita,Computer Science,78
-Ravi,Mathematics,91
+Name,Marks
+Ravi,85
+Priya,92
 ```
 
-Every spreadsheet and database can export it and read it, which is why data arrives this way so often. It is a text file, so everything from the previous chapters applies.
+- Each **line** is one row.
+- **Commas** separate the values in a row.
+- The first row usually holds the **column names**, called the **header**.
 
-## Why Not Just split(",")
+## The `csv` Module
 
-The obvious approach works until it does not:
+Python's built-in **`csv` module** handles commas and other special characters inside values, so you do not have to split or join CSV data manually. The line `import csv` makes the module available. Importing is covered in **Modules and Imports**.
 
-```python
-line = "Anita,Computer Science,78"
-print(line.split(","))
-```
+## Writing to a CSV File
 
-**Output:**
-
-```
-['Anita', 'Computer Science', '78']
-```
-
-Now a name containing a comma:
-
-```python
-line = "Sharma, Anita,Computer Science,78"
-print(line.split(","))
-```
-
-**Output:**
-
-```
-['Sharma', ' Anita', 'Computer Science', '78']
-```
-
-Four fields instead of three, and the record is wrong. CSV handles this by quoting fields that contain commas, and a quote inside a quoted field is doubled. Parsing that correctly by hand means tracking whether you are inside quotes, character by character.
-
-The `csv` module already does it. Use it.
-
-## Reading
-
-`csv.reader` wraps a file object and yields each row as a list of strings:
+`csv.writer()` creates a **writer** object. Its `writerow()` method writes one row, given as a list.
 
 ```python
 import csv
 
-with open("marks.csv", newline="", encoding="utf-8") as handle:
-    reader = csv.reader(handle)
-    for row in reader:
-        print(row)
+with open("students.csv", "w", newline="", encoding="utf-8") as file:
+    writer = csv.writer(file)
+    writer.writerow(["Name", "Marks"])
+    writer.writerow(["Ravi", 85])
+    writer.writerow(["Priya", 92])
+
+with open("students.csv", "r", encoding="utf-8") as file:
+    print(file.read().strip())
 ```
 
 **Output:**
 
 ```
-['name', 'course', 'mark']
-['Anita', 'Computer Science', '78']
-['Ravi', 'Mathematics', '91']
+Name,Marks
+Ravi,85
+Priya,92
 ```
 
-Two details in the `open()` call matter.
+- Each `writerow()` call writes one row. The writer adds the commas automatically.
+- **`newline=""`** should be used when opening a file for the `csv` module. It lets the module handle line endings correctly and prevents extra blank lines when writing on some systems.
+- The second block prints the file's content to show what was written.
 
-**`newline=""` is required.** The csv module handles line endings itself, and letting Python translate them as well produces blank rows between records on Windows. Pass it on every `open()` used with `csv`, for reading and writing.
+### Writing Many Rows at Once
 
-**Every field is a string.** `'78'`, not `78`. A CSV file carries no type information, so conversion is the caller's job.
-
-## Skipping the Header
-
-The header is just the first row, and `next()` takes one row from the reader:
-
-```python
-import csv
-
-with open("marks.csv", newline="", encoding="utf-8") as handle:
-    reader = csv.reader(handle)
-    header = next(reader)
-    print("Columns:", header)
-    for row in reader:
-        print(row[0], int(row[2]))
-```
-
-**Output:**
-
-```
-Columns: ['name', 'course', 'mark']
-Anita 78
-Ravi 91
-```
-
-The `for` loop continued from row two, because `next()` had already consumed row one. A reader is an iterator, so it produces each row once.
-
-Totalling a column is the accumulator pattern with a conversion:
-
-```python
-import csv
-
-total = 0
-count = 0
-
-with open("marks.csv", newline="", encoding="utf-8") as handle:
-    reader = csv.reader(handle)
-    next(reader)
-    for row in reader:
-        total = total + int(row[2])
-        count = count + 1
-
-print(f"{count} students, average {total / count:.1f}")
-```
-
-**Output:**
-
-```
-2 students, average 84.5
-```
-
-## Writing
-
-`csv.writer` has `writerow()` for one row and `writerows()` for many:
+`writerows()` writes **several rows** from a list of lists.
 
 ```python
 import csv
 
 rows = [
-    ["name", "course", "mark"],
-    ["Anita", "Computer Science", 78],
-    ["Ravi", "Mathematics", 91],
+    ["Name", "Marks"],
+    ["Ravi", 85],
+    ["Priya", 92],
+    ["Arun", 78],
 ]
 
-with open("marks.csv", "w", newline="", encoding="utf-8") as handle:
-    writer = csv.writer(handle)
+with open("students.csv", "w", newline="", encoding="utf-8") as file:
+    writer = csv.writer(file)
     writer.writerows(rows)
 
-with open("marks.csv", encoding="utf-8") as handle:
-    print(handle.read())
+with open("students.csv", "r", encoding="utf-8") as file:
+    print(file.read().strip())
 ```
 
 **Output:**
 
 ```
-name,course,mark
-Anita,Computer Science,78
-Ravi,Mathematics,91
-
+Name,Marks
+Ravi,85
+Priya,92
+Arun,78
 ```
 
-Note that the numbers were written without conversion. `csv` converts values to strings on the way out — unlike `write()`, which refuses anything but a string.
+Each inner list in `rows` becomes one row in the file.
 
-Quoting is handled automatically. A field containing a comma or a quote is quoted, and inner quotes are doubled:
+## Reading a CSV File
+
+`csv.reader()` creates a **reader** object. Looping over it gives **one row at a time, as a list of strings**.
+
+The reading examples in this topic use the `students.csv` file created in **Writing Many Rows at Once**. Run that example first.
 
 ```python
 import csv
 
-with open("tricky.csv", "w", newline="", encoding="utf-8") as handle:
-    csv.writer(handle).writerow(["Sharma, Anita", 'He said "hi"'])
-
-print(repr(open("tricky.csv", encoding="utf-8").read()))
-
-with open("tricky.csv", newline="", encoding="utf-8") as handle:
-    print(next(csv.reader(handle)))
-```
-
-**Output:**
-
-```
-'"Sharma, Anita","He said ""hi"""\n'
-['Sharma, Anita', 'He said "hi"']
-```
-
-The file on disk is properly escaped, and reading it back gives the original values exactly. That round trip is the whole reason to use the module.
-
-## DictReader
-
-Indexing rows by number works and reads badly. `row[2]` says nothing; `row["mark"]` says everything.
-
-`csv.DictReader` uses the header row as keys and yields a dictionary per record:
-
-```python
-import csv
-
-with open("marks.csv", newline="", encoding="utf-8") as handle:
-    reader = csv.DictReader(handle)
+with open("students.csv", "r", newline="", encoding="utf-8") as file:
+    reader = csv.reader(file)
     for row in reader:
         print(row)
 ```
@@ -191,105 +104,72 @@ with open("marks.csv", newline="", encoding="utf-8") as handle:
 **Output:**
 
 ```
-{'name': 'Anita', 'course': 'Computer Science', 'mark': '78'}
-{'name': 'Ravi', 'course': 'Mathematics', 'mark': '91'}
+['Name', 'Marks']
+['Ravi', '85']
+['Priya', '92']
+['Arun', '78']
 ```
 
-The header is consumed automatically — no `next()` — and the records become the list of dictionaries that so much other code expects:
+Notice that the marks appear as `'85'`, `'92'` and `'78'`. **The `csv` module reads every value as a string**, even if it looks like a number.
+
+## Reading Rows by Column Name
+
+`csv.DictReader()` reads each row as a **dictionary**. It uses the header row as the keys, so each value can be accessed by its column name.
 
 ```python
 import csv
 
-with open("marks.csv", newline="", encoding="utf-8") as handle:
-    students = list(csv.DictReader(handle))
-
-for student in students:
-    print(f"{student['name']:<10}{int(student['mark']):>5}")
-
-print(f"{'Average':<10}{sum(int(s['mark']) for s in students) / len(students):>5.1f}")
+with open("students.csv", "r", newline="", encoding="utf-8") as file:
+    reader = csv.DictReader(file)
+    for row in reader:
+        print(row["Name"], "scored", row["Marks"])
 ```
 
 **Output:**
 
 ```
-Anita        78
-Ravi         91
-Average    84.5
+Ravi scored 85
+Priya scored 92
+Arun scored 78
 ```
 
-Prefer `DictReader` unless the file has no header. Column order can change without breaking the code, and every access says which column it means.
+- `DictReader` uses the header row, `Name,Marks`, as keys. The header itself is not returned as a data row.
+- `row["Name"]` and `row["Marks"]` access values by column name, making the code easier to read.
 
-## DictWriter
+## Working with Numbers from a CSV File
 
-The counterpart takes the field names up front and writes dictionaries:
+Because every value is read as a string, convert numbers before doing calculations.
 
 ```python
 import csv
 
-students = [
-    {"name": "Anita", "mark": 78},
-    {"name": "Ravi", "mark": 91},
-]
+total = 0
 
-with open("out.csv", "w", newline="", encoding="utf-8") as handle:
-    writer = csv.DictWriter(handle, fieldnames=["name", "mark"])
-    writer.writeheader()
-    writer.writerows(students)
+with open("students.csv", "r", newline="", encoding="utf-8") as file:
+    reader = csv.DictReader(file)
+    for row in reader:
+        total = total + int(row["Marks"])
 
-with open("out.csv", encoding="utf-8") as handle:
-    print(handle.read())
+print("Total marks:", total)
 ```
 
 **Output:**
 
 ```
-name,mark
-Anita,78
-Ravi,91
-
+Total marks: 255
 ```
 
-`fieldnames` fixes the column order, and `writeheader()` writes that row — it is easy to forget and produces a file with no header.
+`int(row["Marks"])` converts each student's marks from a string to an integer, allowing Python to add them and calculate the total.
 
-The keys must match `fieldnames`. An extra key raises `ValueError`; a missing one writes an empty field, or raises if `restval` says so.
+## Points to Remember
 
-## Other Delimiters
-
-Despite the name, the separator is configurable. Tab-separated files are common:
-
-```python
-import csv
-
-with open("marks.tsv", "w", newline="", encoding="utf-8") as handle:
-    writer = csv.writer(handle, delimiter="\t")
-    writer.writerow(["name", "mark"])
-    writer.writerow(["Anita", 78])
-
-with open("marks.tsv", newline="", encoding="utf-8") as handle:
-    for row in csv.reader(handle, delimiter="\t"):
-        print(row)
-```
-
-**Output:**
-
-```
-['name', 'mark']
-['Anita', '78']
-```
-
-The `delimiter` must be given to both the reader and the writer. Semicolons are also widespread, in regions where the comma is the decimal separator.
-
-## What CSV Cannot Do
-
-CSV holds a flat table of text. It has no types, no nesting, and no agreed standard for much beyond the basics.
-
-That means every number needs converting on the way in, a record with a list inside it has nowhere to go, and files from different sources disagree about quoting, encoding and line endings.
-
-When the data is a flat table, CSV is the right choice — universally supported and readable in any editor. When it has structure, the next chapter's format is.
+- **Use `newline=""`** when opening a file for the `csv` module.
+- **`csv.writer()`** writes rows using `writerow()` and `writerows()`.
+- **`csv.reader()`** gives each row as a list, while **`csv.DictReader()`** gives each row as a dictionary.
+- **Values are read as strings.** Convert them with `int()` or `float()` before calculations.
 
 ## Further Reading
 
-- **Official reference for the `csv` module** — https://docs.python.org/3/library/csv.html
-- **Reading and writing CSV in Python** — https://realpython.com/python-csv/
+- 📎 **Official Python reference for the `csv` module** — https://docs.python.org/3/library/csv.html
 
-`csv.reader` and `csv.writer` handle quoting correctly, `newline=""` avoids blank rows, and `DictReader` turns a file into the list of dictionaries the rest of a program wants. Next, a format that keeps types and structure.
+CSV files work well for simple tables. Data with more structure, such as a student with a list of subjects, needs a different format. In the next topic, **JSON Files**, you'll learn how to store this kind of data.

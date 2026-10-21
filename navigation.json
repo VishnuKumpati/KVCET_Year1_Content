@@ -592,31 +592,31 @@
                                        {
                                            "id":  "f0577561-b44b-49fb-b6d6-6486c5a4464d",
                                            "title":  "Modules and Imports",
-                                           "tooltip":  "Week 11 - Splitting code across files, and the main guard",
+                                           "tooltip":  "Week 11 - import, from-import, aliases, and your own modules",
                                            "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/5-modules-and-imports.md"
                                        },
                                        {
                                            "id":  "b8e4c017-5a96-42d3-8f71-2c0ab6d95e84",
                                            "title":  "Regular Expressions",
-                                           "tooltip":  "Week 11 - Patterns, search, findall, sub, split, and matching the whole string",
+                                           "tooltip":  "Week 11 - Patterns, search, findall, fullmatch, and sub",
                                            "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/6-regular-expressions.md"
                                        },
                                        {
                                            "id":  "74aad0ce-fb11-4cc4-8005-7ab924e96400",
                                            "title":  "Packages",
-                                           "tooltip":  "Week 11 - __init__.py, nested packages, and running with -m",
+                                           "tooltip":  "Week 11 - Package structure, __init__.py, importing from a package, and pip",
                                            "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/7-packages.md"
                                        },
                                        {
                                            "id":  "750cd2f4-bdb9-4221-b3a4-fe7043497f53",
                                            "title":  "The Standard Library",
-                                           "tooltip":  "Week 11 - math, random, datetime, collections and what else exists",
+                                           "tooltip":  "Week 11 - random, statistics, collections, and finding more modules",
                                            "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/8-the-standard-library.md"
                                        },
                                        {
                                            "id":  "c4a71e58-30b6-4a92-8d05-71f9be3c6a1d",
                                            "title":  "Dates and Times",
-                                           "tooltip":  "Week 11 - date, datetime, timedelta, strftime and strptime, and sorting by date",
+                                           "tooltip":  "Week 11 - date, datetime, timedelta, strftime and strptime",
                                            "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/9-dates-and-times.md"
                                        },
                                        {

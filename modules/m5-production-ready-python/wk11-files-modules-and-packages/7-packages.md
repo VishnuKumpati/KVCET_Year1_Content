@@ -1,247 +1,112 @@
 # Packages
 
-Modules divide a program into files. Once there are twenty of them in one directory, the directory has the problem the single file had.
+A large project can contain dozens of modules. Without a clear structure, related code gets scattered and hard to find. **Packages** solve this by organising related modules into folders.
 
-A **package** is a directory containing modules. It groups related modules under one name, so imports say where things come from and the filesystem reflects the structure of the program.
+> **A Python package groups related modules under a package name. It is commonly organised as a folder containing Python module files and may include an `__init__.py` file.**
 
-## The Structure
+## The Structure of a Package
 
-```
-shop/
-    __init__.py
-    products.py
-    cart.py
-```
-
-`shop` is the package; `products` and `cart` are modules inside it. `__init__.py` marks the directory as a package and runs when the package is first imported.
-
-It may be completely empty, and often is. Its presence is what matters.
-
-Modern Python can treat a directory without `__init__.py` as a package, but the behaviour differs in ways that cause confusing bugs. **Include `__init__.py`.**
-
-## Importing from a Package
-
-The dot separates package from module, and works with every import form:
-
-```python
-import shop.cart
-
-print(shop.cart.total(["pen", "book"]))
-```
-
-```python
-from shop import cart
-
-print(cart.total(["pen", "book"]))
-```
-
-```python
-from shop.cart import total
-
-print(total(["pen", "book"]))
-```
-
-**Output:**
-
-```
-260
-```
-
-All three reach the same function. The last is usually clearest when one function is used repeatedly.
-
-Note that `import shop.cart` binds the name `shop`, not `cart`, so the full path is needed to call anything. `from shop import cart` binds `cart`.
-
-## Nested Packages
-
-A package can contain packages, each with its own `__init__.py`:
-
-```
-shop/
-    __init__.py
-    products.py
-    cart.py
-    billing/
-        __init__.py
-        invoice.py
-```
-
-The dots continue:
-
-```python
-from shop.billing import invoice
-
-print(invoice.render(["pen", "pen", "book"]))
-```
-
-**Output:**
-
-```
-3 items: 270
-```
-
-Nest only where it earns its place. A package inside a package inside a package makes every import long and every file hard to find. Two levels covers most projects.
-
-## __init__.py as the Public Interface
-
-An empty `__init__.py` is fine. A useful one re-exports the names a user of the package should reach for:
-
-```python
-# shop/__init__.py
-from shop.products import PRICES
-from shop.cart import total
-```
-
-Callers then use the package directly:
-
-```python
-import shop
-
-print(shop.PRICES)
-print(shop.total(["pen", "book"]))
-```
-
-**Output:**
-
-```
-{'pen': 10, 'book': 250}
-260
-```
-
-This is what lets `import json` give you `json.dumps` without knowing which file inside the package defines it. It separates the package's **interface** from its **layout**: modules can be split or renamed without breaking anyone, as long as `__init__.py` still exports the same names.
-
-Keep it to imports. `__init__.py` runs on every import of the package, so work done there is work every user pays for.
-
-## Absolute and Relative Imports
-
-Inside a package, a module can name another in two ways.
-
-An **absolute import** gives the full path from the top:
-
-```python
-# shop/cart.py
-from shop.products import price_of
-```
-
-A **relative import** uses dots to mean "relative to this module's package":
-
-```python
-# shop/cart.py
-from .products import price_of
-```
-
-One dot means the current package, two means the parent:
-
-```python
-# shop/billing/invoice.py
-from ..cart import total
-```
-
-Both work. Absolute imports are preferred — they say exactly which module is meant, they read the same wherever they appear, and a file can be moved without the imports silently changing meaning.
-
-Relative imports have one real advantage: renaming the top-level package requires no edits inside it. They are common in libraries for that reason.
-
-Pick one style per project. Mixing them makes the dependencies harder to follow.
-
-## Running a Module in a Package
-
-This catches everyone once. Given `shop/report.py`:
-
-```python
-from shop.cart import total
-
-if __name__ == "__main__":
-    print("report:", total(["pen", "book"]))
-```
-
-Running it as a file fails:
-
-```
-python shop/report.py
-```
-
-**Output:**
-
-```
-ModuleNotFoundError: No module named 'shop'
-```
-
-Running it as a module works:
-
-```
-python -m shop.report
-```
-
-**Output:**
-
-```
-report: 260
-```
-
-The difference is `sys.path`. Running a **file** puts that file's directory — `shop/` — at the front of the search path, and from inside `shop/` there is no `shop` package to find. Running with **`-m`** puts the current directory there instead, so `shop` is visible.
-
-The rule: **run modules inside a package with `python -m package.module`**, from the project root. `python -m` is also how `pip`, `venv` and `pytest` are invoked, for the same reason.
-
-## A Project Layout
-
-A small project, assembled:
+A package is a folder with modules inside it. For example, a package named `college` could look like this:
 
 ```
 project/
-    README.md
-    requirements.txt
-    .gitignore
-    shop/
-        __init__.py
-        products.py
-        cart.py
-        billing/
-            __init__.py
-            invoice.py
-    tests/
-        test_cart.py
-    main.py
+├── main.py
+└── college/
+    ├── __init__.py
+    ├── students.py
+    └── marks.py
 ```
 
-- `shop/` holds the code, as a package.
-- `main.py` at the root is the entry point, run with `python main.py`.
-- `tests/` sits outside the package, so tests are not shipped with it.
-- `README.md` says what the project is and how to run it.
-- `requirements.txt` lists what it depends on.
+- `college` is the **package**.
+- `students.py` and `marks.py` are **modules** inside the package.
+- `__init__.py` is commonly used to mark `college` as a regular Python package. **It can be empty**, or it can contain code that runs when the package is imported.
+- `main.py` is the program that uses the package. It is outside the `college` folder.
 
-`main.py` stays small — it imports from the package and starts things:
+Python can also treat a folder without `__init__.py` as a package. However, including `__init__.py` is the common and clear way to create one.
+
+## Creating the Package
+
+Create the folders and files shown above, with this code:
+
+**File: `college/__init__.py`**
+
+Leave this file empty.
+
+**File: `college/students.py`**
 
 ```python
-from shop.cart import total
-
-def main():
-    print(total(["pen", "book"]))
-
-if __name__ == "__main__":
-    main()
+def welcome(name):
+    return "Welcome, " + name
 ```
 
-**Output:**
+**File: `college/marks.py`**
+
+```python
+def grade(marks):
+    if marks >= 40:
+        return "Pass"
+    return "Fail"
+```
+
+## Importing from a Package
+
+A module inside a package is imported using **dot notation**: the package name, a dot, and the module name.
+
+**File: `main.py`**
+
+```python
+import college.students
+from college import marks
+from college.marks import grade
+
+print(college.students.welcome("Ravi"))
+print(marks.grade(85))
+print(grade(32))
+```
+
+**Output when `main.py` is run:**
 
 ```
-260
+Welcome, Ravi
+Pass
+Fail
 ```
 
-Running from the project root is what makes `shop` importable. That is why the entry point lives at the root rather than inside the package.
+| Import Line | How It Is Used |
+| --- | --- |
+| `import college.students` | `college.students.welcome("Ravi")` |
+| `from college import marks` | `marks.grade(85)` |
+| `from college.marks import grade` | `grade(32)` |
 
-## Modules Against Packages
+These are the same import styles you learned for modules. Here, the module is inside the `college` package, so its name includes the package.
 
-| | Module | Package |
-| --- | --- | --- |
-| Is | a `.py` file | a directory |
-| Contains | functions, classes, variables | modules and packages |
-| Marked by | the `.py` extension | `__init__.py` |
-| Imported as | `import module` | `import package.module` |
+This example needs several files and a folder. Run it in a code editor on your computer, such as VS Code or IDLE. Online compilers that allow only one file cannot run it.
 
-Start with one file. Split it into modules when it gets unwieldy. Group modules into a package when there are enough of them to need grouping. Each step is a response to a problem, not something to do up front.
+## Installing Packages with `pip`
+
+Many useful packages are written by other programmers and shared online. They are stored in the **Python Package Index (PyPI)**, and are installed using a tool called **`pip`**.
+
+> **`pip` is a tool for installing Python packages, commonly from the Python Package Index (PyPI).**
+
+`pip` runs in the **terminal** or **command prompt**, not inside a Python program. For example, this command installs a package named `requests`:
+
+```
+pip install requests
+```
+
+After it is installed, the package is imported like any other, using `import requests`. This line works only after the package has been installed.
+
+If `pip` is not recognised on your computer, try `python -m pip install requests` instead.
+
+## Points to Remember
+
+- **A Python package groups related modules**, commonly in a folder. A regular package typically contains an `__init__.py` file.
+- **Use dot notation** to import a module from a package, such as `import college.students`.
+- **`pip install package_name`** installs a Python package, commonly from the Python Package Index (PyPI). It runs in the terminal, not in a Python program.
 
 ## Further Reading
 
-- **Official Python guide to packages** — https://docs.python.org/3/tutorial/modules.html#packages
-- **Python modules and packages** — https://realpython.com/python-modules-packages/
+- 📎 **Official Python tutorial on packages** — https://docs.python.org/3/tutorial/modules.html#packages
+- 📎 **Official Python guide to installing packages** — https://docs.python.org/3/installing/index.html
 
-A package is a directory with `__init__.py`, imports use dots to walk it, and `python -m` is how a module inside one is run. Next, the packages that come with Python already.
+Python already includes many useful modules and packages without installing anything. In the next topic, **The Standard Library**, you'll explore some of the most useful ones.
