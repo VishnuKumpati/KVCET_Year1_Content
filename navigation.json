@@ -574,56 +574,50 @@
                                        {
                                            "id":  "26e3641f-f077-49e5-9c62-7f54596979dd",
                                            "title":  "File Paths and Errors",
-                                           "tooltip":  "Week 11 - Relative and absolute paths, pathlib, and the file errors",
+                                           "tooltip":  "Week 11 - Relative and absolute paths, os.path, and the file errors",
                                            "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/2-file-paths-and-errors.md"
-                                       },
-                                       {
-                                           "id":  "e08cb8a9-72af-460c-8ded-0007e7665aeb",
-                                           "title":  "Context Managers",
-                                           "tooltip":  "Week 11 - The with statement, __enter__ and __exit__",
-                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/3-context-managers.md"
                                        },
                                        {
                                            "id":  "9255a7f0-2c58-4d61-af6b-c5ee30633aca",
                                            "title":  "CSV Files",
                                            "tooltip":  "Week 11 - csv.reader, csv.writer, and DictReader",
-                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/4-csv-files.md"
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/3-csv-files.md"
                                        },
                                        {
                                            "id":  "d637b3ca-c8a7-48ef-852b-6db180085a7f",
                                            "title":  "JSON Files",
                                            "tooltip":  "Week 11 - dump, load, the type mapping, and JSONDecodeError",
-                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/5-json-files.md"
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/4-json-files.md"
                                        },
                                        {
                                            "id":  "f0577561-b44b-49fb-b6d6-6486c5a4464d",
                                            "title":  "Modules and Imports",
                                            "tooltip":  "Week 11 - Splitting code across files, and the main guard",
-                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/6-modules-and-imports.md"
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/5-modules-and-imports.md"
                                        },
                                        {
                                            "id":  "b8e4c017-5a96-42d3-8f71-2c0ab6d95e84",
                                            "title":  "Regular Expressions",
                                            "tooltip":  "Week 11 - Patterns, search, findall, sub, split, and matching the whole string",
-                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/7-regular-expressions.md"
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/6-regular-expressions.md"
                                        },
                                        {
                                            "id":  "74aad0ce-fb11-4cc4-8005-7ab924e96400",
                                            "title":  "Packages",
                                            "tooltip":  "Week 11 - __init__.py, nested packages, and running with -m",
-                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/8-packages.md"
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/7-packages.md"
                                        },
                                        {
                                            "id":  "750cd2f4-bdb9-4221-b3a4-fe7043497f53",
                                            "title":  "The Standard Library",
                                            "tooltip":  "Week 11 - math, random, datetime, collections and what else exists",
-                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/9-the-standard-library.md"
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/8-the-standard-library.md"
                                        },
                                        {
                                            "id":  "c4a71e58-30b6-4a92-8d05-71f9be3c6a1d",
                                            "title":  "Dates and Times",
                                            "tooltip":  "Week 11 - date, datetime, timedelta, strftime and strptime, and sorting by date",
-                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/10-dates-and-times.md"
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/9-dates-and-times.md"
                                        },
                                        {
                                            "id":  "9d8b6631-d91c-4991-bf93-cd6ac2d86847",

@@ -1,326 +1,213 @@
 # File Paths and Errors
 
-`open("notes.txt")` works only when `notes.txt` is where the program is looking. Two things decide that: what a path means, and what happens when it is wrong.
+Files on a computer are kept in many different folders. A program must tell Python exactly where a file is, or Python cannot find it. Working with files can also fail, for example when a file is missing. A good program handles these problems instead of stopping suddenly.
 
-## Relative and Absolute Paths
+> **A file path is the location of a file on a computer. It lists the folders that lead to the file, followed by the file name.**
 
-An **absolute path** states the full location from the root of the filesystem:
+A folder is also called a **directory**. Both words mean the same thing.
 
-```
-C:\Users\anita\project\notes.txt
-/home/anita/project/notes.txt
-```
+## The Current Working Directory
 
-A **relative path** is interpreted from the **current working directory** — the directory the program is running in:
+When a file is opened using only its name, such as `"students.txt"`, Python looks for it in the **current working directory**.
 
-```
-notes.txt
-data/marks.csv
-```
+> **The current working directory is the folder Python uses by default when a file is given by its name only. It is usually the folder from which the program runs.**
 
-`os.getcwd()` reports the current working directory:
+The `getcwd()` function from Python's `os` module shows the current working directory. The line `import os` makes this function available. Importing is covered in **Modules and Imports**.
 
 ```python
 import os
+
 print(os.getcwd())
 ```
 
 **Output:**
 
 ```
-C:\Users\anita\project
+/home/user
 ```
 
-This is the commonest source of "but the file is right there". The working directory is where the program was **launched from**, not where the `.py` file lives. Running `python scripts/report.py` from the project root leaves the working directory as the project root, so a relative path resolves from there.
+This prints the folder Python uses when a file is opened using only its name.
 
-Prefer relative paths in code — they keep a project portable — and be clear about what they are relative to.
+This path will be different on your computer. The current working directory depends on how the program is launched and may differ from the folder containing the Python program. **If Python cannot find a file, use `os.getcwd()` to check where it is looking.**
 
-## Separators
+## Absolute Paths
 
-Windows separates path components with `\`, and Linux and macOS with `/`. That is awkward in Python, because `\` starts an escape sequence in a string:
+> **An absolute path gives the complete location of a file, starting from the root of the filesystem.**
 
-```python
-path = "data\new\table.txt"
-print(path)
-```
+The **root directory** is the top-level directory of a filesystem. On Windows, a drive commonly has a root such as `C:/`. On macOS and Linux, the filesystem root is `/`.
 
-**Output:**
+An absolute path gives the full location, so Python does not need to search relative to the current working directory. The file must still exist at that location, and the program must have permission to access it.
 
-```
-data
-ew	able.txt
-```
-
-`\n` became a newline and `\t` a tab. The string never contained the path that was typed.
-
-Sometimes it fails outright rather than silently:
-
-```python
-path = "C:\Users\anita\notes.txt"
-```
-
-**Output:**
-
-```
-SyntaxError: (unicode error) 'unicodeescape' codec can't decode bytes in position 2-3: truncated \UXXXXXXXX escape
-```
-
-`\U` begins a Unicode escape expecting eight hex digits, and `sers\ani` is not that. Nearly every Windows programmer meets this error while typing a path into a string.
-
-Three ways round it: double the backslashes (`"data\\new"`), use a raw string (`r"data\new"`), or use forward slashes, which Windows accepts too (`"data/new"`).
-
-Better than all three is not to write separators at all.
-
-## pathlib
-
-`pathlib.Path` represents a path as an object, and joins components with `/`:
-
-```python
-from pathlib import Path
-
-path = Path("data") / "reports" / "term1.csv"
-print(path)
-```
-
-**Output:**
-
-```
-data\reports\term1.csv
-```
-
-The `/` operator is doing the joining — nothing to do with division. Python inserts whatever separator the operating system uses, so the same code produces `data/reports/term1.csv` on Linux. That is the point: the separator stops being your problem.
-
-A `Path` knows its own parts:
-
-```python
-from pathlib import Path
-
-path = Path("data") / "reports" / "term1.csv"
-print("name:", path.name)
-print("stem:", path.stem)
-print("suffix:", path.suffix)
-print("parent:", path.parent)
-print("parts:", path.parts)
-```
-
-**Output:**
-
-```
-name: term1.csv
-stem: term1
-suffix: .csv
-parent: data\reports
-parts: ('data', 'reports', 'term1.csv')
-```
-
-| Attribute | Gives |
+| Operating System | Example of an Absolute Path |
 | --- | --- |
-| `name` | the final component, with extension |
-| `stem` | the final component, without extension |
-| `suffix` | the extension, including the dot |
-| `parent` | the containing directory |
-| `parts` | every component as a tuple |
+| Windows | `C:/Users/Ravi/Documents/students.txt` |
+| macOS or Linux | `/home/ravi/documents/students.txt` |
 
-Changing an extension is one call rather than string surgery:
+For example, `open("C:/Users/Ravi/Documents/students.txt", "r", encoding="utf-8")` opens the file from the `Documents` folder, as long as the file exists at that location.
+
+### Writing Windows Paths Safely
+
+Windows normally shows paths with **backslashes** (`\`), such as `C:\Users\Ravi`. Inside a Python string, a backslash has a special meaning: it starts an **escape sequence**, such as `\n` for a new line or `\t` for a tab.
 
 ```python
-from pathlib import Path
-print(Path("report.txt").with_suffix(".md"))
+print("C:\new_folder\table.txt")
+print(r"C:\new_folder\table.txt")
 ```
 
 **Output:**
 
 ```
-report.md
+C:
+ew_folder    able.txt
+C:\new_folder\table.txt
 ```
 
-A `Path` can be given to `open()` anywhere a string can.
+In the first print, `\n` creates a new line and `\t` creates a tab, breaking the path. The spaces shown above represent a tab character; they are not necessarily the exact spacing displayed by your terminal. The `r` in the second string makes it a **raw string**, preserving the backslashes.
 
-## Asking About a Path
+> **A raw string is a string written with `r` before the opening quote. In a raw string, backslashes are treated as literal characters rather than starting escape sequences.**
+
+On Windows, use either **forward slashes** (`C:/Users/Ravi`) or a **raw string** (`r"C:\Users\Ravi"`) for file paths.
+
+## Relative Paths
+
+> **A relative path is the location of a file starting from the current working directory.**
+
+A relative path is shorter than an absolute path, because it does not include the full location.
+
+| Relative Path | Where Python Looks |
+| --- | --- |
+| `"students.txt"` | In the current working directory |
+| `"data/students.txt"` | Inside the `data` folder, in the current working directory |
+| `"../students.txt"` | In the **parent folder**, one level above the current working directory |
+
+The two dots, `..`, always mean **the parent folder**, which is the folder that contains the current one.
+
+## Building Paths Safely
+
+Sometimes a program builds a path from a folder name and a file name. Different operating systems use different separators between folders: Windows uses `\`, while macOS and Linux use `/`. The `os.path.join()` function combines path parts using the path conventions of the operating system. It builds a path string but does not create the folder or check whether the path exists.
+
+The example below keeps the student names in a `data` folder and uses a relative path to reach them.
 
 ```python
-from pathlib import Path
+import os
 
-print(Path("notes.txt").exists())
-print(Path("missing.txt").exists())
-print(Path("notes.txt").is_file())
-print(Path(".").is_dir())
-print(Path("notes.txt").stat().st_size)
+os.makedirs("data", exist_ok=True)
+
+path = os.path.join("data", "students.txt")
+
+with open(path, "w", encoding="utf-8") as file:
+    file.write("Ravi\nPriya")
+
+with open(path, "r", encoding="utf-8") as file:
+    print(file.read())
 ```
 
 **Output:**
+
+```
+Ravi
+Priya
+```
+
+- `os.makedirs("data", exist_ok=True)` creates a **folder**, not a file.
+    - If the `data` folder does not exist, Python creates it.
+    - If the `data` folder already exists, `exist_ok=True` allows the program to continue without raising an error.
+- `os.path.join("data", "students.txt")` builds the relative path. It becomes `data/students.txt` on macOS and Linux, and `data\students.txt` on Windows.
+- The same `path` is then used to write the names and read them back.
+
+## Common File Errors
+
+When a file operation fails, Python raises an error. Two common errors are:
+
+| Error | When It Occurs |
+| --- | --- |
+| `FileNotFoundError` | Python cannot find the file or folder used in the operation. |
+| `PermissionError` | The program is not allowed to read or write the file. |
+
+If an error is not handled, Python stops the normal execution of the program and reports the error.
+
+## Handling File Errors
+
+A **`try`** and **`except`** block lets a program respond to a specific error instead of stopping because of that error. What happens next depends on the code inside the `except` block.
+
+```python
+try:
+    with open("missing.txt", "r", encoding="utf-8") as file:
+        print(file.read())
+except FileNotFoundError:
+    print("The file was not found.")
+```
+
+**Output:**
+
+```
+The file was not found.
+```
+
+- The code inside `try` attempts to open `missing.txt`. This file is never created, so it is used to show what happens when a requested file cannot be found.
+- Python raises a `FileNotFoundError`.
+- The `except FileNotFoundError` block catches the error and prints a clear message, instead of stopping the program.
+
+### Handling Permission Errors
+
+A file may exist, but the program may not have permission to read it. Python then raises a `PermissionError`. One `try` block can have a separate `except` block for each error.
+
+```python
+try:
+    with open("private.txt", "r", encoding="utf-8") as file:
+        print(file.read())
+except FileNotFoundError:
+    print("The file was not found.")
+except PermissionError:
+    print("You do not have permission to read this file.")
+```
+
+**Possible output if `private.txt` does not exist:**
+
+```
+The file was not found.
+```
+
+If the file exists and is readable, its contents are printed instead. If it exists but cannot be read because of permissions, the `PermissionError` handler runs. **The output depends on the state of your computer**, so you may not see the permission message yourself.
+
+## Checking Whether a File Exists
+
+Another way to avoid a missing-file error is to check first. The `os.path.exists()` function returns `True` if the path exists and `False` if it does not. On some systems, it may also return `False` when the path exists but cannot be accessed. An invalid path may raise an error. **It does not guarantee that the file can be opened successfully.**
+
+```python
+import os
+
+print(os.path.exists("students.txt"))
+print(os.path.exists("missing.txt"))
+```
+
+**Possible output:**
 
 ```
 True
 False
-True
-True
-18
 ```
 
-`stat().st_size` is the size in bytes.
+Assuming `students.txt` exists in the current working directory and `missing.txt` does not, the output is `True` followed by `False`. **The result depends on which files actually exist in that folder.**
 
-## Reading, Writing and Listing
+### Checking Is Not a Replacement for Handling Errors
 
-For a whole small file, `Path` skips `open()` entirely:
+A file may disappear or become inaccessible after it is checked. So **checking first does not replace error handling**. When a program must open a file, use `try` and `except` to handle the errors that may occur while opening it.
 
-```python
-from pathlib import Path
+Checking with `os.path.exists()` is useful, for example, to show a message to the user. When reading the file is the real goal, handling `FileNotFoundError` directly is often simpler.
 
-Path("greeting.txt").write_text("hello\n", encoding="utf-8")
-print(Path("greeting.txt").read_text(encoding="utf-8"))
-```
+## Points to Remember
 
-**Output:**
-
-```
-hello
-
-```
-
-These open, do the work, and close, in one call. Use them for small files read or written in one go, and `with open(...)` when the file is large or processed line by line.
-
-`mkdir()` creates a directory. `parents=True` creates missing parents, and `exist_ok=True` makes an existing directory acceptable rather than an error:
-
-```python
-from pathlib import Path
-Path("data/reports").mkdir(parents=True, exist_ok=True)
-```
-
-`iterdir()` lists a directory, and `glob()` matches a pattern:
-
-```python
-from pathlib import Path
-
-print(sorted(item.name for item in Path("data/reports").iterdir()))
-print(sorted(item.name for item in Path("data/reports").glob("*.csv")))
-print(sorted(item.name for item in Path("data").glob("**/*.csv")))
-```
-
-**Output:**
-
-```
-['term1.csv', 'term2.csv']
-['term1.csv', 'term2.csv']
-['term1.csv', 'term2.csv']
-```
-
-`*` matches within one directory level; `**` searches subdirectories too. Processing every CSV in a folder is one loop:
-
-```python
-from pathlib import Path
-
-for path in sorted(Path("data/reports").glob("*.csv")):
-    print(path.stem, len(path.read_text(encoding="utf-8").splitlines()))
-```
-
-**Output:**
-
-```
-term1 2
-term2 2
-```
-
-## The File Errors
-
-| Error | Cause |
-| --- | --- |
-| `FileNotFoundError` | reading a file that is not there, or writing into a directory that is not there |
-| `PermissionError` | the operating system refused access |
-| `FileExistsError` | creating something that already exists |
-| `IsADirectoryError` | treating a directory as a file |
-| `UnicodeDecodeError` | reading text with the wrong encoding |
-
-The commonest by a distance:
-
-```python
-with open("missing.txt") as handle:
-    print(handle.read())
-```
-
-**Output:**
-
-```
-FileNotFoundError: [Errno 2] No such file or directory: 'missing.txt'
-```
-
-`FileNotFoundError` also appears on *writing*, when the containing directory does not exist:
-
-```python
-with open("nowhere/deep/file.txt", "w") as handle:
-    handle.write("x")
-```
-
-**Output:**
-
-```
-FileNotFoundError: [Errno 2] No such file or directory: 'nowhere/deep/file.txt'
-```
-
-`"w"` creates a missing **file**. It does not create missing **directories** — `mkdir(parents=True)` does that.
-
-The exact wording of these messages varies between operating systems. The error type does not, and the type is what code should react to.
-
-## Handling Them
-
-Wrap the file operation in `try` / `except` and catch the specific error:
-
-```python
-def load_config(path):
-    try:
-        with open(path, encoding="utf-8") as handle:
-            return handle.read()
-    except FileNotFoundError:
-        print(f"No file at {path}; using defaults")
-        return ""
-
-print(repr(load_config("missing.json")))
-```
-
-**Output:**
-
-```
-No file at missing.json; using defaults
-''
-```
-
-The program continued with a sensible fallback instead of stopping.
-
-Catch the specific error, not everything. A bare `except:` would swallow a `PermissionError` and a typo in the function alike, and report both as a missing file.
-
-## Checking Against Trying
-
-Two approaches look equivalent:
-
-```python
-from pathlib import Path
-
-if Path("data.txt").exists():
-    with open("data.txt", encoding="utf-8") as handle:
-        content = handle.read()
-else:
-    content = ""
-```
-
-```python
-try:
-    with open("data.txt", encoding="utf-8") as handle:
-        content = handle.read()
-except FileNotFoundError:
-    content = ""
-```
-
-The second is preferred in Python, for two reasons.
-
-**The first has a gap.** The file can be deleted between the `exists()` check and the `open()`. The window is tiny and real, and the program crashes when it is hit.
-
-**`exists()` does not mean readable.** A file can exist and still raise `PermissionError`. The check answers a different question from the one that matters.
-
-The principle has a name — *easier to ask forgiveness than permission* — and it is why Python code tends to attempt an operation and handle the failure, rather than testing first. Use `exists()` when the answer is genuinely the point, such as deciding whether to create a file; use `try` when you are about to open it anyway.
+- **A file name alone** uses the current working directory.
+- **An absolute path** gives the full location, while **a relative path** starts from the current working directory.
+- **On Windows, use forward slashes or a raw string** for paths, so backslashes are not read as escape sequences.
+- **Use `os.path.join()`** to build paths from separate parts.
+- **Use `try` and `except`** to handle errors such as `FileNotFoundError` and `PermissionError`, so the program does not stop suddenly.
 
 ## Further Reading
 
-- **Official reference for `pathlib`** — https://docs.python.org/3/library/pathlib.html
-- **Working with file paths in Python** — https://realpython.com/python-pathlib/
+- 📎 **Official Python reference for `os.getcwd()`** — https://docs.python.org/3/library/os.html#os.getcwd
+- 📎 **Official Python reference for `os.path.exists()`** — https://docs.python.org/3/library/os.path.html#os.path.exists
+- 📎 **Official Python guide to handling exceptions** — https://docs.python.org/3/tutorial/errors.html#handling-exceptions
 
-Paths are relative to where the program was launched, `pathlib` builds them without separator trouble, and the file errors are specific enough to catch individually. Next, how the `with` statement guarantees that cleanup always runs.
+Files often store data as rows and columns, such as the name and marks of many students. In the next topic, **CSV Files**, you'll learn how to read and write this kind of data.

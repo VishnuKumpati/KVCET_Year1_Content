@@ -1,318 +1,297 @@
 # Reading and Writing Files
 
-Everything a program has stored so far has lived in memory, and memory is emptied when the program ends. Run a marks program twice and the second run knows nothing about the first.
+Data stored in variables is usually lost when a program ends. But programs often need to save information, such as student names, marks or reports, and use it again later.
 
-A **file** outlives the program. Writing to one keeps data between runs, and reading from one lets a program work on data it did not create.
+**Files** let a program save data on a computer's storage and read it back when needed.
+
+> **File handling means using a program to create, read, write and manage files.**
 
 ## Opening a File
 
-`open()` takes a filename and a **mode**, and returns a file object:
+Python opens a file using the built-in **`open()`** function.
+
+**Syntax:**
 
 ```python
-handle = open("notes.txt", "w")
-handle.write("first line\n")
-handle.close()
+file = open("students.txt", "w")
+file.close()
 ```
 
-Three things happened: the file was opened for writing, a line was written, and the file was closed.
+- The first argument, `"students.txt"`, is the **file name**.
+- The second argument, `"w"`, is the **mode**. It tells Python what you want to do with the file.
+- `open()` returns a **file object**, which is used to read from or write to the file.
 
-`close()` matters. Writes are buffered — held in memory and written out in batches — so data may not reach the disk until the file is closed. A program that forgets can lose the end of what it wrote.
+Python opens `students.txt` for writing and stores the file object in `file`. The next line closes the file. Since only a file name is given, Python looks for or creates the file in the **current working directory**. You'll learn more about file locations in **File Paths and Errors**.
 
-## The with Statement
+| Mode | Name | What It Does |
+| --- | --- | --- |
+| `"r"` | Read | Opens the file for reading. This is the default mode. Raises an error if the file does not exist. |
+| `"w"` | Write | Opens the file for writing. Creates the file if it does not exist. **Truncates the file**, removing its existing content. |
+| `"a"` | Append | Opens the file for adding content at the end. Creates the file if it does not exist. Keeps the existing content. |
 
-Calling `close()` by hand is unreliable, because an error between the open and the close skips it. `with` closes the file automatically, whatever happens:
+## Writing to a File and Closing It
+
+The **`write()`** method writes text into a file. After the work is done, the **`close()`** method closes the file.
 
 ```python
-with open("notes.txt", "w") as handle:
-    handle.write("first line\n")
-    handle.write("second line\n")
+file = open("students.txt", "w")
+file.write("Ravi\n")
+file.write("Priya")
+file.close()
 
-print(handle.closed)
+file = open("students.txt", "r")
+print(file.read())
+file.close()
 ```
 
 **Output:**
 
 ```
-True
+Ravi
+Priya
 ```
 
-The file was closed on leaving the block, without `close()` appearing. It would have closed just as reliably had the block raised an error.
+- `open("students.txt", "w")` opens `students.txt` for writing. If the file does not exist, Python creates it. If it already exists, Python removes its existing content.
+- `write()` does not move to a new line on its own. **`\n` adds a new line**, so `Priya` is written on the second line.
+- `read()` reads the whole file as one string.
+- `close()` closes the file. **Close a file after using it** to release the file resource and make sure Python finishes writing its buffered data. The `with` statement, explained next, handles closing automatically.
 
-**Always use `with`.** The bare `open()` form appears above only to show what `with` replaces.
+This example uses `close()` to show how file handling works manually. In everyday Python code, prefer `with`, because it closes the file even if an error occurs inside the block.
 
-## The Modes
+## The `with` Statement
 
-The second argument says what the file is opened for:
+Remembering to call `close()` every time is easy to forget. The **`with`** statement opens a file and **closes it automatically** when the indented block ends.
 
-| Mode | Meaning | If the file exists | If it does not |
-| --- | --- | --- | --- |
-| `"r"` | read | opened for reading | `FileNotFoundError` |
-| `"w"` | write | **emptied** | created |
-| `"a"` | append | written to at the end | created |
-| `"x"` | create | `FileExistsError` | created |
-
-`"r"` is the default, so `open("notes.txt")` opens for reading.
-
-The dangerous one is `"w"`. It empties an existing file the moment it is opened, before anything is written:
+**Syntax:**
 
 ```python
-with open("notes.txt", "w") as handle:
-    pass
+with open("students.txt", "w") as file:
+    file.write("Ravi")
 ```
 
-That is now an empty file. If the intention was to add to it, the mode wanted was `"a"`.
+- `as file` stores the file object in the variable `file`.
+- Use the file inside the indented block. When the block ends, Python closes the file automatically, so `close()` is not needed.
 
-Adding `"b"` to any mode — `"rb"`, `"wb"` — works on bytes rather than text, which is what images, PDFs and other non-text files need.
+**Use the `with` statement when working with files.** It closes the file automatically when the block ends, even if an error occurs. This works because file objects support **context managers**, which handle setup and cleanup around a block of code. The remaining examples in this topic use `with`.
 
-## Reading a Whole File
+## Choosing a File Encoding
 
-`read()` returns the entire contents as one string:
+A computer does not store letters directly. It stores everything as **numbers**. So when text is saved in a file, each character must be changed into numbers, and when the file is read, those numbers must be changed back into characters.
+
+> **An encoding is a set of rules that tells Python which numbers represent which characters.**
+
+For example, in the UTF-8 encoding, the letter `A` is stored as the number `65`.
+
+**UTF-8** is the most widely used encoding. It can store characters from almost every language in the world, including English, Tamil, Hindi and symbols.
+
+### Why the Encoding Should Be Specified
+
+If no encoding is given, Python uses the default encoding of the computer. **This default can be different on different computers.** A file written on one computer may then be read wrongly on another.
+
+To avoid this, specify the encoding when opening a text file, using `encoding="utf-8"`.
 
 ```python
-with open("notes.txt", "w") as handle:
-    handle.write("first line\n")
-    handle.write("second line\n")
+with open("greeting.txt", "w", encoding="utf-8") as file:
+    file.write("Hello\nவணக்கம்\nनमस्ते")
 
-with open("notes.txt") as handle:
-    content = handle.read()
+with open("greeting.txt", "r", encoding="utf-8") as file:
+    print(file.read())
+```
 
-print(repr(content))
+**Output:**
+
+```
+Hello
+வணக்கம்
+नमस्ते
+```
+
+- The first block writes English, Tamil and Hindi words into the file using UTF-8.
+- The second block reads the file using the **same** encoding, so every word appears correctly.
+
+**Always use the same encoding to write and read a file.** If a file written in UTF-8 is read with a different encoding, the text may appear as wrong characters, or Python may raise a **`UnicodeDecodeError`**.
+
+`encoding="utf-8"` is an **option** passed to `open()`. It is not a file mode, so it is written after the mode, separated by a comma. The remaining examples in this topic use it.
+
+## Writing Numbers and Other Values
+
+In text mode, `write()` expects a **string**. To write a number, convert it to a string first using `str()`.
+
+```python
+marks = 85
+
+with open("marks.txt", "w", encoding="utf-8") as file:
+    file.write(str(marks))
+
+with open("marks.txt", "r", encoding="utf-8") as file:
+    print(file.read())
+```
+
+**Output:**
+
+```
+85
+```
+
+Writing `file.write(marks)` without `str()` raises a **`TypeError`**, because `marks` is a number. For more complex data, such as lists of students or structured records, Python provides formats such as CSV and JSON, which are covered in **CSV Files** and **JSON Files**.
+
+## Reading a File
+
+Python provides three methods to read a file, and a file can also be read using a loop:
+
+| Way of Reading | What It Gives |
+| --- | --- |
+| `read()` | The whole file as one string |
+| `readline()` | One line at a time, as a string |
+| `readlines()` | All the lines as a list of strings |
+| A `for` loop | One line in each round of the loop |
+
+Each example below first writes three names into `students.txt`, and then reads them in a different way.
+
+### Reading the Whole File with `read()`
+
+`read()` reads **everything** in the file and returns it as **one string**.
+
+```python
+with open("students.txt", "w", encoding="utf-8") as file:
+    file.write("Ravi\nPriya\nArun")
+
+with open("students.txt", "r", encoding="utf-8") as file:
+    content = file.read()
+
 print(content)
 ```
 
 **Output:**
 
 ```
-'first line\nsecond line\n'
-first line
-second line
-
-```
-
-`repr()` shows the string as Python sees it, with the newline characters visible. Printing it shows them as actual line breaks — and the trailing `\n` is why there is a blank line at the end.
-
-`read()` is convenient and loads everything into memory at once. For a large file, that is a problem.
-
-## Reading Line by Line
-
-A file object is iterable, giving one line per iteration:
-
-```python
-with open("notes.txt") as handle:
-    for number, line in enumerate(handle, start=1):
-        print(number, line.strip())
-```
-
-**Output:**
-
-```
-1 first line
-2 second line
-```
-
-This reads one line at a time rather than the whole file, so it works on a file of any size. It is the form to reach for by default.
-
-`.strip()` is almost always wanted. Each line arrives with its newline still attached, so `print(line)` would double-space the output.
-
-`readlines()` gives every line as a list, newlines included:
-
-```python
-with open("notes.txt") as handle:
-    print(handle.readlines())
-```
-
-**Output:**
-
-```
-['first line\n', 'second line\n']
-```
-
-Useful when the lines are needed as a list — to count them, index them, or sort them. Like `read()`, it loads everything at once.
-
-| Method | Returns | Memory |
-| --- | --- | --- |
-| `read()` | the whole file as one string | all of it |
-| `readlines()` | a list of lines | all of it |
-| `readline()` | the next line only | one line |
-| iterating the file | one line per loop | one line |
-
-## Writing
-
-`write()` writes a string and returns how many characters it wrote:
-
-```python
-with open("names.txt", "w") as handle:
-    handle.write("Anita")
-    handle.write("Ravi")
-
-with open("names.txt") as handle:
-    print(handle.read())
-```
-
-**Output:**
-
-```
-AnitaRavi
-```
-
-`write()` adds nothing of its own. No newline, no separator — unlike `print()`, which adds a line break every time. Supply the `\n` yourself:
-
-```python
-with open("names.txt", "w") as handle:
-    handle.write("Anita\n")
-    handle.write("Ravi\n")
-
-with open("names.txt") as handle:
-    print(handle.read())
-```
-
-**Output:**
-
-```
-Anita
 Ravi
-
+Priya
+Arun
 ```
 
-`write()` only accepts strings. A number must be converted:
+`content` holds the whole file as one string: `"Ravi\nPriya\nArun"`. When it is printed, each `\n` starts a new line.
+
+Use `read()` when the file is small and you need all of its content at once.
+
+### Reading One Line with `readline()`
+
+`readline()` reads **one line** each time it is called.
 
 ```python
-with open("marks.txt", "w") as handle:
-    handle.write(78)
+with open("students.txt", "w", encoding="utf-8") as file:
+    file.write("Ravi\nPriya\nArun")
+
+with open("students.txt", "r", encoding="utf-8") as file:
+    first = file.readline()
+    second = file.readline()
+
+print(first.strip())
+print(second.strip())
 ```
 
 **Output:**
 
 ```
-TypeError: write() argument must be str, not int
-```
-
-Writing a list of lines is common enough to have its own method. `writelines()` takes any sequence of strings and — matching `write()` — adds no newlines:
-
-```python
-with open("names.txt", "w") as handle:
-    handle.writelines(["Anita\n", "Ravi\n"])
-
-with open("names.txt") as handle:
-    print(handle.read())
-```
-
-**Output:**
-
-```
-Anita
 Ravi
-
+Priya
 ```
 
-Writing a list of values is the loop you would expect:
+- The first `readline()` reads `"Ravi\n"`.
+- The second `readline()` reads `"Priya\n"`, because Python keeps track of the **current reading position** in the file. Each call continues from where the previous one stopped.
+- `strip()` removes whitespace, including the newline character (`\n`), from the beginning and end of a string.
+
+### When There Is Nothing Left to Read
+
+A file may be empty, or a program may reach the end of a file while reading it.
+
+- `read()` returns an empty string (`""`) when there is no more content to read.
+- `readline()` also returns `""` when it reaches the end of the file.
+- A **blank line** inside a file is different from the end of the file. A blank line is read as `"\n"`, a line containing only a newline character.
+
+This difference becomes useful when processing files line by line.
+
+### Reading All Lines into a List with `readlines()`
+
+`readlines()` reads **all the lines** and returns them as a **list**. Each line becomes one item.
 
 ```python
-names = ["Anita", "Ravi", "Meera"]
+with open("students.txt", "w", encoding="utf-8") as file:
+    file.write("Ravi\nPriya\nArun")
 
-with open("names.txt", "w") as handle:
-    for name in names:
-        handle.write(f"{name}\n")
+with open("students.txt", "r", encoding="utf-8") as file:
+    lines = file.readlines()
 
-with open("names.txt") as handle:
-    print(handle.read().strip())
+print(lines)
 ```
 
 **Output:**
 
 ```
-Anita
+['Ravi\n', 'Priya\n', 'Arun']
+```
+
+Each item keeps its newline character (`\n`) when one is present. The last line in this example has no `\n` because the text written to the file does not end with a newline. Use `readlines()` when you want to work with the lines as a list.
+
+### Reading Line by Line with a Loop
+
+The simplest way to read a file line by line is to use a **`for` loop** on the file object.
+
+```python
+with open("students.txt", "w", encoding="utf-8") as file:
+    file.write("Ravi\nPriya\nArun")
+
+with open("students.txt", "r", encoding="utf-8") as file:
+    for line in file:
+        print(line.strip())
+```
+
+**Output:**
+
+```
 Ravi
-Meera
+Priya
+Arun
 ```
 
-## Appending
+Each round of the loop gives the next line of the file. `strip()` removes the newline and other surrounding whitespace before printing, preventing unwanted blank lines.
 
-`"a"` adds to the end and leaves existing content alone:
+A `for` loop is **usually a good choice for large files**, because it processes one line at a time instead of loading the entire file into memory.
+
+## Appending to a File
+
+Mode `"w"` removes the existing content. To **add** content to the end of a file instead, use mode `"a"`.
 
 ```python
-with open("log.txt", "w") as handle:
-    handle.write("first entry\n")
+with open("students.txt", "w", encoding="utf-8") as file:
+    file.write("Ravi\n")
 
-with open("log.txt", "a") as handle:
-    handle.write("second entry\n")
+with open("students.txt", "a", encoding="utf-8") as file:
+    file.write("Priya")
 
-with open("log.txt") as handle:
-    print(handle.read().strip())
+with open("students.txt", "r", encoding="utf-8") as file:
+    print(file.read())
 ```
 
 **Output:**
 
 ```
-first entry
-second entry
+Ravi
+Priya
 ```
 
-Had the second block used `"w"`, the first entry would be gone. Append is the mode for logs, records, and anything that accumulates.
+The first block opens the file in `"w"` mode and writes `Ravi`, replacing any previous content. The second block uses `"a"` mode, which adds `Priya` without removing `Ravi`.
 
-## Encoding
+## Points to Remember
 
-A file holds bytes; text is those bytes interpreted according to an **encoding**. Python picks a default that varies by operating system, which means a file written on one machine can be unreadable on another.
-
-State it explicitly:
-
-```python
-with open("notes.txt", "w", encoding="utf-8") as handle:
-    handle.write("Café — naïve\n")
-
-with open("notes.txt", encoding="utf-8") as handle:
-    print(handle.read().strip())
-```
-
-**Output:**
-
-```
-Café — naïve
-```
-
-`utf-8` handles every character in every language and is the standard for text files. Use it on every `open()` that deals with text. Omitting it works until the day a name has an accent in it.
-
-Reading a file with the wrong encoding gives `UnicodeDecodeError`, or — worse — silently wrong characters.
-
-## A Complete Example
-
-Reading records, working on them, and writing a report:
-
-```python
-with open("marks.txt", "w", encoding="utf-8") as handle:
-    handle.write("Anita 78\n")
-    handle.write("Ravi 91\n")
-    handle.write("Meera 64\n")
-
-total = 0
-count = 0
-
-with open("marks.txt", encoding="utf-8") as handle:
-    for line in handle:
-        name, mark = line.split()
-        total = total + int(mark)
-        count = count + 1
-
-with open("report.txt", "w", encoding="utf-8") as handle:
-    handle.write(f"Students: {count}\n")
-    handle.write(f"Average: {total / count:.1f}\n")
-
-with open("report.txt", encoding="utf-8") as handle:
-    print(handle.read().strip())
-```
-
-**Output:**
-
-```
-Students: 3
-Average: 77.7
-```
-
-Three separate `with` blocks, each open only as long as it is needed. Note that `int(mark)` is required — everything read from a file is text, exactly as everything read from `input()` is.
+- **Be careful with `"w"`.** Opening an existing file in this mode removes its previous content, even if you do not write anything new. Use `"a"` to keep the content and add to the end.
+- **Use `\n` to start a new line** when writing. `write()` does not add one automatically.
+- **Use the `with` statement** so the file is closed automatically.
+- **Specify `encoding="utf-8"`** when opening text files.
+- **Mode `"r"` raises a `FileNotFoundError`** if the file does not exist at the specified location.
 
 ## Further Reading
 
-- **Official Python guide to reading and writing files** — https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files
-- **Working with files in Python** — https://realpython.com/read-write-files-python/
+- 📎 **Official Python guide to reading and writing files** — https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files
 
-`open()` with a mode, `with` to guarantee closing, and `utf-8` to be sure of the text. Next, naming the file to open and handling the times it is not there.
+The examples in this topic use only a file name. In the next topic, **File Paths and Errors**, you'll learn how to work with files in other folders and how to handle errors such as a missing file.
