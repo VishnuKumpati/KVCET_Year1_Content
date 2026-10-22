@@ -2,11 +2,11 @@
 
 A list contains many values. Iteration lets a program process those values one by one, without writing the same code repeatedly.
 
-> **Iteration is the process of going through the elements of a list one at a time.** A `for` loop performs this automatically, taking each element in turn from the first to the last.
+> **Iteration is the process of going through a collection of values one at a time.** In this lesson, you will use a `for` loop to iterate over lists. The loop takes each element in turn, from the first to the last.
 
 ## Looping Through a List
 
-A `for` loop takes the list name after the keyword `in`. On each iteration the loop variable holds one element.
+A `for` loop takes a list after the keyword `in`. On each iteration, the loop variable receives the next element from the list.
 
 **Syntax**
 
@@ -82,7 +82,7 @@ The loop visited all four elements. `passed` was increased only on the two itera
 
 ## Looping with the Index
 
-A `for` loop over a list gives the elements but not their positions. When the position is needed, the loop runs over `range(len(list_name))` instead.
+A `for` loop over a list gives you each element directly. If you also need its position, you can loop over `range(len(list_name))` and use each index to access the corresponding element.
 
 **Example**
 
@@ -121,7 +121,7 @@ print(marks)
 [87, 72, 95]
 ```
 
-Nothing changed. `mark` is a separate variable. Assigning a new value to it changes what `mark` refers to, not the element in the list.
+Nothing changed. `mark` receives the value of each element. The statement `mark = mark + 5` assigns a new value to `mark`; it does not update the corresponding element in the list.
 
 Assigning through the index changes the list itself.
 
@@ -169,6 +169,56 @@ for position, name in enumerate(names):
 
 `enumerate()` gives two values on each iteration: the position and the element. `position` and `name` receive those two values.
 
+## Looping Through Two Lists with zip()
+
+Sometimes two lists hold related values, such as students' names in one list and their marks in another. The `zip()` function goes through both lists together, giving one element from each list on every iteration.
+
+**Syntax**
+
+```
+for variable1, variable2 in zip(list1, list2):
+    statements
+```
+
+**Example**
+
+```python
+names = ["Asha", "Ravi", "Meera"]
+marks = [87, 72, 95]
+for name, mark in zip(names, marks):
+    print(name, mark)
+```
+
+**Output:**
+
+```
+Asha 87
+Ravi 72
+Meera 95
+```
+
+On the first iteration, `name` holds `"Asha"` and `mark` holds `87`, the first element of each list. On the second, they hold the second elements, and so on.
+
+When the lists have different lengths, `zip()` stops at the end of the **shorter** list.
+
+**Example**
+
+```python
+names = ["Asha", "Ravi", "Meera"]
+marks = [87, 72]
+for name, mark in zip(names, marks):
+    print(name, mark)
+```
+
+**Output:**
+
+```
+Asha 87
+Ravi 72
+```
+
+`marks` has only two elements, so the loop ran twice. `Meera` was skipped because there was no matching mark.
+
 ## Removing Elements During a Loop
 
 A list should not be shortened while a loop is going through it. Removing an element moves the later elements along, and the loop skips the one that takes its place.
@@ -189,7 +239,7 @@ print(marks)
 [87, 20, 95]
 ```
 
-The `20` should have been removed and was not. When `30` was removed, `20` moved into its position, and the loop had already moved past that position.
+The `20` should have been removed and was not. When `30` was removed, `20` shifted into its position. The loop then moved to the next index, skipping `20`.
 
 The safe approach is to build a new list of the elements to keep.
 

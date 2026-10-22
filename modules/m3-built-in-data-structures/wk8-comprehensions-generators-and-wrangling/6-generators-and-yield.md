@@ -52,7 +52,13 @@ def get_scores():
     yield 95
 ```
 
-`return` sends back a result and ends the function. `yield` provides a value and pauses the function's execution. When another value is requested, the function continues from the statement after `yield`.
+| `return` | `yield` |
+| --- | --- |
+| Sends a value back and ends the function. | Sends a value back and pauses the function, keeping its current state. |
+| A function using `return` normally provides one final result per call. | A function using `yield` can provide multiple values, one at a time. |
+| Calling the function again starts a new function call from the beginning. | Requesting the next value resumes the function from where it paused. |
+| The function does not continue executing after `return`. | The function continues executing from after `yield` when the next value is requested. |
+| A function with `return` returns a value directly. | A function with `yield` returns a generator, which produces values when requested. |
 
 This function produces nothing yet. The next section shows why.
 
