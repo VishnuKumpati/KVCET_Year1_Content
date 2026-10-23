@@ -2,7 +2,7 @@
 
 When a class is used in a program, the code using it usually needs to know **what** the class can do, not **how** it does it. Showing every internal detail makes a program harder to understand and use.
 
-In a group of related classes, every child class may also need to provide certain methods. Without a rule that enforces this, a child class can easily miss a required method. **Abstraction** solves both problems.
+In a group of related classes, every child class may also need to provide certain methods. Without a rule that enforces this, a child class can easily miss a required method. **Abstraction**, the fourth pillar, solves both problems.
 
 > **Abstraction means showing only the essential features of an object and hiding the details of how they work.**
 

@@ -458,7 +458,7 @@
                     {
                         "id":  "e112536e-181d-4a71-923e-7c92ba36b4e7",
                         "title":  "M4 - Object-Oriented Programming",
-                        "description":  "Classes, inheritance, polymorphism, dunder methods, and decorators.",
+                        "description":  "Classes, the four pillars of OOP, dunder methods, and decorators.",
                         "url":  "modules/m4-object-oriented-programming",
                         "prerequisites":  {
                                               "url":  "",
@@ -474,82 +474,76 @@
                                            "url":  "modules/m4-object-oriented-programming/wk9-classes-and-objects/1-introduction-to-object-oriented-programming.md"
                                        },
                                        {
+                                           "id":  "5ff25b6d-bad9-4f28-96e5-e42c181c9824",
+                                           "title":  "Programming Paradigms",
+                                           "tooltip":  "Week 9 - Procedural, object-oriented and functional styles compared on one task",
+                                           "url":  "modules/m4-object-oriented-programming/wk9-classes-and-objects/2-programming-paradigms.md"
+                                       },
+                                       {
                                            "id":  "4d022ff0-8918-4d57-acef-f95c037a010d",
                                            "title":  "Classes and Objects",
                                            "tooltip":  "Week 9 - Defining a type and creating instances of it",
-                                           "url":  "modules/m4-object-oriented-programming/wk9-classes-and-objects/2-classes-and-objects.md"
+                                           "url":  "modules/m4-object-oriented-programming/wk9-classes-and-objects/3-classes-and-objects.md"
                                        },
                                        {
                                            "id":  "2348cf23-6236-49f3-8cd2-f74d03993885",
                                            "title":  "Attributes and the __init__ Method",
                                            "tooltip":  "Week 9 - Instance attributes, __init__, and self as the object being created",
-                                           "url":  "modules/m4-object-oriented-programming/wk9-classes-and-objects/3-attributes-and-the-init-method.md"
+                                           "url":  "modules/m4-object-oriented-programming/wk9-classes-and-objects/4-attributes-and-the-init-method.md"
                                        },
                                        {
                                            "id":  "2d6a9322-2ac4-4022-929a-68ad6146f7fc",
                                            "title":  "Methods",
                                            "tooltip":  "Week 9 - Instance methods, calling them on an object, and self inside methods",
-                                           "url":  "modules/m4-object-oriented-programming/wk9-classes-and-objects/4-methods.md"
+                                           "url":  "modules/m4-object-oriented-programming/wk9-classes-and-objects/5-methods.md"
                                        },
                                        {
                                            "id":  "e2ee329b-6468-4016-aa18-dbd5b0554af3",
                                            "title":  "Class Attributes and Class Methods",
                                            "tooltip":  "Week 9 - Data shared by all objects of a class, and methods that work with it",
-                                           "url":  "modules/m4-object-oriented-programming/wk9-classes-and-objects/5-class-attributes-and-class-methods.md"
+                                           "url":  "modules/m4-object-oriented-programming/wk9-classes-and-objects/6-class-attributes-and-class-methods.md"
+                                       },
+                                       {
+                                           "id":  "c610f627-c728-4da3-8424-fb8c6e4190f9",
+                                           "title":  "Introduction to the Four Pillars of OOP",
+                                           "tooltip":  "Week 10 - Encapsulation, inheritance, polymorphism and abstraction, and how they connect",
+                                           "url":  "modules/m4-object-oriented-programming/wk10-pillars-of-oop/1-introduction-to-the-four-pillars.md"
                                        },
                                        {
                                            "id":  "d27ee8fd-f7e5-41eb-b9fa-fe7b60fd7279",
                                            "title":  "Encapsulation",
-                                           "tooltip":  "Week 9 - Access levels, private attributes, and getter and setter methods",
-                                           "url":  "modules/m4-object-oriented-programming/wk9-classes-and-objects/6-encapsulation.md"
+                                           "tooltip":  "Week 10 - Access levels, private attributes, and getter and setter methods",
+                                           "url":  "modules/m4-object-oriented-programming/wk10-pillars-of-oop/2-encapsulation.md"
                                        },
                                        {
                                            "id":  "df722487-6e4f-47ff-be63-ef027cdb341d",
                                            "title":  "Inheritance",
-                                           "tooltip":  "Week 10 - Parent and child classes, reusing attributes and methods",
-                                           "url":  "modules/m4-object-oriented-programming/wk10-inheritance-and-polymorphism/1-inheritance.md"
-                                       },
-                                       {
-                                           "id":  "4d1cc0b2-f40a-4385-a181-313299576ab3",
-                                           "title":  "Method Overriding",
-                                           "tooltip":  "Week 10 - Replacing a parent method in a child class",
-                                           "url":  "modules/m4-object-oriented-programming/wk10-inheritance-and-polymorphism/2-method-overriding.md"
-                                       },
-                                       {
-                                           "id":  "fbc20ce6-cfcd-46d1-871e-0b400f56e261",
-                                           "title":  "The super() Function",
-                                           "tooltip":  "Week 10 - Calling the parent's __init__ and methods from a child class",
-                                           "url":  "modules/m4-object-oriented-programming/wk10-inheritance-and-polymorphism/3-the-super-function.md"
-                                       },
-                                       {
-                                           "id":  "c1d413f1-da17-4669-bb77-53976598ac41",
-                                           "title":  "Types of Inheritance",
-                                           "tooltip":  "Week 10 - Single, multiple, multilevel, hierarchical and hybrid inheritance",
-                                           "url":  "modules/m4-object-oriented-programming/wk10-inheritance-and-polymorphism/4-types-of-inheritance.md"
+                                           "tooltip":  "Week 10 - Child classes, method overriding, super(), types of inheritance and the MRO",
+                                           "url":  "modules/m4-object-oriented-programming/wk10-pillars-of-oop/3-inheritance.md"
                                        },
                                        {
                                            "id":  "ee49ca32-7873-42ee-8a6d-58c38a26f57c",
                                            "title":  "Polymorphism",
-                                           "tooltip":  "Week 10 - Same method name, different behaviour, and why Python has no method overloading",
-                                           "url":  "modules/m4-object-oriented-programming/wk10-inheritance-and-polymorphism/5-polymorphism.md"
+                                           "tooltip":  "Week 10 - Overriding, built-in polymorphism, duck typing, and why Python has no method overloading",
+                                           "url":  "modules/m4-object-oriented-programming/wk10-pillars-of-oop/4-polymorphism.md"
                                        },
                                        {
                                            "id":  "d3039526-fbd8-4989-b64a-2dfc57fa3a06",
                                            "title":  "Abstraction",
                                            "tooltip":  "Week 10 - Abstract classes with ABC and @abstractmethod",
-                                           "url":  "modules/m4-object-oriented-programming/wk10-inheritance-and-polymorphism/6-abstraction.md"
+                                           "url":  "modules/m4-object-oriented-programming/wk10-pillars-of-oop/5-abstraction.md"
                                        },
                                        {
                                            "id":  "34c91d05-3fde-4cf5-a829-acf0926e0996",
                                            "title":  "Dunder Methods",
                                            "tooltip":  "Week 10 - Common special methods, including operator overloading",
-                                           "url":  "modules/m4-object-oriented-programming/wk10-inheritance-and-polymorphism/7-dunder-methods.md"
+                                           "url":  "modules/m4-object-oriented-programming/wk10-pillars-of-oop/6-dunder-methods.md"
                                        },
                                        {
                                            "id":  "cc3a2916-72a5-4f6d-9226-faadde77b416",
                                            "title":  "Decorators",
                                            "tooltip":  "Week 10 - Writing decorators, plus @staticmethod, @property and @classmethod",
-                                           "url":  "modules/m4-object-oriented-programming/wk10-inheritance-and-polymorphism/8-decorators.md"
+                                           "url":  "modules/m4-object-oriented-programming/wk10-pillars-of-oop/7-decorators.md"
                                        }
                                    ]
                     },

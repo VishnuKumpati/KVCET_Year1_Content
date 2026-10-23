@@ -8,7 +8,7 @@ As the application grows, keeping student data and all the operations related to
 
 > **Object-oriented programming (OOP) is a way of organising a program around objects that hold data and provide methods to work with that data.**
 
-Instead of treating data and the operations on it as completely separate parts, OOP brings related data and behaviour together. This makes it easier to represent things from the real world in a program, such as students, bank accounts, or library books.
+Instead of treating data and the operations on it as completely separate parts, OOP brings related data and behaviour together. This makes it easier to represent things from the real world in a program, such as students, bank accounts, or library books. OOP is one of several **programming paradigms**, or ways of organising a program.
 
 For example, a student in a college application has data such as a name and score, along with operations such as adding bonus marks or checking the result. OOP provides a way to organise these related parts together.
 
@@ -56,4 +56,4 @@ The difference now is that you will write your own classes rather than only usin
 - 📎 **Object-oriented programming with worked examples** — https://www.programiz.com/python-programming/object-oriented-programming
 - 📎 **Official Python guide to classes** — https://docs.python.org/3/tutorial/classes.html
 
-You will explore how this works in the following topics, starting with the two fundamental concepts behind OOP: classes and objects.
+OOP is not the only way to organise a program. In the next topic, **Programming Paradigms**, you'll compare it with the procedural and functional styles.

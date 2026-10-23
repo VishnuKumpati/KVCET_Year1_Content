@@ -10,12 +10,54 @@ The word comes from Greek: **poly** means "many" and **morph** means "form". So 
 
 Python allows the same operation to work with different objects or values in several ways:
 
+- **Method overriding:** Child classes provide their own versions of an inherited method, allowing the same method call to behave differently for different objects.
 - **Built-in functions:** A function such as `len()` works with different types of objects.
 - **Operators:** An operator such as `+` performs different operations depending on the values.
 - **Duck typing:** A function works with different objects as long as they provide the methods it needs.
-- **Method overriding:** Child classes provide their own versions of an inherited method, allowing the same method call to behave differently for different objects.
 
 The examples below show how each approach works in Python.
+
+## Polymorphism with Method Overriding
+
+In **Inheritance**, you learned that a child class can override a method inherited from its parent class. When different child objects use the same method call, each object can produce different behaviour.
+
+```python
+class Animal:
+    def speak(self):
+        print("Some sound")
+
+class Dog(Animal):
+    def speak(self):
+        print("Woof!")
+
+class Cat(Animal):
+    def speak(self):
+        print("Meow!")
+
+animals = [Dog(), Cat()]
+
+for animal in animals:
+    animal.speak()
+```
+
+**Output:**
+
+```
+Woof!
+Meow!
+```
+
+Both `Dog` and `Cat` inherit from `Animal`, but each overrides `speak()` with its own behaviour. The loop does not check which kind of animal it has. It writes one call, `animal.speak()`, and each object runs its own version.
+
+Python chooses which version to run based on the object's class when the method is called. Because this choice is made while the program is running, this is called **runtime polymorphism**.
+
+Overriding is used whenever related classes share an action but perform it differently.
+
+| Parent Class | Child Classes | Overridden Method |
+| --- | --- | --- |
+| `Account` | `SavingsAccount`, `CurrentAccount` | `calculate_interest()`, because each account type earns interest differently |
+| `Shape` | `Circle`, `Rectangle` | `area()`, because each shape uses a different formula |
+| `Payment` | `UPIPayment`, `CardPayment` | `pay()`, because each payment method works differently |
 
 ## Polymorphism in Built-in Functions
 
@@ -77,7 +119,7 @@ Python also lets you decide how operators such as `+` behave for objects of your
 
 ## Polymorphism with Duck Typing
 
-Different classes can have methods with the **same name**. A single function can then call that method on objects of any of these classes. This is called **duck typing**.
+Classes do not need a shared parent class to have methods with the **same name**. A single function can call that method on objects of any of these classes. This is called **duck typing**.
 
 > **Duck typing means an object can be used as long as it supports the methods the code needs, regardless of its class.**
 
@@ -109,40 +151,6 @@ Paid 1200 using a card
 `UPIPayment` and `CardPayment` are **separate classes**. Neither inherits from a shared payment class, yet `make_payment()` works with both, because both have a `pay()` method.
 
 If an object has no `pay` attribute, calling `make_payment()` with it raises an **`AttributeError`**.
-
-## Polymorphism with Inheritance
-
-In **Method Overriding**, you learned that a child class can provide its own version of a method inherited from a parent class. When different child objects use the same method call, each object can produce different behaviour.
-
-```python
-class Animal:
-    def speak(self):
-        print("Some sound")
-
-class Dog(Animal):
-    def speak(self):
-        print("Woof!")
-
-class Cat(Animal):
-    def speak(self):
-        print("Meow!")
-
-animals = [Dog(), Cat()]
-
-for animal in animals:
-    animal.speak()
-```
-
-**Output:**
-
-```
-Woof!
-Meow!
-```
-
-Both `Dog` and `Cat` inherit from `Animal`, but each overrides `speak()` with its own behaviour.
-
-The same call, `animal.speak()`, produces different results depending on the object. Python selects the appropriate overridden method at runtime. This is **runtime polymorphism through method overriding**.
 
 ## Method Overloading
 
@@ -257,10 +265,10 @@ The `**` before `details` collects all the keyword arguments into one dictionary
 
 **These techniques make methods flexible, but they are not method overloading.** They do not create multiple method definitions or automatically choose a different version based on the number or types of the arguments.
 
-Sometimes, we want to ensure that every child class provides a required method. In the next topic, **Abstraction**, you'll learn how abstract base classes help us do this.
-
 ## Further Reading
 
 - 📎 **Polymorphism in Python with examples** — https://www.tutorialspoint.com/python/python_polymorphism.htm
 - 📎 **Official Python guide to default arguments, `*args` and `**kwargs`** — https://docs.python.org/3/tutorial/controlflow.html#default-argument-values
 - 📎 **Official Python glossary entry for duck typing** — https://docs.python.org/3/glossary.html#term-duck-typing
+
+Sometimes, we want to ensure that every child class provides a required method. In the next topic, **Abstraction**, the fourth pillar, you'll learn how abstract base classes help us do this.

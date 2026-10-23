@@ -164,4 +164,4 @@ When reading `student1.college`, Python first looks for an instance attribute na
 - 📎 **Official Python guide to class and instance variables** — https://docs.python.org/3/tutorial/classes.html#class-and-instance-variables
 - 📎 **Official Python reference for `classmethod`** — https://docs.python.org/3/library/functions.html#classmethod
 
-Any part of the program can currently change an object's attributes directly, for example by setting `student1.marks` to a negative number. In the next topic, **Encapsulation**, you'll learn how to control access to an object's data.
+This completes the topics of this week. With classes, objects, attributes and methods, you are ready to learn the main principles of object-oriented design. In the next topic, **Introduction to the Four Pillars of OOP**, you'll get an overview of these principles.
