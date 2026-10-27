@@ -109,4 +109,4 @@ If `pip` is not recognised on your computer, try `python -m pip install requests
 - 📎 **Official Python tutorial on packages** — https://docs.python.org/3/tutorial/modules.html#packages
 - 📎 **Official Python guide to installing packages** — https://docs.python.org/3/installing/index.html
 
-Python already includes many useful modules and packages without installing anything. In the next topic, **The Standard Library**, you'll explore some of the most useful ones.
+Python's built-in `re` module helps search for patterns in text, such as phone numbers or email addresses. In the next topic, **Regular Expressions**, you'll learn how to describe and search for these patterns.

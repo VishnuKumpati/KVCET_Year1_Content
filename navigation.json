@@ -596,64 +596,64 @@
                                            "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/5-modules-and-imports.md"
                                        },
                                        {
+                                           "id":  "74aad0ce-fb11-4cc4-8005-7ab924e96400",
+                                           "title":  "Packages",
+                                           "tooltip":  "Week 11 - Package structure, __init__.py, importing from a package, and pip",
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/6-packages.md"
+                                       },
+                                       {
                                            "id":  "b8e4c017-5a96-42d3-8f71-2c0ab6d95e84",
                                            "title":  "Regular Expressions",
                                            "tooltip":  "Week 11 - Patterns, search, findall, fullmatch, and sub",
-                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/6-regular-expressions.md"
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/7-regular-expressions.md"
                                        },
                                        {
                                            "id":  "c4a71e58-30b6-4a92-8d05-71f9be3c6a1d",
                                            "title":  "Dates and Times",
                                            "tooltip":  "Week 11 - date, datetime, timedelta, strftime and strptime",
-                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/7-dates-and-times.md"
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/8-dates-and-times.md"
                                        },
                                        {
-                                           "id":  "74aad0ce-fb11-4cc4-8005-7ab924e96400",
-                                           "title":  "Packages",
-                                           "tooltip":  "Week 11 - Package structure, __init__.py, importing from a package, and pip",
-                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/8-packages.md"
-                                       },
-                                       {
-                                           "id":  "750cd2f4-bdb9-4221-b3a4-fe7043497f53",
-                                           "title":  "The Standard Library",
-                                           "tooltip":  "Week 11 - random, statistics, collections, and finding more modules",
-                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/9-the-standard-library.md"
+                                           "id":  "18a4a369-b8bf-41e5-8cb6-348127260936",
+                                           "title":  "Built-in and External Libraries",
+                                           "tooltip":  "Week 12 - The standard library, random, statistics, collections, and popular external libraries",
+                                           "url":  "modules/m5-production-ready-python/wk12-libraries-environments-and-apis/1-built-in-and-external-libraries.md"
                                        },
                                        {
                                            "id":  "9d8b6631-d91c-4991-bf93-cd6ac2d86847",
                                            "title":  "Virtual Environments and pip",
                                            "tooltip":  "Week 12 - Isolating dependencies, installing, and requirements.txt",
-                                           "url":  "modules/m5-production-ready-python/wk12-libraries-environments-and-apis/1-virtual-environments-and-pip.md"
+                                           "url":  "modules/m5-production-ready-python/wk12-libraries-environments-and-apis/2-virtual-environments-and-pip.md"
                                        },
                                        {
                                            "id":  "38ef29a8-0dd5-40c8-8e83-7777c56f1feb",
                                            "title":  "Reading Documentation",
                                            "tooltip":  "Week 12 - help, dir, reading a signature, and where to look",
-                                           "url":  "modules/m5-production-ready-python/wk12-libraries-environments-and-apis/2-reading-documentation.md"
+                                           "url":  "modules/m5-production-ready-python/wk12-libraries-environments-and-apis/3-reading-documentation.md"
                                        },
                                        {
                                            "id":  "a93e276b-0ff5-4729-9752-32a3212ff6ac",
                                            "title":  "APIs and HTTP",
                                            "tooltip":  "Week 12 - Requests and responses, methods, status codes and headers",
-                                           "url":  "modules/m5-production-ready-python/wk12-libraries-environments-and-apis/3-apis-and-http.md"
+                                           "url":  "modules/m5-production-ready-python/wk12-libraries-environments-and-apis/4-apis-and-http.md"
                                        },
                                        {
                                            "id":  "43d6cbc0-445b-4d13-9471-58fed88387ce",
                                            "title":  "Calling an API with requests",
                                            "tooltip":  "Week 12 - get, params, headers, timeouts, and parsing JSON",
-                                           "url":  "modules/m5-production-ready-python/wk12-libraries-environments-and-apis/4-calling-an-api-with-requests.md"
+                                           "url":  "modules/m5-production-ready-python/wk12-libraries-environments-and-apis/5-calling-an-api-with-requests.md"
                                        },
                                        {
                                            "id":  "e04476e8-b7a4-4a8c-adc9-4582059392ea",
                                            "title":  "Handling API Errors",
                                            "tooltip":  "Week 12 - Exceptions against status codes, retries, and rate limits",
-                                           "url":  "modules/m5-production-ready-python/wk12-libraries-environments-and-apis/5-handling-api-errors.md"
+                                           "url":  "modules/m5-production-ready-python/wk12-libraries-environments-and-apis/6-handling-api-errors.md"
                                        },
                                        {
                                            "id":  "f8304361-d1d8-4f63-87b8-57e3a0ec248f",
                                            "title":  "Introduction to pandas",
                                            "tooltip":  "Week 12 - DataFrames, selection, filtering, and groupby",
-                                           "url":  "modules/m5-production-ready-python/wk12-libraries-environments-and-apis/6-introduction-to-pandas.md"
+                                           "url":  "modules/m5-production-ready-python/wk12-libraries-environments-and-apis/7-introduction-to-pandas.md"
                                        },
                                        {
                                            "id":  "e91cf1dd-d623-470b-ad95-97fdfc1116a5",

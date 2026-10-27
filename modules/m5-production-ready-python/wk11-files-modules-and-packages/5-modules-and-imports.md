@@ -152,4 +152,4 @@ This example needs two files. Run it in a code editor on your computer, such as 
 
 - 📎 **Official Python tutorial on modules** — https://docs.python.org/3/tutorial/modules.html
 
-Python's built-in `re` module helps search for patterns in text, such as phone numbers or email addresses. In the next topic, **Regular Expressions**, you'll learn how to describe and search for these patterns.
+As a program grows, it may need many modules of its own. In the next topic, **Packages**, you'll learn how to group related modules together in folders.

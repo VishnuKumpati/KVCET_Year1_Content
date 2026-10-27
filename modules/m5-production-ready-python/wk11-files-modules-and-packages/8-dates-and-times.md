@@ -20,7 +20,7 @@ flowchart LR
 
 This topic covers these four tasks in order, one step at a time.
 
-> **The `datetime` module is a standard library module for creating, displaying, reading and calculating dates and times.**
+> **The `datetime` module is a built-in Python module for creating, displaying, reading and calculating dates and times.**
 
 It provides three main types used in this topic:
 
@@ -181,4 +181,4 @@ print(gap.days)
 - 📎 **Official Python reference for the `datetime` module** — https://docs.python.org/3/library/datetime.html
 - 📎 **Official list of format codes** — https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
 
-As a program grows, it may need many modules of its own. In the next topic, **Packages**, you'll learn how to group related modules together in folders.
+This completes the topics of this week. Modules such as `datetime`, `re`, `csv` and `json` come built into Python, and many more libraries can be installed when a project needs them. In the next topic, **Built-in and External Libraries**, you'll explore both kinds of libraries and some of the most popular ones.
