@@ -162,4 +162,4 @@ Each digit, `\d`, is replaced with `*`, which hides the phone number.
 
 - 📎 **Official Python regular expression how-to** — https://docs.python.org/3/howto/regex.html
 
-As a program grows, it may need many modules of its own. In the next topic, **Packages**, you'll learn how to group related modules together in folders.
+Programs also often work with dates and times, such as a date of birth or an assignment's due date. In the next topic, **Dates and Times**, you'll learn how to use Python's `datetime` module.

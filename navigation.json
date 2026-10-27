@@ -518,32 +518,38 @@
                                        {
                                            "id":  "df722487-6e4f-47ff-be63-ef027cdb341d",
                                            "title":  "Inheritance",
-                                           "tooltip":  "Week 10 - Child classes, method overriding, super(), types of inheritance and the MRO",
+                                           "tooltip":  "Week 10 - Parent and child classes, the five types of inheritance, and the MRO",
                                            "url":  "modules/m4-object-oriented-programming/wk10-pillars-of-oop/3-inheritance.md"
+                                       },
+                                       {
+                                           "id":  "59c7cbc0-1696-40b2-abaf-0e450e597a95",
+                                           "title":  "Method Overriding and super()",
+                                           "tooltip":  "Week 10 - Replacing an inherited method, overriding __init__, and reusing the parent's code with super()",
+                                           "url":  "modules/m4-object-oriented-programming/wk10-pillars-of-oop/4-method-overriding-and-super.md"
                                        },
                                        {
                                            "id":  "ee49ca32-7873-42ee-8a6d-58c38a26f57c",
                                            "title":  "Polymorphism",
                                            "tooltip":  "Week 10 - Overriding, built-in polymorphism, duck typing, and why Python has no method overloading",
-                                           "url":  "modules/m4-object-oriented-programming/wk10-pillars-of-oop/4-polymorphism.md"
+                                           "url":  "modules/m4-object-oriented-programming/wk10-pillars-of-oop/5-polymorphism.md"
                                        },
                                        {
                                            "id":  "d3039526-fbd8-4989-b64a-2dfc57fa3a06",
                                            "title":  "Abstraction",
                                            "tooltip":  "Week 10 - Abstract classes with ABC and @abstractmethod",
-                                           "url":  "modules/m4-object-oriented-programming/wk10-pillars-of-oop/5-abstraction.md"
+                                           "url":  "modules/m4-object-oriented-programming/wk10-pillars-of-oop/6-abstraction.md"
                                        },
                                        {
                                            "id":  "34c91d05-3fde-4cf5-a829-acf0926e0996",
                                            "title":  "Dunder Methods",
                                            "tooltip":  "Week 10 - Common special methods, including operator overloading",
-                                           "url":  "modules/m4-object-oriented-programming/wk10-pillars-of-oop/6-dunder-methods.md"
+                                           "url":  "modules/m4-object-oriented-programming/wk10-pillars-of-oop/7-dunder-methods.md"
                                        },
                                        {
                                            "id":  "cc3a2916-72a5-4f6d-9226-faadde77b416",
                                            "title":  "Decorators",
                                            "tooltip":  "Week 10 - Writing decorators, plus @staticmethod, @property and @classmethod",
-                                           "url":  "modules/m4-object-oriented-programming/wk10-pillars-of-oop/7-decorators.md"
+                                           "url":  "modules/m4-object-oriented-programming/wk10-pillars-of-oop/8-decorators.md"
                                        }
                                    ]
                     },
@@ -561,9 +567,9 @@
                         "topics":  [
                                        {
                                            "id":  "0dfae30c-22fd-4950-9166-dcccae12c801",
-                                           "title":  "Reading and Writing Files",
+                                           "title":  "File Handling",
                                            "tooltip":  "Week 11 - open, modes, the with statement, and text encoding",
-                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/1-reading-and-writing-files.md"
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/1-file-handling.md"
                                        },
                                        {
                                            "id":  "26e3641f-f077-49e5-9c62-7f54596979dd",
@@ -596,22 +602,22 @@
                                            "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/6-regular-expressions.md"
                                        },
                                        {
+                                           "id":  "c4a71e58-30b6-4a92-8d05-71f9be3c6a1d",
+                                           "title":  "Dates and Times",
+                                           "tooltip":  "Week 11 - date, datetime, timedelta, strftime and strptime",
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/7-dates-and-times.md"
+                                       },
+                                       {
                                            "id":  "74aad0ce-fb11-4cc4-8005-7ab924e96400",
                                            "title":  "Packages",
                                            "tooltip":  "Week 11 - Package structure, __init__.py, importing from a package, and pip",
-                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/7-packages.md"
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/8-packages.md"
                                        },
                                        {
                                            "id":  "750cd2f4-bdb9-4221-b3a4-fe7043497f53",
                                            "title":  "The Standard Library",
                                            "tooltip":  "Week 11 - random, statistics, collections, and finding more modules",
-                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/8-the-standard-library.md"
-                                       },
-                                       {
-                                           "id":  "c4a71e58-30b6-4a92-8d05-71f9be3c6a1d",
-                                           "title":  "Dates and Times",
-                                           "tooltip":  "Week 11 - date, datetime, timedelta, strftime and strptime",
-                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/9-dates-and-times.md"
+                                           "url":  "modules/m5-production-ready-python/wk11-files-modules-and-packages/9-the-standard-library.md"
                                        },
                                        {
                                            "id":  "9d8b6631-d91c-4991-bf93-cd6ac2d86847",

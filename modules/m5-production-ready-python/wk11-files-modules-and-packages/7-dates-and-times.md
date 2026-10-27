@@ -181,4 +181,4 @@ print(gap.days)
 - 📎 **Official Python reference for the `datetime` module** — https://docs.python.org/3/library/datetime.html
 - 📎 **Official list of format codes** — https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
 
-This completes the topics of this week. With files, modules, packages, regular expressions and the standard library, you can now build programs that store data, organise code and reuse ready-made tools.
+As a program grows, it may need many modules of its own. In the next topic, **Packages**, you'll learn how to group related modules together in folders.

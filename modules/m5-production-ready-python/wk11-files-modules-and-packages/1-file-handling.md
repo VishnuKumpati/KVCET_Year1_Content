@@ -1,16 +1,31 @@
-# Reading and Writing Files
+# File Handling
 
-Data stored in variables is usually lost when a program ends. But programs often need to save information, such as student names, marks or reports, and use it again later.
+Variables store data while a program runs. But what happens when the program ends and we need that data again?
 
-**Files** let a program save data on a computer's storage and read it back when needed.
+Programs often need to preserve information such as student names, marks or reports and use it later. **Files** make this possible by storing data on a computer's storage, even after a program ends.
 
 > **File handling means using a program to create, read, write and manage files.**
+
+## What Is a File
+
+> **A file is a named collection of data stored on a computer. Unlike data held only in variables, its contents can remain available after a program ends or the computer is switched off.**
+
+Every file has a **name** and usually an **extension**, the part after the dot, such as `.txt` in `students.txt`. The extension usually indicates the file's type or format, although it does not guarantee what the file actually contains.
+
+Files are of two main types:
+
+| Type | What It Stores | Common Examples |
+| --- | --- | --- |
+| **Text file** | Characters that people can read, such as letters, numbers and symbols, arranged in lines | `.txt`, `.csv`, `.json`, `.py`, `.html` |
+| **Binary file** | Data stored as bytes, which is not meant to be read as plain text | `.jpg`, `.png`, `.mp3`, `.pdf`, `.exe` |
+
+This topic focuses on **text files**. To work with a binary file, add `b` to the mode, for example `"rb"` to read or `"wb"` to write binary data.
 
 ## Opening a File
 
 Python opens a file using the built-in **`open()`** function.
 
-**Syntax:**
+**Example:**
 
 ```python
 file = open("students.txt", "w")
@@ -76,11 +91,11 @@ with open("students.txt", "w") as file:
 
 ## Choosing a File Encoding
 
-A computer does not store letters directly. It stores everything as **numbers**. So when text is saved in a file, each character must be changed into numbers, and when the file is read, those numbers must be changed back into characters.
+Computers store data as **bytes**, small units of data that a computer can store and process. When text is saved in a file, an encoding converts characters into bytes. When the file is read, the same encoding is used to convert those bytes back into characters.
 
-> **An encoding is a set of rules that tells Python which numbers represent which characters.**
+> **An encoding is a set of rules that defines how characters are represented as bytes.**
 
-For example, in the UTF-8 encoding, the letter `A` is stored as the number `65`.
+For example, in UTF-8, the letter `A` is represented by the byte value `65`. A character can use one or more bytes: `A` uses one byte, while the Tamil letter `வ` uses three.
 
 **UTF-8** is the most widely used encoding. It can store characters from almost every language in the world, including English, Tamil, Hindi and symbols.
 
@@ -109,7 +124,7 @@ Hello
 - The first block writes English, Tamil and Hindi words into the file using UTF-8.
 - The second block reads the file using the **same** encoding, so every word appears correctly.
 
-**Always use the same encoding to write and read a file.** If a file written in UTF-8 is read with a different encoding, the text may appear as wrong characters, or Python may raise a **`UnicodeDecodeError`**.
+**Always use the same encoding to write and read a file.** If a file written in UTF-8 is read using a different encoding, the text may appear incorrectly, or Python may raise a **`UnicodeDecodeError`**. The result depends on the encoding used and the bytes in the file.
 
 `encoding="utf-8"` is an **option** passed to `open()`. It is not a file mode, so it is written after the mode, separated by a comma. The remaining examples in this topic use it.
 
@@ -199,7 +214,7 @@ Priya
 
 - The first `readline()` reads `"Ravi\n"`.
 - The second `readline()` reads `"Priya\n"`, because Python keeps track of the **current reading position** in the file. Each call continues from where the previous one stopped.
-- `strip()` removes whitespace, including the newline character (`\n`), from the beginning and end of a string.
+- `strip()` removes whitespace, including the newline character (`\n`), from the beginning and end of a string. Be careful: `strip()` also removes spaces and tabs at the beginning and end, which may be meaningful in some data.
 
 ### When There Is Nothing Left to Read
 

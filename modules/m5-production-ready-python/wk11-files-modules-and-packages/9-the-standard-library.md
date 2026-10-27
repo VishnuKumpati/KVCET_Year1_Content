@@ -106,4 +106,4 @@ The standard library contains many more modules. Before writing code for a commo
 - 📎 **Official Python Standard Library reference** — https://docs.python.org/3/library/index.html
 - 📎 **Official Python tutorial: a brief tour of the standard library** — https://docs.python.org/3/tutorial/stdlib.html
 
-One of the most widely used standard library modules is `datetime`, which works with dates and times. In the next topic, **Dates and Times**, you'll learn how to use it.
+This completes the topics of this week. With files, modules, packages, regular expressions and the standard library, you can now build programs that store data, organise code and reuse ready-made tools.

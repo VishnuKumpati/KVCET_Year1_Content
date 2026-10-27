@@ -1,8 +1,8 @@
 # Abstraction
 
-When a class is used in a program, the code using it usually needs to know **what** the class can do, not **how** it does it. Showing every internal detail makes a program harder to understand and use.
+A parent class often expects every child class to provide a certain method. If a new child class forgets to write that method, Python does not complain, and the program can quietly give wrong results.
 
-In a group of related classes, every child class may also need to provide certain methods. Without a rule that enforces this, a child class can easily miss a required method. **Abstraction**, the fourth pillar, solves both problems.
+Object-oriented programming solves this through **abstraction**. The parent class declares which methods are required, and each child class provides its own version. The code using these classes then needs to know only **what** each method does, not **how** it works.
 
 > **Abstraction means showing only the essential features of an object and hiding the details of how they work.**
 
@@ -126,6 +126,14 @@ This shape has an area of 9
 - When `describe()` calls `self.area()`, Python runs the `area()` method of the object's own class.
 
 The code using these objects only calls `describe()`. It does not need to know how each shape calculates its area. This is abstraction.
+
+> **Note:** If a child class does not implement an inherited abstract method, Python raises a **`TypeError`** when you try to create an object from that class. For example, if `Rectangle` did not implement `area()`, `Rectangle()` would raise an error similar to this:
+>
+> ```
+> TypeError: Can't instantiate abstract class Rectangle without an implementation for abstract method 'area'
+> ```
+>
+> "Instantiate" means "create an object from". The exact wording of the message can vary between Python versions.
 
 ## Abstraction and Encapsulation
 

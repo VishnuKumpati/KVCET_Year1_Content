@@ -1,8 +1,8 @@
 # Dunder Methods
 
-Objects of built-in types work naturally with Python's built-in functions and operators. A string can be printed, a list can be measured with `len()`, and two numbers can be added with `+`. Objects of your own classes cannot do these things in a useful way until the class tells Python how. **Dunder methods** let a class define this behaviour.
+Objects of built-in types work naturally with Python's built-in functions and operators. A string can be printed, a list can be measured with `len()`, and two numbers can be added with `+`. Objects of your own classes do not automatically support every operation in the way you might expect. You can define **dunder methods** to tell Python how these objects should behave with particular functions and operators.
 
-> **Dunder methods are special methods whose names start and end with two underscores. Python calls them automatically when an object is used with certain built-in functions or operators.**
+> **Dunder methods are special methods whose names start and end with two underscores. Python calls them automatically when an object is used with supported built-in functions, operators, or other language features. They allow objects of your own classes to work with Python's built-in features.**
 
 The word **dunder** is short for "**d**ouble **under**score". Dunder methods are also called **magic methods** or **special methods**. `__init__()` is one dunder method: Python calls it automatically to initialise an object when the object is created.
 
@@ -39,7 +39,7 @@ student1 = Student("Ravi", 85)
 print(student1)
 ```
 
-**Output:**
+**Possible output:**
 
 ```
 <__main__.Student object at 0x7f40a11feed0>
@@ -78,7 +78,7 @@ Printing a list of students uses `__repr__()` for each object inside the list, r
 
 > **`__repr__()` returns a string that represents an object clearly for programmers. Ideally, the string should help them understand the object and, when practical, recreate it.**
 
-The string returned by `__repr__()` usually looks like the code used to create the object.
+The string returned by `__repr__()` should clearly represent the object. When practical, it can look like the code used to create the object.
 
 ```python
 class Student:
@@ -147,7 +147,7 @@ The same pattern works for many operators. Python provides corresponding dunder 
 
 ### Overloading the `+` Operator
 
-Python cannot add two objects of your own class unless the class provides a suitable method. Without one, using `+` with those objects will generally raise a **`TypeError`**.
+Python needs a suitable method to define how `+` works with objects of your own class. If neither operand supports the operation, Python raises a **`TypeError`**. An **operand** is a value on either side of an operator, such as `trip1` and `trip2` in `trip1 + trip2`.
 
 The action here is `+`, so Python looks for `__add__()`.
 
@@ -181,7 +181,7 @@ When Python runs `trip1 + trip2`, it calls `trip1.__add__(trip2)`:
 - `other` is `trip2`, the object on the right of `+`.
 - The method returns a new `Distance` object with the total distance.
 
-Printing `total` then uses `__str__()`, so the result appears as `200 km`.
+`__add__()` returns a **new** object; it does not change `trip1` or `trip2`. Printing `total` then uses `__str__()`, so the result appears as `200 km`.
 
 ### Overloading Comparison Operators
 
@@ -221,9 +221,11 @@ True
 
 ### Operator Overloading and Method Overloading
 
-Python **supports operator overloading**, but it does **not support traditional method overloading**. Operator overloading gives an operator a new meaning for your class. Traditional method overloading means defining multiple methods with the same name but different parameter lists. Python does not support this in the same way as languages such as Java. If you define the same method name multiple times in a class, the later definition replaces the earlier one.
+Python **supports operator overloading**, but not traditional method overloading, as explained in **Polymorphism**. Operator overloading gives an existing operator a new meaning for your class. It does not create several methods with the same name.
 
 ## Quick Reference
+
+The last few rows follow the same pattern and are included for reference.
 
 | What You Write | What Python Looks For | Memory Clue |
 | --- | --- | --- |
@@ -237,9 +239,14 @@ Python **supports operator overloading**, but it does **not support traditional 
 | `a < b` | `__lt__()` | Compare it (less than) |
 | `a > b` | `__gt__()` | Compare it (greater than) |
 
+## Points to Remember
+
+- **Python calls dunder methods automatically.** You write `print(student1)` or `trip1 + trip2`, not `student1.__str__()` or `trip1.__add__(trip2)`.
+- **Use the special method names defined by Python**, such as `__str__()` and `__len__()`. Avoid inventing your own double-underscore names, because Python reserves this naming pattern for special purposes.
+- **Return the correct type.** For example, `__str__()` and `__repr__()` must return strings, and `__len__()` must return a non-negative integer.
 
 ## Further Reading
 
 - 📎 **Official Python reference for special method names** — https://docs.python.org/3/reference/datamodel.html#special-method-names
 
-You've used special syntax such as `@classmethod` and `@abstractmethod`. This syntax uses **decorators**, which are different from dunder methods. In the next topic, **Decorators**, you'll learn how decorators work and how to create your own.
+You've already seen decorators such as `@classmethod` and `@abstractmethod`. In the next topic, **Decorators**, you'll learn how they work and how to create your own.
