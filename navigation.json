@@ -633,9 +633,9 @@
                                        },
                                        {
                                            "id":  "a93e276b-0ff5-4729-9752-32a3212ff6ac",
-                                           "title":  "APIs and HTTP",
-                                           "tooltip":  "Week 12 - Requests and responses, methods, status codes and headers",
-                                           "url":  "modules/m5-production-ready-python/wk12-libraries-environments-and-apis/4-apis-and-http.md"
+                                           "title":  "Web APIs and API Keys",
+                                           "tooltip":  "Week 12 - Clients and servers, HTTP, URLs, status codes, endpoints, and API keys",
+                                           "url":  "modules/m5-production-ready-python/wk12-libraries-environments-and-apis/4-web-apis-and-api-keys.md"
                                        },
                                        {
                                            "id":  "43d6cbc0-445b-4d13-9471-58fed88387ce",
@@ -646,14 +646,20 @@
                                        {
                                            "id":  "e04476e8-b7a4-4a8c-adc9-4582059392ea",
                                            "title":  "Handling API Errors",
-                                           "tooltip":  "Week 12 - Exceptions against status codes, retries, and rate limits",
+                                           "tooltip":  "Week 12 - Status codes, raise_for_status, connection errors, timeouts, and invalid JSON",
                                            "url":  "modules/m5-production-ready-python/wk12-libraries-environments-and-apis/6-handling-api-errors.md"
+                                       },
+                                       {
+                                           "id":  "512c2db2-ce4c-44df-a137-1bd1d51c6b4d",
+                                           "title":  "Building a Small API Program",
+                                           "tooltip":  "Week 12 - Fetching tasks from an API and saving a CSV and JSON report",
+                                           "url":  "modules/m5-production-ready-python/wk12-libraries-environments-and-apis/7-building-a-small-api-program.md"
                                        },
                                        {
                                            "id":  "f8304361-d1d8-4f63-87b8-57e3a0ec248f",
                                            "title":  "Introduction to pandas",
                                            "tooltip":  "Week 12 - DataFrames, selection, filtering, and groupby",
-                                           "url":  "modules/m5-production-ready-python/wk12-libraries-environments-and-apis/7-introduction-to-pandas.md"
+                                           "url":  "modules/m5-production-ready-python/wk12-libraries-environments-and-apis/8-introduction-to-pandas.md"
                                        },
                                        {
                                            "id":  "e91cf1dd-d623-470b-ad95-97fdfc1116a5",

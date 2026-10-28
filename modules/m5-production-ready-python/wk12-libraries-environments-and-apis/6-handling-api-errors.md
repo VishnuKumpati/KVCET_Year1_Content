@@ -1,270 +1,261 @@
 # Handling API Errors
 
-Reading a local file can fail. Calling an API across the internet can fail in far more ways: the network may be down, the server may be overloaded, the address may be wrong, the response may not be what was promised, and you may simply be calling too often.
+A program that calls an API depends on things it cannot control: the internet connection, the server and the data returned. The connection may fail, the server may respond too slowly, the requested data may not exist, or the response may not contain valid JSON.
 
-Code that assumes success works on your machine and fails in use. This chapter is about the difference.
+These problems do not all behave the same way. **Some cause Python to raise an exception; others return a response that the program must check.**
 
-## Two Kinds of Failure
+> **Handling API errors means detecting problems that occur while calling an API and responding to them appropriately, instead of allowing unexpected failures to disrupt the program.**
 
-They need handling differently, and confusing them is the usual mistake.
+This topic uses `try` and `except`, covered in **File Paths and Errors**, and the `requests` library and JSONPlaceholder API from **Calling an API with requests**.
 
-**The request never completed.** No response arrived at all — no network, no such host, the server took too long. `requests` raises an **exception**, so a `try` is needed.
+## Two Kinds of API Problems
 
-**The server answered, and the answer was no.** A response arrived normally, carrying a `4xx` or `5xx` status. **No exception is raised.** The status must be checked.
+Problems with an API call fall into two groups. It is important to tell them apart, because Python handles them differently.
 
-```mermaid
-flowchart TD
-    A["requests.get(...)"] --> B{"Did a response arrive?"}
-    B -->|No| C["Exception raised<br>ConnectionError, Timeout"]
-    B -->|Yes| D{"Status code?"}
-    D -->|"2xx"| E["Success"]
-    D -->|"4xx / 5xx"| F["No exception.<br>You must check."]
-```
+| Kind of Problem | What Happens | Examples | Does `requests` Raise an Exception? |
+| --- | --- | --- | --- |
+| **The request fails completely** | No response arrives from the server | No internet connection, server cannot be reached | **Yes**, automatically |
+| **The server responds with an error** | A response arrives, but its status code shows a problem | 404 Not Found, 401 Unauthorized, 500 Internal Server Error | **No**, unless you ask for it |
 
-## The Exceptions
+The second row surprises many beginners. When the server answers with a **404**, `requests` does **not** raise an exception. It returns a `Response` object as usual, and the program continues. **You must check the status code yourself.**
 
-All of them inherit from `requests.RequestException`:
+## Checking the Status Code
 
-| Exception | Cause |
-| --- | --- |
-| `ConnectionError` | no network, DNS failure, connection refused |
-| `Timeout` | the server did not answer in time |
-| `TooManyRedirects` | the server redirected in a loop |
-| `HTTPError` | raised by `raise_for_status()` on a `4xx` or `5xx` |
-| `JSONDecodeError` | the body was not valid JSON |
-| `RequestException` | the base class for all of the above |
+The simplest way to detect a server error is to check `response.status_code` before using the data.
 
 ```python
 import requests
 
-print(issubclass(requests.ConnectionError, requests.RequestException))
-print(issubclass(requests.Timeout, requests.RequestException))
-```
+response = requests.get("https://jsonplaceholder.typicode.com/todos/999999", timeout=10)
 
-**Output:**
-
-```
-True
-True
-```
-
-That hierarchy is what makes `except requests.RequestException` a sound catch-all — it catches every failure from the library and nothing else. A bare `except:` would also swallow your own bugs.
-
-```python
-import requests
-
-try:
-    requests.get("https://no-such-host-abc123.invalid", timeout=10)
-except requests.ConnectionError:
-    print("Could not reach the server")
-```
-
-**Output:**
-
-```
-Could not reach the server
-```
-
-## raise_for_status
-
-Checking `response.ok` by hand works. `raise_for_status()` turns a bad status into an exception instead, which lets both kinds of failure be handled in one `try`:
-
-```python
-import requests
-
-response = requests.get("https://jsonplaceholder.typicode.com/todos/99999999", timeout=10)
-
-try:
-    response.raise_for_status()
-except requests.HTTPError as error:
-    print("HTTPError:", error)
-```
-
-**Output:**
-
-```
-HTTPError: 404 Client Error: Not Found for url: https://jsonplaceholder.typicode.com/todos/99999999
-```
-
-It does nothing on a `2xx` and raises on anything from `400` upwards. The raised error carries the response, so `error.response.status_code` is available in the handler.
-
-Use `raise_for_status()` when any failure should stop the operation. Use `response.ok` when a `404` is a normal outcome you want to handle without exceptions — checking whether a record exists, for instance.
-
-## Bodies That Are Not JSON
-
-An endpoint returning HTML, or an error page, breaks `json()`:
-
-```python
-import requests
-
-response = requests.get("https://example.com", timeout=10)
 print(response.status_code)
+print(response.ok)
 
-try:
-    response.json()
-except requests.exceptions.JSONDecodeError:
-    print("The response was not valid JSON")
+if response.status_code == 404:
+    print("Task not found")
+elif response.status_code == 200:
+    print(response.json()["title"])
+else:
+    print("Unexpected status code:", response.status_code)
 ```
 
 **Output:**
 
 ```
-200
-The response was not valid JSON
+404
+False
+Task not found
 ```
 
-A `200` and still unparseable. This is why a successful status is not on its own a guarantee — a proxy, a login page or a maintenance notice can all return `200` with a body you cannot use.
+- No task has the ID `999999`, so the server responds with **404**.
+- `response.ok` is `False`, because 404 is not below 400.
+- The three branches handle three different results:
+  - **404:** the task does not exist, so a clear message is printed.
+  - **200:** the request succeeded, so the title is printed.
+  - **Anything else**, such as 401 or 500: the status code is printed, because the problem is something other than a missing task.
 
-When debugging, print `response.headers["Content-Type"]` and the first part of `response.text`. It is usually immediately obvious what arrived.
+Without this check, `response.json()["title"]` would fail, because the response body is an empty `{}` with no `"title"` key.
 
-## A Robust Fetch
+Every example in this topic includes `timeout=10`, as recommended in **Calling an API with requests**.
 
-Everything together, in a function worth reusing:
+## Turning Error Status Codes into Exceptions
+
+Checking the status code with `if` works well when you want to handle a particular response yourself. But if you want Python to treat HTTP error responses as **exceptions**, `requests` provides a method called `raise_for_status()`.
+
+A `try` block contains code that might raise an exception. If an exception occurs, Python **skips the remaining statements** in that block and looks for a matching `except` block. If one matches, its code runs.
+
+> **`raise_for_status()` is a `Response` method that raises an `HTTPError` exception if the status code shows an error (400 or above). If the status code shows success, it does nothing.**
 
 ```python
 import requests
 
-def fetch_json(url, **kwargs):
+try:
+    response = requests.get("https://jsonplaceholder.typicode.com/todos/999999", timeout=10)
+    response.raise_for_status()
+    print(response.json())
+except requests.exceptions.HTTPError:
+    print("The server returned an error:", response.status_code)
+```
+
+**Output:**
+
+```
+The server returned an error: 404
+```
+
+1. `requests.get()` receives a response with status code **404**.
+2. `response.raise_for_status()` sees that 404 is an error status, so it raises an **`HTTPError`**.
+3. Python skips `print(response.json())` and jumps to the matching `except` block.
+4. The `except` block prints a clear message.
+
+If the status code had been `200`, `raise_for_status()` would do nothing, and the data would be printed.
+
+`requests.exceptions.HTTPError` is the full name of the exception. All the exceptions in this topic are inside `requests.exceptions`.
+
+`raise_for_status()` handles HTTP error responses, such as 404 and 500. But what happens if the program cannot reach the server and receives **no HTTP response at all**? In that case, `requests` raises a connection-related exception.
+
+## Handling Connection Errors
+
+If the program cannot reach the server at all, for example because there is no internet connection or the address is wrong, `requests` raises a **`ConnectionError`**.
+
+```python
+import requests
+
+try:
+    response = requests.get("https://this-site-does-not-exist.invalid", timeout=10)
+except requests.exceptions.ConnectionError:
+    print("Could not connect to the server")
+```
+
+**Output:**
+
+```
+Could not connect to the server
+```
+
+The address ends with `.invalid`, which is reserved for examples and never belongs to a real website. So no server can be reached, and `requests` raises a `ConnectionError`.
+
+## Handling Timeouts
+
+Sometimes the server is reachable, but the request takes too long. Instead of waiting forever, you can set a **timeout**.
+
+`timeout=10` sets a limit on how long `requests` waits for a connection or for data to arrive. If that limit is exceeded, `requests` raises a **`Timeout`** exception.
+
+```python
+import requests
+
+try:
+    response = requests.get("https://jsonplaceholder.typicode.com/todos/1", timeout=0.001)
+except requests.exceptions.Timeout:
+    print("The server took too long to respond")
+```
+
+**Possible output:**
+
+```
+The server took too long to respond
+```
+
+This example uses an extremely short timeout, `0.001` seconds, to make a timeout **more likely** so you can see it happen. It will often raise a `Timeout` exception, but network behaviour can vary. In real programs, use a sensible timeout, such as `10` seconds.
+
+So far, every problem has been about **receiving** a response. But receiving a response does not guarantee that its contents are in the format you expect. For example, a request may return HTML instead of JSON.
+
+## Handling Invalid JSON
+
+A response can arrive successfully but still not contain JSON. For example, a website's home page sends back HTML, the language of web pages. Calling `response.json()` on it raises a **`JSONDecodeError`**.
+
+```python
+import requests
+
+response = requests.get("https://jsonplaceholder.typicode.com", timeout=10)
+
+try:
+    data = response.json()
+except requests.exceptions.JSONDecodeError:
+    print("The response is not valid JSON")
+```
+
+**Output:**
+
+```
+The response is not valid JSON
+```
+
+The base URL of JSONPlaceholder returns its home page, not API data. The status code is `200`, but the body is HTML, so it cannot be converted into Python data.
+
+In a real program, check the HTTP status **and** whether the response contains valid JSON. A response can have a successful status code but contain data in an unexpected format.
+
+## Common `requests` Exceptions
+
+| Exception | When It Is Raised |
+| --- | --- |
+| `HTTPError` | `raise_for_status()` finds an error status code, such as 404 or 500 |
+| `ConnectionError` | The server cannot be reached |
+| `Timeout` | The server does not respond within the timeout |
+| `JSONDecodeError` | `response.json()` is called on a body that is not valid JSON |
+| `RequestException` | A general exception type that can catch many errors raised by `requests`, including the exceptions listed above |
+
+If you do not need to tell different request failures apart, you can catch the general `RequestException` type. This is useful when you only need to show one message for any of these request problems:
+
+```python
+import requests
+
+try:
+    response = requests.get("https://this-site-does-not-exist.invalid", timeout=10)
+    response.raise_for_status()
+except requests.exceptions.RequestException:
+    print("The request failed")
+```
+
+**Output:**
+
+```
+The request failed
+```
+
+## Putting It All Together
+
+The example below is a **combined practice example**. It brings together every technique from this topic in one function. Each part has already been explained separately, so read it one block at a time.
+
+```python
+import requests
+
+def get_todo(todo_id):
+    url = "https://jsonplaceholder.typicode.com/todos/" + str(todo_id)
+
     try:
-        response = requests.get(url, timeout=10, **kwargs)
+        response = requests.get(url, timeout=10)
         response.raise_for_status()
         return response.json()
-    except requests.HTTPError as error:
-        print(f"Server returned {error.response.status_code}")
-    except requests.ConnectionError:
-        print("Could not reach the server")
-    except requests.Timeout:
-        print("The server took too long to respond")
+    except requests.exceptions.HTTPError:
+        print("Error: the server returned status code", response.status_code)
+    except requests.exceptions.Timeout:
+        print("Error: the server took too long to respond")
+    except requests.exceptions.ConnectionError:
+        print("Error: could not connect to the server")
     except requests.exceptions.JSONDecodeError:
-        print("The response was not valid JSON")
-    except requests.RequestException as error:
-        print(f"Request failed: {error}")
+        print("Error: the response is not valid JSON")
+
     return None
 
-print(fetch_json("https://jsonplaceholder.typicode.com/todos/1"))
-print(fetch_json("https://jsonplaceholder.typicode.com/todos/99999999"))
-print(fetch_json("https://example.com"))
+todo = get_todo(1)
+if todo:
+    print("Title:", todo["title"])
+
+todo = get_todo(999999)
+if todo:
+    print("Title:", todo["title"])
 ```
 
 **Output:**
 
 ```
-{'userId': 1, 'id': 1, 'title': 'delectus aut autem', 'completed': False}
-Server returned 404
-None
-The response was not valid JSON
-None
+Title: delectus aut autem
+Error: the server returned status code 404
 ```
 
-Three points of design.
+- **Task 1 exists.** The request succeeds, `raise_for_status()` does nothing, and the function returns the task's data.
+- **Task 999999 does not exist.** `raise_for_status()` raises an `HTTPError`, the function prints a message and returns `None`.
+- `if todo:` uses the data only when the function returned a task, because `None` counts as false.
 
-**Specific handlers come before general ones.** `RequestException` is last, because it would otherwise catch everything above it. Python tries the `except` clauses in order.
+When the request succeeds, the function returns the task data. When a handled error occurs, it prints a message and returns `None`, meaning no task data was returned. The `if todo:` check prevents the program from trying to read a title when no task was returned.
 
-**The function returns `None` on failure.** The caller checks the result rather than the exception, which keeps call sites simple.
+### The Order of `except` Blocks Matters
 
-**Each failure gets its own message.** "Could not reach the server" and "Server returned 404" send someone to completely different places. A single "something went wrong" wastes the information the code already had.
+Python checks `except` blocks **from top to bottom** and runs the first matching block. Some exception types overlap. For example, `ConnectTimeout`, the exception raised when connecting takes too long, is both a `Timeout` and a `ConnectionError`.
 
-## Retrying
+Placing **`Timeout` before `ConnectionError`** gives connection timeouts the more specific timeout message. As a general rule, **place more specific exceptions before more general ones**, and put `RequestException` last if you include it.
 
-Some failures are temporary. A timeout, a dropped connection, a `503` — the same request a second later may well succeed.
+## Points to Remember
 
-Two rules decide what to retry:
-
-**Retry `5xx`, `429`, timeouts and connection errors.** The request was acceptable; the problem is at the other end or in between.
-
-**Do not retry `4xx`.** A `404` will be a `404` however many times you ask. A `401` needs a valid key, not another attempt.
-
-And retry with **exponential backoff** — a delay that doubles each time. Retrying immediately adds load to a server that is already struggling:
-
-```python
-import time
-import requests
-
-def fetch_with_retry(url, attempts=3):
-    delay = 1
-    for attempt in range(1, attempts + 1):
-        try:
-            response = requests.get(url, timeout=10)
-            if response.status_code < 500 and response.status_code != 429:
-                return response
-            print(f"attempt {attempt}: status {response.status_code}, retrying")
-        except (requests.ConnectionError, requests.Timeout) as error:
-            print(f"attempt {attempt}: {type(error).__name__}, retrying")
-        if attempt < attempts:
-            time.sleep(delay)
-            delay = delay * 2
-    print("giving up")
-    return None
-
-response = fetch_with_retry("https://httpbin.org/status/500", attempts=2)
-print(response)
-```
-
-**Output:**
-
-```
-attempt 1: status 500, retrying
-attempt 2: status 500, retrying
-giving up
-None
-```
-
-Note the `if attempt < attempts` guard. Without it the function sleeps after the final attempt, delaying the failure for no reason.
-
-`https://httpbin.org/status/500` returns whatever status you put in the URL, which makes it useful for testing error handling deliberately rather than waiting for a real failure.
-
-**Always cap the attempts.** A retry loop with no limit turns a server outage into a program that never finishes.
-
-## Rate Limits
-
-APIs limit how often a client may call — perhaps 60 requests a minute, or 1000 a day. Exceeding the limit returns:
-
-```
-429 Too Many Requests
-```
-
-The response often carries a `Retry-After` header saying how many seconds to wait:
-
-```python
-wait = int(response.headers.get("Retry-After", 60))
-print(wait)
-```
-
-**Output:**
-
-```
-5
-```
-
-`get()` with a default matters here: the header is optional, and missing it should not crash the program handling the rate limit.
-
-Many APIs also report the current state of your allowance in headers such as `X-RateLimit-Remaining` and `X-RateLimit-Reset`, which lets a program slow down before being cut off.
-
-Four practices keep you inside the limits:
-
-**Pause between requests in a loop.** A `time.sleep(0.5)` between calls is usually enough, and costs nothing compared with being blocked.
-
-**Cache what you fetch.** Data that does not change every minute should be stored and reused. This is the largest reduction available in most programs.
-
-**Ask for more at once.** One request for 100 records beats 100 requests for one, where the API supports it.
-
-**Respect `Retry-After`.** When the server says wait five seconds, waiting four is worse than useless.
-
-## Failing Well
-
-When a request finally cannot succeed, the program still has a choice.
-
-**Use a default.** Cached or fallback data may be better than nothing — a weather app can show the last reading with a note about its age.
-
-**Continue past it.** Processing a hundred records should not stop entirely because one failed. Record the failure, carry on, and report at the end.
-
-**Stop, clearly.** When the data is essential, stop with a message saying what failed and what to do about it.
-
-What to avoid is failing **silently**. An empty result that should have been data, with nothing logged, produces a report of zeroes that looks like an answer.
+- **A 404 or 500 response does not raise an exception by itself.** Check the status code, or call `raise_for_status()`.
+- **`ConnectionError`** means the server could not be reached, and **`Timeout`** means it did not respond in time.
+- **`JSONDecodeError`** means the response body is not valid JSON, even if the status code is 200.
+- **Order `except` blocks from specific to general**, and always set a `timeout`.
 
 ## Further Reading
 
-- **requests: errors and exceptions** — https://requests.readthedocs.io/en/latest/user/quickstart/#errors-and-exceptions
-- **HTTP response status codes** — https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+- 📎 **Official `requests` guide to errors and exceptions** — https://requests.readthedocs.io/en/latest/user/quickstart/#errors-and-exceptions
+- 📎 **Official Python tutorial on handling exceptions** — https://docs.python.org/3/tutorial/errors.html#handling-exceptions
 
-A failed request raises; a failed *response* does not, and must be checked. Retry the temporary failures with a growing delay, never the `4xx` ones, and always cap the attempts. Next, analysing data once you have it.
+You can now call an API and handle the problems that may occur. In the next topic, **Building a Small API Program**, you'll combine everything from this week and the files topics into one complete program.
