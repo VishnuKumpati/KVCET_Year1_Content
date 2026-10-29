@@ -216,7 +216,7 @@ Now try two more URLs:
 
 ## Reading an API's Documentation
 
-Every public API has documentation that explains how to use it. Before using any API, look for these details, using the skills from **Reading Documentation**:
+Every public API has documentation that explains how to use it. Before using any API, look for these details:
 
 | Detail | Question It Answers |
 | --- | --- |

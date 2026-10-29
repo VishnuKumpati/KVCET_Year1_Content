@@ -1,14 +1,76 @@
 # Introduction to pandas
 
-Much of the data programs work with is arranged as a **table**: rows of records, with the same columns in each row. Student marks, sales records, survey results and the CSV file from **Building a Small API Program** are all tables.
+Much of the data that programs work with is arranged as a **table**. Student marks, sales records, survey results and the CSV file from **Building a Small API Program** are all tables. Working with such data means answering questions about it: What is the average? Which records match a condition? Which record has the highest value?
 
-Python's lists and dictionaries can hold table data, but answering simple questions takes many lines of code. Finding the average mark, keeping only the students from one city, or sorting by marks each needs its own loop. **pandas** is an external library built to make this work short and simple.
+This topic first explains how table data is organised, then shows why answering these questions with lists and loops is slow, and finally introduces **pandas**, a library built for this work.
 
-> **pandas is an external Python library for storing, exploring and analysing table data. It lets you filter, sort and summarise data with short, readable code instead of writing loops.**
+## Understanding Table Data
 
-pandas is one of the most widely used Python libraries for data analysis.
+> **Table data, also called tabular data, is data organised into rows and columns, where every row has a value for the same set of columns.**
 
-## Installing pandas
+Here is a small table of student data:
+
+| name | city | marks |
+| --- | --- | --- |
+| Ravi | Chennai | 85 |
+| Priya | Madurai | 92 |
+| Arun | Chennai | 78 |
+| Meena | Coimbatore | 66 |
+| Kavya | Madurai | 88 |
+
+Every table is described using the same terms:
+
+| Term | Meaning | In This Table |
+| --- | --- | --- |
+| **Row** | One complete **record**: all the details about one item | `Priya, Madurai, 92` |
+| **Column** | One **attribute** shared by every record | The `marks` column |
+| **Column label** | The name at the top of a column, also called a **header** | `name`, `city`, `marks` |
+| **Cell** | The single value where one row and one column meet | Priya's marks, `92` |
+
+## Working with Table Data Without pandas
+
+Python can store this table as a **list of dictionaries**: each dictionary is one row, and each key is a column label. Answering questions, however, needs a separate loop each time.
+
+```python
+students = [
+    {"name": "Ravi", "city": "Chennai", "marks": 85},
+    {"name": "Priya", "city": "Madurai", "marks": 92},
+    {"name": "Arun", "city": "Chennai", "marks": 78},
+    {"name": "Meena", "city": "Coimbatore", "marks": 66},
+    {"name": "Kavya", "city": "Madurai", "marks": 88},
+]
+
+total = 0
+for student in students:
+    total = total + student["marks"]
+print("Average:", total / len(students))
+
+for student in students:
+    if student["city"] == "Chennai":
+        print(student["name"])
+```
+
+**Output:**
+
+```
+Average: 81.8
+Ravi
+Arun
+```
+
+- Finding the **average** needed a variable, a loop and a calculation.
+- Finding the students **from Chennai** needed another loop and an `if` statement.
+- Sorting, counting and saving would each need even more code.
+
+This works for five rows, but real tables often have thousands of rows and many questions to answer. Writing a loop for every question is slow and easy to get wrong.
+
+## What pandas Is
+
+> **pandas is an external Python library for storing, exploring and analysing tabular data. It lets you select, filter, sort and summarise data with short, readable code instead of writing loops.**
+
+pandas is one of the most widely used Python libraries for data analysis. Later in this topic, the same average and the same Chennai filter each take **one line** of pandas code.
+
+### Installing pandas
 
 pandas is an external library, so it must be installed in your project's virtual environment. Activate the environment, as explained in **Virtual Environments and pip**, and run:
 
@@ -18,9 +80,9 @@ python -m pip install pandas
 
 Downloading needs an internet connection. pandas also installs a few libraries it depends on, such as `numpy`.
 
-## Importing pandas
+### Importing pandas
 
-pandas is almost always imported with the short name **`pd`**:
+pandas is conventionally imported with the short name **`pd`**:
 
 ```python
 import pandas as pd
@@ -28,22 +90,23 @@ import pandas as pd
 
 `as pd` gives the library a shorter name, as covered in **Modules and Imports**. `pd` is the widely used convention in pandas examples and documentation, so using it makes code easier to recognise and follow.
 
-## The Two Main Structures: Series and DataFrame
+## Labels and the Index
 
-pandas provides two primary data structures: the **Series** and the **DataFrame**.
+In a list, a value is found by its **position**, such as `marks[0]`. pandas adds something more useful: a **label** for every value.
+
+> **An index is the set of labels that pandas attaches to the values in a data structure, so each value can be identified and accessed by its label.**
+
+If no labels are given, pandas uses the numbers `0`, `1`, `2` and so on as the index, similar to list positions. Labels can also be meaningful values, such as student names.
+
+## The Two Primary Data Structures
+
+pandas provides two primary data structures: the **Series** and the **DataFrame**. Both use an index.
+
+### The Series
 
 > **A Series is a one-dimensional collection of values, where each value has an associated label called an index.**
 
-> **A DataFrame is a two-dimensional table of rows and columns. Each column in a DataFrame is a Series.**
-
-**One-dimensional** means the values are arranged in a single sequence. **Two-dimensional** means the values are arranged in both rows and columns.
-
-| Data Structure | Dimensions | Labels |
-| --- | --- | --- |
-| **Series** | One-dimensional | An **index**, which labels each value |
-| **DataFrame** | Two-dimensional | A **row index**, which labels each row, and **column labels**, which name each column |
-
-### Creating a Series
+**One-dimensional** means the values are arranged in a single sequence, like one column of the table above.
 
 ```python
 import pandas as pd
@@ -61,11 +124,51 @@ print(marks)
 dtype: int64
 ```
 
-- The left column, `0`, `1` and `2`, is the **index**. pandas uses these labels to identify the values. By default, it starts with `0`, similar to the positions of items in a Python list.
-- The right column holds the values.
+- The left column, `0`, `1` and `2`, is the **index**. No labels were given, so pandas created the default index, starting with `0`.
+- The right column holds the **values**.
 - `dtype: int64` is the Series' **dtype**, short for **data type**. `int64` means a **64-bit integer**: whole numbers, each stored using 64 bits of memory.
 
-### Creating a DataFrame
+The index can also use meaningful labels, passed with the `index` argument:
+
+```python
+import pandas as pd
+
+marks = pd.Series([85, 92, 78], index=["Ravi", "Priya", "Arun"])
+print(marks)
+print(marks["Priya"])
+```
+
+**Output:**
+
+```
+Ravi     85
+Priya    92
+Arun     78
+dtype: int64
+92
+```
+
+`marks["Priya"]` uses the **label** `"Priya"` to get the value `92`, in the same way a dictionary uses a key.
+
+### The DataFrame
+
+A single Series holds one column. A table needs several columns that line up row by row.
+
+> **A DataFrame is a two-dimensional table of rows and columns. Each column in a DataFrame is a Series, and all the columns share the same row index.**
+
+**Two-dimensional** means the values are arranged in both rows and columns, like the whole student table above.
+
+```mermaid
+flowchart TD
+    A["DataFrame: students"] --> B["Series: name"]
+    A --> C["Series: city"]
+    A --> D["Series: marks"]
+```
+
+| Data Structure | Dimensions | Labels |
+| --- | --- | --- |
+| **Series** | One-dimensional | An **index**, which labels each value |
+| **DataFrame** | Two-dimensional | A **row index**, which labels each row, and **column labels**, which name each column |
 
 A DataFrame is commonly created from a **dictionary**. Each key becomes a **column label**, and each list becomes the values of that column.
 
@@ -93,7 +196,8 @@ print(students)
 4  Kavya     Madurai     88
 ```
 
-- Each **row** is one record, here one student, and each **column** holds one attribute of the records.
+- This is the same student table, now stored as a DataFrame.
+- Each **row** is one record, and each **column** holds one attribute of the records.
 - The numbers on the left, `0` to `4`, are the **row index**, which labels each row.
 - `name`, `city` and `marks` are the **column labels**.
 - All the lists must have the **same length**, because each row needs a value in every column.
@@ -220,7 +324,7 @@ print(from_chennai)
 - Placing the boolean mask inside `students[...]` keeps the rows whose value is `True` and excludes the rows whose value is `False`.
 - The rows keep their original index numbers, such as `0`, `1` and `4`. This shows which original rows were kept.
 
-The same filtering with a list would need a loop and an `if` statement. pandas does it in one line.
+`from_chennai` gives the same result as the loop and `if` statement in **Working with Table Data Without pandas**, but in one line.
 
 ## Sorting Rows
 
@@ -281,7 +385,7 @@ Name: count, dtype: int64
 
 | Method | What It Returns | Result Here |
 | --- | --- | --- |
-| `mean()` | The **mean**, the average of the values | `81.8` |
+| `mean()` | The **mean**, the average of the values | `81.8`, the same average the loop calculated earlier |
 | `max()` | The highest value | `92` |
 | `min()` | The lowest value | `66` |
 | `value_counts()` | A Series containing the count of each **unique value**, in descending order of count | 2 from Chennai, 2 from Madurai, 1 from Coimbatore |
@@ -367,4 +471,5 @@ The exact formatting and some displayed labels can vary slightly between pandas 
 - 📎 **Official pandas guide: 10 minutes to pandas** — https://pandas.pydata.org/docs/user_guide/10min.html
 - 📎 **Official pandas getting started tutorials** — https://pandas.pydata.org/docs/getting_started/intro_tutorials/index.html
 
-This completes the topics of this week. You can now use external libraries, set up virtual environments, read documentation, call web APIs safely, and analyse the data you collect with pandas.
+This completes the topics of this week. You can now use external libraries, set up virtual environments
+, call web APIs safely, and analyse the data you collect with pandas.

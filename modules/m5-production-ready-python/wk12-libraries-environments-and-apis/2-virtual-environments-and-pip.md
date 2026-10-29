@@ -220,4 +220,4 @@ The other person creates their own environment, activates it and runs `python -m
 - 📎 **Official Python tutorial on virtual environments and packages** — https://docs.python.org/3/tutorial/venv.html
 - 📎 **Official pip user guide** — https://pip.pypa.io/en/stable/user_guide/
 
-Every library you install comes with its own functions and rules. In the next topic, **Reading Documentation**, you'll learn how to find out how a library works by reading its official documentation.
+Many libraries connect a program to services on the internet, such as weather or payment services. In the next topic, **Web APIs and API Keys**, you'll learn how programs communicate with these services.

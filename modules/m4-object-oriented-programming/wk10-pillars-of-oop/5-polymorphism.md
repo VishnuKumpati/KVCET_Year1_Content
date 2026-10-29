@@ -49,6 +49,32 @@ print(calc.add(1, 2, 3))
 - Only the three-number version remains, so `calc.add(1, 2, 3)` works.
 - `calc.add(1, 2)` would raise a **`TypeError`**, because the remaining `add()` needs three numbers but receives only two.
 
+### Why Python Replaces the Earlier Method
+
+There are two reasons.
+
+**1. `def` assigns a function to a name.** In Python, `def` creates a function object and **binds** it to a name, much like `=` assigns a value to a variable. Defining a function with the same name again binds that name to the new function, and the earlier function is no longer reachable through it.
+
+```python
+def greet():
+    print("First version")
+
+def greet():
+    print("Second version")
+
+greet()
+```
+
+**Output:**
+
+```
+Second version
+```
+
+This works exactly like `x = 1` followed by `x = 2`: the name `x` keeps only the latest value. Inside a class, each method name is stored in the class in the same way, so the second `add()` replaces the first.
+
+**2. Python does not choose a method by its parameter types.** In Java, every parameter has a declared type, such as `int` or `double`, and Java picks the matching method before the program runs. Python is **dynamically typed**: parameters have no declared types, and Python finds a method **only by its name** when it is called. With only one method per name, Python cannot choose between versions by the number or types of arguments.
+
 ## Accepting Different Arguments with `*args` and `**kwargs`
 
 Python can handle different arguments through a single method instead of defining multiple methods with the same name. Two useful tools for this are `*args` and `**kwargs`.
@@ -121,12 +147,139 @@ The name `kwargs` is also only a convention, so any name can be used after the `
 
 `*args` and `**kwargs` make one method flexible. They are **not** method overloading, because there is still only one method with that name.
 
+## Rules for Using `*args` and `**kwargs`
+
+### The Order of Parameters
+
+When a function or method combines different kinds of parameters, they **must** appear in this order:
+
+| Order | Kind of Parameter | Example |
+| --- | --- | --- |
+| 1 | Regular parameters | `name` |
+| 2 | Parameters with default values | `greeting="Hello"` |
+| 3 | `*args` | `*others` |
+| 4 | Keyword-only parameters, which come after `*args` | `city="Chennai"` |
+| 5 | `**kwargs` | `**details` |
+
+Not every function needs all five. Whichever ones are used must keep this order.
+
+```python
+def show(name, greeting="Hello", *others, **details):
+    print("name:", name)
+    print("greeting:", greeting)
+    print("others:", others)
+    print("details:", details)
+
+show("Ravi")
+print()
+show("Ravi", "Hi", "Priya", "Arun", city="Chennai", marks=85)
+```
+
+**Output:**
+
+```
+name: Ravi
+greeting: Hello
+others: ()
+details: {}
+
+name: Ravi
+greeting: Hi
+others: ('Priya', 'Arun')
+details: {'city': 'Chennai', 'marks': 85}
+```
+
+- In the first call, only `name` is passed. `greeting` uses its default, and `others` and `details` are **empty**: an empty tuple, `()`, and an empty dictionary, `{}`.
+- In the second call, positional arguments fill `name` and `greeting` **first**. The remaining positional arguments, `"Priya"` and `"Arun"`, go into `others`. The keyword arguments go into `details`.
+
+### Other Rules
+
+- **`**kwargs` must be the last parameter.** Writing `def f(**kwargs, *args):` raises a **`SyntaxError`**.
+- **Only one `*` parameter and one `**` parameter are allowed** in a function.
+- **`*args` is a tuple and `**kwargs` is a dictionary**, so they are used like any tuple or dictionary.
+- **The names `args` and `kwargs` are conventions.** The `*` and `**` symbols are what matter.
+- **When calling a function, positional arguments must come before keyword arguments.** `f(a=1, 2)` raises a **`SyntaxError`**.
+
+## Edge Cases
+
+### A Default Parameter Before `*args` Can Be Filled by Mistake
+
+Positional arguments always fill regular and default parameters **before** `*args`. So a default parameter placed before `*args` can receive a value that was meant for `*args`.
+
+```python
+def welcome(greeting="Hello", *names):
+    for name in names:
+        print(greeting, name)
+
+welcome("Ravi", "Priya", "Arun")
+```
+
+**Output:**
+
+```
+Ravi Priya
+Ravi Arun
+```
+
+`"Ravi"` was meant to be a name, but it filled `greeting`, because `greeting` comes first. Only `"Priya"` and `"Arun"` went into `names`.
+
+**The fix is to place the default parameter after `*args`.** It then becomes **keyword-only**, so it can be changed only by name:
+
+```python
+def welcome(*names, greeting="Hello"):
+    for name in names:
+        print(greeting, name)
+
+welcome("Ravi", "Priya", "Arun")
+welcome("Ravi", "Priya", greeting="Hi")
+```
+
+**Output:**
+
+```
+Hello Ravi
+Hello Priya
+Hello Arun
+Hi Ravi
+Hi Priya
+```
+
+- All positional arguments now go into `names`.
+- `greeting` keeps its default unless it is passed by name, as in `greeting="Hi"`.
+
+### A Default Parameter with `**kwargs`
+
+A keyword argument whose name matches a parameter goes to **that parameter**, not into `**kwargs`. Only keyword arguments with **no matching parameter** are collected into `**kwargs`.
+
+```python
+def register(name, city="Chennai", **details):
+    print("city:", city)
+    print("details:", details)
+
+register("Ravi", city="Madurai", marks=85)
+```
+
+**Output:**
+
+```
+city: Madurai
+details: {'marks': 85}
+```
+
+- `city="Madurai"` matches the parameter `city`, so it replaces the default value, `"Chennai"`.
+- `marks=85` matches no parameter, so it is collected into `details`.
+
+### The Same Argument Passed Twice
+
+A parameter can receive only **one** value. Calling `register("Ravi", name="Priya")` passes `name` both by position and by keyword, so Python raises a **`TypeError`**: `register() got multiple values for argument 'name'`.
+
 ## Points to Remember
 
 - **Polymorphism** lets the same method or function behave differently depending on the object.
 - **Method overriding** achieves polymorphism by letting child classes provide their own version of an inherited method.
 - **Python does not support traditional method overloading.** A later method with the same name replaces the earlier one.
 - **`*args` and `**kwargs`** let one method accept a different number of arguments.
+- **Parameter order** is regular parameters, default parameters, `*args`, keyword-only parameters, then `**kwargs`.
 
 ## Further Reading
 

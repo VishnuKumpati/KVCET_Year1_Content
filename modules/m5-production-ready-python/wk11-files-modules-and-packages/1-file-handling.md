@@ -40,9 +40,18 @@ Python opens `students.txt` for writing and stores the file object in `file`. Th
 
 | Mode | Name | What It Does |
 | --- | --- | --- |
-| `"r"` | Read | Opens the file for reading. This is the default mode. Raises an error if the file does not exist. |
-| `"w"` | Write | Opens the file for writing. Creates the file if it does not exist. **Truncates the file**, removing its existing content. |
+| `"r"` | Read | Opens an existing file for reading only. This is the default mode. Reading starts at the beginning of the file. Raises an error if the file does not exist. |
+| `"rb"` | Read binary | Opens an existing file for reading only, in binary format. Reading starts at the beginning of the file. Raises an error if the file does not exist. |
+| `"r+"` | Read and write | Opens an existing file for both reading and writing. Starts at the beginning of the file. Raises an error if the file does not exist. |
+| `"rb+"` | Read and write binary | Opens an existing file for both reading and writing, in binary format. Starts at the beginning of the file. Raises an error if the file does not exist. |
+| `"w"` | Write | Opens the file for writing only. Creates the file if it does not exist. **Truncates the file**, removing its existing content. |
+| `"wb"` | Write binary | Opens the file for writing only, in binary format. Creates the file if it does not exist. **Truncates the file**, removing its existing content. |
+| `"w+"` | Write and read | Opens the file for both writing and reading. Creates the file if it does not exist. **Truncates the file**, removing its existing content. |
+| `"wb+"` | Write and read binary | Opens the file for both writing and reading, in binary format. Creates the file if it does not exist. **Truncates the file**, removing its existing content. |
 | `"a"` | Append | Opens the file for adding content at the end. Creates the file if it does not exist. Keeps the existing content. |
+| `"ab"` | Append binary | Opens the file for adding content at the end, in binary format. Creates the file if it does not exist. Keeps the existing content. |
+| `"a+"` | Append and read | Opens the file for both appending and reading. Creates the file if it does not exist. Keeps the existing content, and new content is always written at the end. |
+| `"ab+"` | Append and read binary | Opens the file for both appending and reading, in binary format. Creates the file if it does not exist. Keeps the existing content, and new content is always written at the end. |
 
 ## Writing to a File and Closing It
 
