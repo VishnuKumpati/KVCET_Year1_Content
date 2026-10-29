@@ -628,7 +628,7 @@
                                        {
                                            "id":  "38ef29a8-0dd5-40c8-8e83-7777c56f1feb",
                                            "title":  "Reading Documentation",
-                                           "tooltip":  "Week 12 - help, dir, reading a signature, and where to look",
+                                           "tooltip":  "Week 12 - Where to find documentation, reading signatures and entries, help(), and docstrings",
                                            "url":  "modules/m5-production-ready-python/wk12-libraries-environments-and-apis/3-reading-documentation.md"
                                        },
                                        {
@@ -658,7 +658,7 @@
                                        {
                                            "id":  "f8304361-d1d8-4f63-87b8-57e3a0ec248f",
                                            "title":  "Introduction to pandas",
-                                           "tooltip":  "Week 12 - DataFrames, selection, filtering, and groupby",
+                                           "tooltip":  "Week 12 - Series, DataFrames, CSV files, selecting, filtering, sorting, and summarising data",
                                            "url":  "modules/m5-production-ready-python/wk12-libraries-environments-and-apis/8-introduction-to-pandas.md"
                                        },
                                        {

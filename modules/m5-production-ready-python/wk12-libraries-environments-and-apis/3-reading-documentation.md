@@ -1,243 +1,276 @@
 # Reading Documentation
 
-There are hundreds of thousands of packages on PyPI and nobody has memorised any but a few. The skill that matters is not knowing libraries — it is finding out how one works, quickly and from a source that is correct.
+Every library contains far more functions, classes and options than any programmer can remember. Professional programmers do not memorise them. They look up how something works at the moment they need it, and they look it up in the **documentation**.
 
-Documentation is that source. Tutorials go stale, forum answers describe versions from years ago, and an AI assistant will confidently describe functions that do not exist. The official documentation describes the version you actually installed.
+> **Documentation is the written reference that explains what a library, module, class or function does and how to use it correctly. It allows programmers to use code without reading its source code.**
 
-## help()
+A new phone or washing machine comes with a user manual that explains each button and setting. Documentation does the same job for code. Reading it is a core programming skill: it is how you learn a new library, find the correct way to call a function, and understand why something went wrong.
 
-`help()` prints a function's documentation, and works at the interactive prompt or in a script:
+## Terms Used in Documentation
+
+Documentation is written using precise programming terms. You have met most of these terms in earlier topics. This table collects them in one place, because documentation uses all of them together.
+
+| Term | Meaning | Example |
+| --- | --- | --- |
+| **Function** | A named block of code that performs a task when it is called | `round()` |
+| **Method** | A function that belongs to an object, called using a dot after the object | `marks.index(92)` |
+| **Parameter** | A name listed in a function's definition that receives a value | In `round(number, ndigits=None)`, `number` and `ndigits` are parameters |
+| **Argument** | The actual value passed to a parameter when the function is called | In `round(3.14159, 2)`, `3.14159` and `2` are arguments |
+| **Positional argument** | An argument matched to a parameter by its **position** in the call | `round(3.14159, 2)` |
+| **Keyword argument** | An argument matched to a parameter by its **name**, written as `name=value` | `round(3.14159, ndigits=2)` |
+| **Default value** | The value a parameter uses when no argument is passed for it | `ndigits=None` |
+| **Optional parameter** | A parameter with a default value, so passing an argument for it is not required | `ndigits` |
+| **Return value** | The value a function sends back to the code that called it | `round(3.14159, 2)` returns `3.14` |
+| **Exception** | An event, represented by an object, that interrupts the normal flow of a program unless it is handled | `ValueError` |
+| **Signature** | The function's name and parameters, including any default values and argument restrictions | `round(number, ndigits=None)` |
+
+The difference between a **parameter** and an **argument** matters in documentation: the documentation lists **parameters**, and you supply **arguments** when you call the function.
+
+## Where to Find Documentation
+
+There are three main places to find documentation.
+
+| Source | What It Contains | When to Use It |
+| --- | --- | --- |
+| **The official documentation website** | Complete, detailed documentation of every module, function and class | When you need full details, examples and notes |
+| **The library's PyPI page** | A description of an external library, its installation command and links to its full documentation | When you start using an external library |
+| **The built-in `help()` function** | The documentation of a function, class or module, shown inside Python | When you need a quick reminder while writing code |
+
+**Start with the official documentation.** It is written by the people who build the library, and it is kept up to date with each version.
+
+### Finding the Official Python Documentation
+
+1. Open **https://docs.python.org/3/** in your browser.
+2. Check the **version selector**, usually near the top of the page. Website layouts can change, so its exact position may differ. Choose the version that matches your Python installation. You can find your version by running `python --version` in the terminal.
+3. Open the **Library Reference**. It documents the **built-in functions** and every module in the **standard library**.
+4. Use the **search box** to look up a name, such as `round` or `random`.
+5. On a long page, press **Ctrl+F** (or **Cmd+F** on macOS) to find a word on that page.
+
+### Finding an External Library's Documentation
+
+External libraries publish their documentation on their own websites. Their **PyPI page** links to it. For example, the PyPI page of `requests`, the library used later this week, is:
+
+```
+https://pypi.org/project/requests/
+```
+
+| Part of the PyPI Page | What It Shows |
+| --- | --- |
+| **Installation command** | The `pip install` command for the library |
+| **Project description** | What the library does, often with a short example |
+| **Project links**, such as **Documentation** | Links to the library's full documentation website |
+| **Release history** | The available versions and when each was released |
+
+## How a Module's Documentation Page Is Organised
+
+The official documentation groups related information into pages. Each standard library module usually has its own page. For example, the page for the `random` module, at https://docs.python.org/3/library/random.html, is organised like most module pages:
+
+| Part of the Page | What It Contains |
+| --- | --- |
+| **Title and introduction** | What the module is for |
+| **Grouped sections** | Related functions grouped together, such as functions for integers and functions for sequences |
+| **Entries** | One entry for each function, class or constant, starting with its signature |
+| **Notes and warnings** | Highlighted boxes with important details or limitations |
+| **Examples** | Sample code showing the module in use, often near the end of the page |
+
+To find a specific function on such a page, use **Ctrl+F** with the function's name.
+
+## Reading a Function Entry, Line by Line
+
+Every function entry follows the same pattern: a **signature**, followed by a **description**. This is the official entry for `round()`:
+
+```
+round(number, ndigits=None)
+    Return number rounded to ndigits precision after the decimal point.
+    If ndigits is omitted or is None, it returns the nearest integer to its input.
+```
+
+Read it one part at a time:
+
+| Part | In This Entry | What It Tells You |
+| --- | --- | --- |
+| **Function name** | `round` | The name to call |
+| **First parameter** | `number` | It has no default value, so an argument is **required** |
+| **Second parameter** | `ndigits=None` | It has a default value of `None`, so it is **optional** |
+| **Return value** | "Return number rounded to…" | The function returns the rounded number. When `ndigits` is omitted or `None`, it returns an integer |
+| **Behaviour of the default** | "If ndigits is omitted or is None…" | Without `ndigits`, it returns the nearest **integer** |
+
+The entry predicts exactly what the code will do:
+
+```python
+print(round(3.14159))
+print(round(3.14159, 2))
+print(round(3.14159, ndigits=2))
+```
+
+**Output:**
+
+```
+3
+3.14
+3.14
+```
+
+- `round(3.14159)` passes only `number`. `ndigits` uses its default value, `None`, so the result is the nearest integer, `3`. Python rounds exact halfway cases to the nearest **even** value. For example, `round(2.5)` returns `2`, while `round(3.5)` returns `4`.
+- `round(3.14159, 2)` passes `2` as a **positional argument** for `ndigits`.
+- `round(3.14159, ndigits=2)` passes the same value as a **keyword argument**. The result is the same.
+
+## Reading Special Symbols in a Signature
+
+Some signatures contain symbols that are not parameters. They describe **how** arguments must be passed. You will see them often in the documentation and in `help()`.
+
+In these signatures, a standalone `/` or `*` marks a **boundary** between parameters with different argument-passing rules. Square brackets are a documentation convention, not Python syntax.
+
+| Symbol | Meaning | Example |
+| --- | --- | --- |
+| `/` | Parameters **before** `/` are **positional-only**: they must be passed by position, not by name | `len(obj, /)` |
+| `*` | Parameters **after** `*` are **keyword-only**: they must be passed as keyword arguments | `sorted(iterable, /, *, key=None, reverse=False)` |
+| `[ ]` | In this documentation notation, square brackets enclose **optional arguments**; nested brackets mean those arguments are independently optional | `list.index(value[, start[, stop]])` |
+
+The official signature of `sorted()` uses both `/` and `*`:
+
+```
+sorted(iterable, /, *, key=None, reverse=False)
+```
+
+- `iterable` comes before `/`, so it must be passed **by position**.
+- `key` and `reverse` come after `*`, so they must be passed **by name**.
+- Both have default values, so both are optional.
+
+```python
+print(sorted([3, 1, 2]))
+print(sorted([3, 1, 2], reverse=True))
+```
+
+**Output:**
+
+```
+[1, 2, 3]
+[3, 2, 1]
+```
+
+Writing `sorted([3, 1, 2], True)` would raise a **`TypeError`**, because `reverse` is **keyword-only** and cannot be passed by position. The signature tells you this before you run the code.
+
+## Reading the Description Carefully
+
+The description often contains small details that change how the function behaves. The official entry for `random.randint()` says:
+
+```
+random.randint(a, b)
+    Return a random integer N such that a <= N <= b.
+```
+
+The condition `a <= N <= b` means the result `N` can be **equal to** `a` or `b`. So `random.randint(1, 6)` can return `1` or `6`, not only the numbers between them. A reader who skips this detail may expect the wrong range of results.
+
+## Reading About Exceptions
+
+Many entries state which **exception** a function **raises** when it cannot do its task. The official entry for the list method `index()` says:
+
+```
+list.index(value[, start[, stop]])
+    Return zero-based index of the first occurrence of value in the list.
+    Raises a ValueError if there is no such item.
+```
+
+- The notation `[, start[, stop]]` shows that you can optionally supply `start` and `stop` when calling `index()`.
+- "**zero-based index**" means the first position is `0`.
+- "**Raises a ValueError** if there is no such item" tells you what happens when the value is missing.
+
+```python
+marks = [85, 92, 78]
+print(marks.index(92))
+```
+
+**Output:**
+
+```
+1
+```
+
+`92` is at position `1`, because counting starts at `0`. Calling `marks.index(50)` would raise a **`ValueError`**, exactly as the entry says, because `50` is not in the list. Knowing this in advance lets you handle the exception with `try` and `except`, as covered in **File Paths and Errors**.
+
+## Getting Help Inside Python
+
+The built-in **`help()`** function displays the documentation of a function, method, class or module without leaving Python.
 
 ```python
 help(round)
 ```
 
-**Output:**
+**Possible output (shortened):**
 
 ```
 Help on built-in function round in module builtins:
 
 round(number, ndigits=None)
     Round a number to a given precision in decimal digits.
-
-    The return value is an integer if ndigits is omitted or None.  Otherwise
-    the return value has the same type as the number.  ndigits may be negative.
 ```
 
-Four facts in five lines: the parameters, that `ndigits` is optional, that omitting it returns an `int` while supplying it preserves the type, and that it may be negative. Reading that takes ten seconds and answers more than a search would.
+- Pass the function **itself**, without parentheses: `help(round)`, not `help(round())`. With parentheses, Python would call `round()` first, which raises a `TypeError` because the required argument `number` is missing.
+- The output commonly includes the function's **signature** and **description**, depending on the documentation available for that object.
+- The wording can differ slightly from the website and between Python versions.
 
-It works on methods too:
+`help()` also works with modules and methods. For example, after `import random`, `help(random)` shows the documentation of the whole module, and `help(list.index)` shows the documentation of the `index()` method.
+
+## Writing Documentation for Your Own Functions
+
+The text that `help()` displays comes from **docstrings**. You can write docstrings for your own functions in exactly the same way.
+
+> **A docstring is a string literal written as the first statement inside a function, class or module. It documents what that code does, and Python makes it available through `help()`.**
+
+Docstrings are commonly written with triple quotes, `"""`. Triple quotes also make it easy to write descriptions across multiple lines.
 
 ```python
-help(str.strip)
+def greet(name):
+    """Return a greeting message for the given name."""
+    return "Hello, " + name
+
+help(greet)
 ```
 
 **Output:**
 
 ```
-Help on method_descriptor:
+Help on function greet in module __main__:
 
-strip(self, chars=None, /) unbound builtins.str method
-    Return a copy of the string with leading and trailing whitespace removed.
-
-    If chars is given and not None, remove characters in chars instead.
+greet(name)
+    Return a greeting message for the given name.
 ```
 
-`help()` accepts a function, a method, a class, a module or an object. Note that the function is passed **without brackets** — `help(round)`, not `help(round())`.
-
-## dir()
-
-`dir()` lists what something contains. It answers "what can this do?" where `help()` answers "how does this one thing work?":
-
-```python
-import math
-print([name for name in dir(math) if not name.startswith("_")][:12])
-```
-
-**Output:**
-
-```
-['acos', 'acosh', 'asin', 'asinh', 'atan', 'atan2', 'atanh', 'cbrt', 'ceil', 'comb', 'copysign', 'cos']
-```
-
-The filter removes the dunder names, which are rarely what you are looking for.
-
-`dir()` on an object of your own lists its attributes and methods, which makes it a quick way to inspect something unfamiliar returned by a library.
-
-The pair works well together: `dir()` to find the name, `help()` to learn the name.
-
-## Reading a Signature
-
-The first line of any documentation is the **signature**, and it encodes more than it first appears:
-
-```python
-import inspect
-print(inspect.signature(sorted))
-```
-
-**Output:**
-
-```
-(iterable, /, *, key=None, reverse=False)
-```
-
-Four things are being said:
-
-- `iterable` is required.
-- `/` means everything before it is **positional-only** — it cannot be passed by name.
-- `*` means everything after it is **keyword-only** — it must be passed by name.
-- `key` and `reverse` have defaults, so both are optional.
-
-So `sorted(marks, reverse=True)` is correct and `sorted(marks, True)` is not, and the signature said so before you tried it.
-
-A longer one:
-
-```python
-import inspect
-print(inspect.signature(open))
-```
-
-**Output:**
-
-```
-(file, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None)
-```
-
-Only `file` is required. Everything else has a default, which is why `open("notes.txt")` works — and it shows that `mode` defaults to `'r'` and `encoding` defaults to `None`, meaning the platform default rather than UTF-8.
-
-| Symbol | Means |
-| --- | --- |
-| `name` | required |
-| `name=value` | optional, with that default |
-| `/` | arguments before this are positional-only |
-| `*` | arguments after this are keyword-only |
-| `*args` | any number of positional arguments |
-| `**kwargs` | any number of keyword arguments |
-
-## The Official Python Documentation
-
-`docs.python.org` has four parts worth knowing apart:
-
-- **The Tutorial** — a guided introduction, read in order.
-- **The Library Reference** — every standard library module. This is the part you return to.
-- **The Language Reference** — how the language itself is defined. Rarely needed.
-- **The HOWTOs** — focused guides on sorting, logging, regular expressions and more.
-
-Two entry points do most of the work. The **module index** at https://docs.python.org/3/py-modindex.html lists every module alphabetically — scan it before writing something fiddly. The **search box** is reliable when you know the name of the thing you want.
-
-Check the version selector in the corner. The documentation defaults to the newest release, which may describe features your Python does not have.
-
-## Third-Party Documentation
-
-Library documentation is less consistent. Most well-maintained projects have:
-
-- a **quickstart** — the first thing to read, usually enough to begin
-- an **API reference** — every function, generated from the code
-- a **user guide** — longer explanations of concepts
-- a **changelog** — what changed between versions, which is where to look when working code stops working
-
-The quickstart and the changelog are the two people skip and should not.
-
-Find the documentation from PyPI. Every package page links to its home page and documentation, which is safer than a search that may land on an old mirror.
-
-## Writing Documentation Others Can Read
-
-The same tools work on your own code, if you write docstrings:
-
-```python
-def apply_discount(price, percent=10, *, round_to=2):
-    """Return price reduced by percent, rounded to round_to decimals.
-
-    Args:
-        price: the original price.
-        percent: the discount percentage. Defaults to 10.
-        round_to: decimal places in the result. Defaults to 2.
-
-    Returns:
-        The discounted price as a float.
-    """
-    return round(price * (1 - percent / 100), round_to)
-
-help(apply_discount)
-```
-
-**Output:**
-
-```
-Help on function apply_discount in module __main__:
-
-apply_discount(price, percent=10, *, round_to=2)
-    Return price reduced by percent, rounded to round_to decimals.
-
-    Args:
-        price: the original price.
-        percent: the discount percentage. Defaults to 10.
-        round_to: decimal places in the result. Defaults to 2.
-
-    Returns:
-        The discounted price as a float.
-```
-
-Python generated the signature line itself. The docstring supplied the rest.
-
-Note the `*` in that signature, which makes `round_to` keyword-only:
-
-```python
-print(apply_discount(200))
-print(apply_discount(200, 25))
-print(apply_discount(200, 25, round_to=0))
-apply_discount(200, 25, 0)
-```
-
-**Output:**
-
-```
-180.0
-150.0
-150.0
-TypeError: apply_discount() takes from 1 to 2 positional arguments but 3 were given
-```
-
-The `*` forced the third argument to be named. That is worth doing for any parameter whose meaning would be unclear as a bare value — `apply_discount(200, 25, 0)` gives the reader no idea what `0` is.
-
-## Answering a Question from the Docs
-
-A worked example. The question: *how do I sort a list of dictionaries by one field, case-insensitively?*
-
-**Start with `help()`.** `help(sorted)` gives the signature and says `key` specifies a function of one argument used to extract a comparison key.
-
-**Follow to the HOWTO.** The sorting HOWTO at https://docs.python.org/3/howto/sorting.html covers exactly this, with examples of key functions.
-
-**Combine what both said.** A key function returning `record["name"].lower()` sorts by name, ignoring case.
-
-```python
-students = [{"name": "ravi"}, {"name": "Anita"}, {"name": "meera"}]
-print(sorted(students, key=lambda student: student["name"].lower()))
-```
-
-**Output:**
-
-```
-[{'name': 'Anita'}, {'name': 'meera'}, {'name': 'ravi'}]
-```
-
-No search engine was involved, and the answer is correct for the installed version.
-
-## Where Else to Look
-
-**Official documentation** is authoritative and matches your version. Start here.
-
-**Stack Overflow** is good for "why does this error happen", and every answer has a date. An accepted answer from 2013 may describe Python 2. Check the date, check the votes, check the comments — the correction is often in the comments rather than the answer.
-
-**AI assistants** are fast and confidently wrong about specifics. They invent plausible function names and parameters that do not exist. Anything they tell you about a library must be checked against `help()` or the documentation before you rely on it.
-
-**The source code** is the final word, and more readable than people expect. When documentation is ambiguous, the standard library's own source resolves it.
-
-The order that works: `help()` first because it is instant and correct, documentation second for anything wider, search engines third for problems you cannot phrase as a lookup.
+- `help(greet)` shows the function's **signature**, `greet(name)`, and its **docstring**.
+- `__main__` is the name Python gives to the file you run directly.
+
+A good docstring starts with a short sentence describing what the function does. This makes its purpose clear when someone reads the code or uses `help()`.
+
+## A Routine for Using Any New Function
+
+1. **Find the entry** in the official documentation, or use `help()`.
+2. **Read the signature.** Identify the required parameters, the optional parameters and their default values, and any `/` or `*` symbols.
+3. **Read the description.** Find out what the function returns and any special behaviour.
+4. **Check for exceptions, notes and examples.**
+5. **Try a small example** to confirm that the function behaves as the documentation says.
+
+### Common Mistakes When Reading Documentation
+
+| Mistake | Why It Causes Problems | What to Do Instead |
+| --- | --- | --- |
+| Reading documentation for a different Python version | A function may behave differently, or may not exist, in your version | Select your version on the documentation website |
+| Skipping the description after reading the signature | Important details, such as whether a range includes its end values, are missed | Read the whole entry |
+| Ignoring the default values | A function may behave differently from what you expect when an argument is left out | Check what each optional parameter defaults to |
+| Writing `help(round())` | Python calls `round()` first, and the call fails | Pass the function itself: `help(round)` |
+| Ignoring the exceptions listed | The program may stop unexpectedly | Plan how to handle each listed exception |
+
+## Points to Remember
+
+- **Documentation** explains what code does and how to use it. Start with the official documentation for your Python version.
+- **A signature** shows the function's name and its parameters. Parameters with **default values** are optional.
+- **`/`** marks positional-only parameters, and **`*`** marks keyword-only parameters.
+- **`help()`** displays documentation inside Python, and **docstrings** let you document your own functions.
 
 ## Further Reading
 
-- **The Python documentation** — https://docs.python.org/3/
-- **The module index** — https://docs.python.org/3/py-modindex.html
+- 📎 **Official Python documentation for built-in functions** — https://docs.python.org/3/library/functions.html
+- 📎 **Official Python tutorial on documentation strings** — https://docs.python.org/3/tutorial/controlflow.html#documentation-strings
+- 📎 **Official Python glossary**, the meaning of programming terms used in the documentation — https://docs.python.org/3/glossary.html
 
-`help()` and `dir()` answer most questions without leaving the interpreter, and a signature says which arguments are required, optional and keyword-only. Next, the kind of library that talks to another computer.
+Many libraries connect a program to services on the internet, such as weather or payment services. In the next topic, **Web APIs and API Keys**, you'll learn how programs communicate with these services.
