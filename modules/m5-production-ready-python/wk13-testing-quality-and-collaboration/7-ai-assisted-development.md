@@ -211,7 +211,7 @@ Before using any code from an AI tool:
 1. **Read every line** and make sure you understand what it does. If you do not, ask the tool to explain it.
 2. **Run the code** to check that it works at all.
 3. **Test it with pytest**, including edge cases such as boundary values, empty values and invalid input.
-4. **Check the documentation** for any function or library it uses, as shown in **Reading Documentation**, to confirm that it exists and works as described.
+4. **Check the documentation** for any function or library it uses, to confirm that it exists and works as described.
 5. **Check for security problems**, such as API keys written in the code, as warned in **Web APIs and API Keys**.
 6. **Commit it with Git** only after it passes your checks, so you can return to the earlier version if a problem appears later.
 
@@ -256,4 +256,4 @@ Asking for an **explanation**, not only a fix, helps you learn and recognise the
 - 📎 **GitHub Copilot documentation: What is GitHub Copilot** — https://docs.github.com/en/copilot/get-started/what-is-github-copilot
 - 📎 **Official VS Code guide to GitHub Copilot** — https://code.visualstudio.com/docs/copilot/overview
 
-This completes the course. You can now write Python programs, organise them with classes and modules, work with files and APIs, test and log your code, and collaborate with others using Git and GitHub. Most importantly, you have the skills to check that your code, whoever writes it, works correctly.
+This completes the teaching content. You can now write Python programs, organise them with classes and modules, work with files and APIs, test and log your code, and collaborate with others using Git and GitHub. Most importantly, you have the skills to check that your code, whoever writes it, works correctly. Next, you will put all of these skills together in the **Capstone Project**.
