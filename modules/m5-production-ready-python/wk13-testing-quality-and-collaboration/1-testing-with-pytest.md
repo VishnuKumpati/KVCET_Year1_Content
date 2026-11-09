@@ -1,330 +1,293 @@
 # Testing with pytest
 
-Testing so far has meant running the program and looking at the output. That works for ten lines and fails for a hundred, for three reasons.
+Programs change all the time. A bug is fixed, a function is improved, or a new feature is added. Each change can accidentally break something that worked before, and the mistake may not be noticed until much later. Checking every part of a program by hand after each change is slow, and it is easy to miss something.
 
-**It does not scale.** Checking every path by hand after every change takes longer than the change did.
+Programmers solve this by writing **tests**: code that checks other code automatically. Once written, tests can be run again after every change, so a broken feature is found immediately.
 
-**It is not repeated.** Code that worked last week is assumed to still work. Usually it does. The times it does not are called **regressions**, and they are found by users.
+## Software Testing
 
-**It is not recorded.** The cases you thought about exist only in your head, and are gone next month.
+> **Software testing is the process of evaluating a program to verify that it behaves as expected and to identify defects before the program is used.**
 
-An **automated test** is code that checks other code. It runs in a second, checks everything every time, and is a permanent record of what the code is supposed to do.
+A **defect**, commonly called a **bug**, is a mistake in a program that makes it behave differently from what was intended. Testing done by a person is called **manual testing**, and testing done by code is called **automated testing**. This topic teaches automated testing.
 
-## assert
+## Test Cases
 
-`assert` is the building block. It does nothing if its condition is true, and raises `AssertionError` if it is false:
+Every test is built around a **test case**.
 
-```python
-assert 2 + 2 == 4
-print("first check passed")
-assert 2 + 2 == 5
-print("never reached")
-```
+> **A test case is a specific set of conditions used to check one behaviour of a program. It defines the input, the action to perform and the expected result.**
 
-**Output:**
+For example, one test case for an `add()` function is:
 
-```
-first check passed
-AssertionError
-```
+- **Input:** the numbers `2` and `3`
+- **Action:** call `add(2, 3)`
+- **Expected result:** the function returns `5`
 
-That is the whole idea of a test: state what should be true, and let it fail loudly when it is not.
+The value the code really returns when the test runs is called the **actual result**.
+
+- If the actual result matches the expected result, the test **passes**.
+- If they differ, the test **fails**. This may indicate a defect in the program or an incorrect expectation in the test.
+
+## Unit Testing
+
+> **A unit is a small, testable part of a program, such as a function, a method or a class.**
+
+> **A unit test checks one small part of a program, usually a function or method, by giving it an input and checking whether it produces the expected result.**
+
+Testing one unit at a time has a clear benefit. When a unit test fails, you know which unit to examine first, instead of searching the whole program.
 
 ## pytest
 
-`unittest` is built in; **pytest** is what most projects use, because a test is an ordinary function with an ordinary `assert`.
+Tests can be written using plain Python code, but a project usually has many tests. Running them one by one and checking each result by hand would be slow. A **testing framework** solves this.
+
+> **A testing framework is a library that provides the structure and tools for writing, organising and running tests, and for reporting their results.**
+
+> **pytest is an external Python testing framework that makes it easy to write small, readable tests. It automatically discovers tests, runs them and gives a detailed report of every test that passes or fails.**
+
+## Project Setup
+
+pytest does not need a special project. In this topic, the test file is kept in the **same folder** as the code it tests, so it can import that code directly.
+
+1. Create a folder named `calculator_project` and open a terminal in it.
+2. Create and activate a virtual environment, as explained in **Virtual Environments and pip**.
+3. Install pytest:
 
 ```
-pip install pytest
+python -m pip install pytest
 ```
 
-Given `calculator.py`:
+   To confirm the installation, run `python -m pytest --version`. It prints the installed pytest version.
+
+4. Create two files in the folder:
+
+```
+calculator_project/
+├── calculator.py         # The code to be tested
+└── test_calculator.py    # The tests for calculator.py
+```
+
+**File: `calculator.py`**
 
 ```python
 def add(a, b):
     return a + b
 
-def divide(a, b):
-    if b == 0:
-        raise ValueError("cannot divide by zero")
-    return a / b
-
-def average(numbers):
-    return sum(numbers) / len(numbers)
+class Calculator:
+    def multiply(self, a, b):
+        return a * b
 ```
 
-Write `test_calculator.py` beside it:
+This file contains two units to test: the **function** `add()`, and the **method** `multiply()` of the `Calculator` class. The tests for them are written in a separate file, `test_calculator.py`, so the code being tested stays clean.
+
+## Writing a Test for a Function
+
+**File: `test_calculator.py`**
 
 ```python
-from calculator import add, divide
-
-def test_add_two_positives():
-    assert add(2, 3) == 5
-
-def test_add_negative():
-    assert add(-1, 1) == 0
-
-def test_divide():
-    assert divide(10, 2) == 5.0
-```
-
-No class, no special assertion methods, no setup. Three functions with three asserts.
-
-## Naming Matters
-
-pytest finds tests by name, and the conventions are requirements:
-
-- test **files** are named `test_*.py` or `*_test.py`
-- test **functions** are named `test_*`
-- test **classes**, if used, are named `Test*`
-
-A function called `check_add` is not collected and never runs. A test that silently does not run is worse than no test, because it looks like coverage.
-
-## Running
-
-Run `pytest` from the project directory. It finds the files, finds the functions, and runs them:
-
-```
-pytest
-```
-
-**Output:**
-
-```
-============================= test session starts =============================
-platform win32 -- Python 3.13.11, pytest-9.1.1, pluggy-1.6.0
-rootdir: C:\Users\anita\project
-collected 3 items
-
-test_calculator.py ...                                                   [100%]
-
-============================== 3 passed in 0.01s ==============================
-```
-
-Each dot is a passing test. `-q` gives the short form:
-
-```
-pytest -q
-```
-
-**Output:**
-
-```
-...                                                                      [100%]
-3 passed in 0.03s
-```
-
-`-v` gives one line per test with its name, which is what you want when something fails.
-
-| Command | Runs |
-| --- | --- |
-| `pytest` | every test found |
-| `pytest test_calculator.py` | one file |
-| `pytest test_calculator.py::test_add_two_positives` | one test |
-| `pytest -v` | verbose, one line each |
-| `pytest -q` | quiet |
-| `pytest -x` | stop at the first failure |
-| `pytest -k add` | only tests whose name contains "add" |
-
-## Reading a Failure
-
-This is what pytest is really for. Two deliberately broken tests:
-
-```python
-from calculator import add, average
-
-def test_add_is_wrong():
-    assert add(2, 3) == 6
-
-def test_average_of_empty():
-    assert average([]) == 0
-```
-
-**Output:**
-
-```
-============================= test session starts =============================
-collected 2 items
-
-test_failing.py FF                                                       [100%]
-
-================================== FAILURES ===================================
-______________________________ test_add_is_wrong ______________________________
-
-    def test_add_is_wrong():
->       assert add(2, 3) == 6
-E       assert 5 == 6
-E        +  where 5 = add(2, 3)
-
-test_failing.py:5: AssertionError
-____________________________ test_average_of_empty ____________________________
-
-    def test_average_of_empty():
->       assert average([]) == 0
-               ^^^^^^^^^^^
-
-test_failing.py:9:
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-
-numbers = []
-
-    def average(numbers):
->       return sum(numbers) / len(numbers)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E       ZeroDivisionError: division by zero
-
-calculator.py:12: ZeroDivisionError
-=========================== short test summary info ===========================
-FAILED test_failing.py::test_add_is_wrong - assert 5 == 6
-FAILED test_failing.py::test_average_of_empty - ZeroDivisionError: division b...
-============================== 2 failed in 0.06s ==============================
-```
-
-`F` replaced the dot for each failure, and then pytest explained both.
-
-The first is an **assertion failure**. `assert 5 == 6` and `where 5 = add(2, 3)` show the comparison *and* where the wrong value came from. A plain `AssertionError` would have said only that something was false; pytest rewrites assertions to report the actual values.
-
-The second is a **different failure entirely**. The test did not fail its assertion — the code raised `ZeroDivisionError` before the assertion was reached. pytest followed the call into `calculator.py`, showed the failing line, and reported `numbers = []` as the argument that caused it.
-
-That second failure is a real bug in `average()`, found by a test asking an obvious question. Deciding what to do about it — raise a clear error, or return `0` — is the subject of the next chapter.
-
-Read failures bottom-up: the summary says which tests failed and why in one line each, and the detail above explains each one.
-
-## Testing That Something Raises
-
-Code that should reject bad input needs testing too, and a test that raises is normally a failing test. `pytest.raises` inverts that — it **passes** when the expected exception occurs:
-
-```python
-import pytest
-
-from calculator import divide
-
-def test_divide_by_zero_raises():
-    with pytest.raises(ValueError):
-        divide(1, 0)
-
-def test_divide_by_zero_message():
-    with pytest.raises(ValueError, match="cannot divide by zero"):
-        divide(1, 0)
-```
-
-**Output:**
-
-```
-test_raises.py::test_divide_by_zero_raises PASSED                        [ 50%]
-test_raises.py::test_divide_by_zero_message PASSED                       [100%]
-
-============================== 2 passed in 0.02s ==============================
-```
-
-It is a context manager, so the code under test goes inside the `with` block. If no exception is raised, the test fails — which is right, because silently accepting bad input is the bug being guarded against.
-
-`match` checks the message as well as the type, which is worth adding when the message is part of what you promise.
-
-## Running One Test Many Times
-
-Four cases of the same test means four near-identical functions. `parametrize` supplies the values instead:
-
-```python
-import pytest
-
 from calculator import add
 
-@pytest.mark.parametrize("a, b, expected", [
-    (2, 3, 5),
-    (-1, 1, 0),
-    (0, 0, 0),
-    (2.5, 0.5, 3.0),
-])
-def test_add(a, b, expected):
-    assert add(a, b) == expected
+def test_add_two_positive_numbers():
+    assert add(2, 3) == 5
 ```
 
-**Output:**
+Line by line:
+
+1. `from calculator import add` imports the function being tested. This works because `calculator.py` is in the same folder.
+2. `def test_add_two_positive_numbers():` defines a **test function**.
+3. `assert add(2, 3) == 5` is the check. It calls `add(2, 3)` and compares the actual result with the expected result, `5`.
+
+> **A test function is a Python function whose name starts with `test`. pytest runs it as a test and reports whether it passed or failed.**
+
+The check is written with the **`assert`** statement.
+
+> **The `assert` statement evaluates a condition. If the condition is `True`, nothing happens and the program continues. If the condition is `False`, Python raises an `AssertionError`.**
+
+So `assert add(2, 3) == 5` means: "the actual result of `add(2, 3)` **must be equal** to `5`." If it is, the test passes. If it is not, an `AssertionError` is raised, and the test fails.
+
+## Test Discovery
+
+pytest finds this test on its own, without being told its name.
+
+> **Test discovery is the process by which pytest automatically searches a project for test files and test functions, using naming conventions.**
+
+By default, pytest uses these naming conventions:
+
+- **Test files** must have names that start with `test_` or end with `_test.py`, such as `test_calculator.py`.
+- **Test functions** must have names that start with `test`. The usual style is to start them with `test_`, such as `test_multiply_two_numbers()`.
+
+By default, pytest discovers files and functions that follow these naming conventions. If they do not follow them, pytest may not find them. A test name should also describe exactly what the test checks. Then, when a test fails, its name alone tells you which behaviour is broken.
+
+## Running a Test That Passes
+
+In the terminal, inside the project folder, with the virtual environment active, run:
 
 ```
-test_param.py::test_add[2-3-5] PASSED                                    [ 25%]
-test_param.py::test_add[-1-1-0] PASSED                                   [ 50%]
-test_param.py::test_add[0-0-0] PASSED                                    [ 75%]
-test_param.py::test_add[2.5-0.5-3.0] PASSED                              [100%]
-
-============================== 4 passed in 0.02s ==============================
+python -m pytest
 ```
 
-One function, four separate tests. Each is reported individually, so a failure names the exact values that broke — far better than one test that stops at the first bad case.
+**Possible output:**
 
-Adding a case is adding a line to the list.
+```
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.2.0, pluggy-1.7.0
+rootdir: /home/ravi/calculator_project
+collected 1 item
 
-## Fixtures
+test_calculator.py .                                                     [100%]
 
-Tests that need the same starting data can share it through a **fixture** — a function decorated with `@pytest.fixture`, requested by naming it as a parameter:
+============================== 1 passed in 0.01s ===============================
+```
+
+Here is exactly what pytest did:
+
+1. **Searched the folder** and found `test_calculator.py`, because its name starts with `test_`.
+2. **Collected the test**, `test_add_two_positive_numbers()`, because its name starts with `test`. The line `collected 1 item` reports this.
+3. **Ran the test function.** `add(2, 3)` returned `5`, so `5 == 5` was `True`, and `assert` raised no error.
+4. **Marked the test as passed**, shown by the dot, `.`, after the file name.
+5. **Printed a summary**: `1 passed in 0.01s`.
+
+The first lines show your Python version, pytest version and project folder, so they will be different on your computer.
+
+## Running a Test That Fails
+
+To see what happens when code has a defect, change `add()` in `calculator.py` so that it subtracts by mistake:
 
 ```python
-import pytest
-
-@pytest.fixture
-def students():
-    return [
-        {"name": "Anita", "mark": 78},
-        {"name": "Ravi", "mark": 91},
-    ]
-
-def test_count(students):
-    assert len(students) == 2
-
-def test_top(students):
-    assert max(students, key=lambda s: s["mark"])["name"] == "Ravi"
+def add(a, b):
+    return a - b
 ```
 
-**Output:**
+Run `python -m pytest` again.
+
+**Possible output (shortened):**
 
 ```
-test_fixture.py::test_count PASSED                                       [ 50%]
-test_fixture.py::test_top PASSED                                         [100%]
+test_calculator.py F                                                     [100%]
 
-============================== 2 passed in 0.02s ==============================
+=================================== FAILURES ===================================
+________________________ test_add_two_positive_numbers _________________________
+
+    def test_add_two_positive_numbers():
+>       assert add(2, 3) == 5
+E       assert -1 == 5
+E        +  where -1 = add(2, 3)
+
+test_calculator.py:5: AssertionError
+=========================== short test summary info ============================
+FAILED test_calculator.py::test_add_two_positive_numbers - assert -1 == 5
+============================== 1 failed in 0.01s ===============================
 ```
 
-Nothing called `students()`. pytest saw the parameter name, matched it to the fixture, and passed the result in.
+Here is exactly what happened:
 
-The fixture runs **fresh for each test**, so one test cannot corrupt another's data. That isolation is the point: tests must pass in any order and on their own.
+1. pytest ran the same test function.
+2. `add(2, 3)` now returned `-1`, so the condition `-1 == 5` was `False`.
+3. `assert` raised an **`AssertionError`**.
+4. pytest reports the test as failed with an `F` and continues running the remaining tests.
+5. pytest printed a **failure report** explaining what went wrong.
 
-Fixtures shared across files go in a file called `conftest.py`, which pytest loads automatically.
+Read the failure report from top to bottom:
 
-## The Shape of a Test
+- **`F`** after the file name means one test failed.
+- **`>`** marks the line where the test failed: `assert add(2, 3) == 5`.
+- **`E       assert -1 == 5`** shows the comparison that failed. The actual result was `-1`, and the expected result was `5`.
+- **`where -1 = add(2, 3)`** shows the function call that produced the actual result.
+- **`test_calculator.py:5`** shows the file and line number of the failing check.
 
-A good test has three parts, conventionally called **Arrange, Act, Assert**:
+The report shows that `add(2, 3)` returned a different value from what the test expected. This helps you identify where to investigate the problem. Change `add()` back to `return a + b`, run the test again, and it passes.
+
+## Writing a Test for a Method
+
+A **method** is a function that belongs to a class, so it is called on an **object** of that class. This makes testing a method one step longer than testing a function:
+
+| Testing a Function | Testing a Method |
+| --- | --- |
+| Call the function directly, such as `add(2, 3)` | First **create an object** of the class, then call the method on that object, such as `calculator.multiply(4, 5)` |
+
+Add this test to `test_calculator.py`, and change the import line so it also imports the `Calculator` class:
 
 ```python
-def test_average_of_three_marks():
-    marks = [78, 91, 64]
+from calculator import add, Calculator
 
-    result = average(marks)
+def test_add_two_positive_numbers():
+    assert add(2, 3) == 5
 
-    assert result == pytest.approx(77.67, abs=0.01)
+def test_multiply_two_numbers():
+    calculator = Calculator()
+    assert calculator.multiply(4, 5) == 20
 ```
 
-Set up the data, do the thing, check the result. Keeping them visually separate makes a test readable at a glance.
+- `from calculator import add, Calculator` imports both the function and the class.
+- `calculator = Calculator()` creates an object of the `Calculator` class.
+- `calculator.multiply(4, 5)` calls the method on that object. The `assert` checks that the actual result is `20`.
 
-`pytest.approx` is the right way to compare floats, for the same reason `math.isclose` was — `77.666...` will not equal `77.67` exactly.
+Run `python -m pytest -v`. The **`-v`** option, short for **verbose**, lists every test by name:
 
-## What Makes a Test Worth Having
+**Possible output (shortened):**
 
-**One behaviour per test.** A test asserting five things stops at the first failure and hides the rest.
+```
+test_calculator.py::test_add_two_positive_numbers PASSED                 [ 50%]
+test_calculator.py::test_multiply_two_numbers PASSED                     [100%]
 
-**A name that states the expectation.** `test_withdraw_fails_when_funds_are_short` tells you what broke from the summary line alone. `test_1` does not.
+============================== 2 passed in 0.01s ===============================
+```
 
-**No dependence on other tests.** Tests may run in any order, and in parallel. A test relying on one that ran before it will fail mysteriously.
+pytest discovered and ran both test functions, one testing a function and one testing a method, and both passed.
 
-**No dependence on the outside world.** A test that calls a real API fails when the network does, which trains people to ignore failures.
+## Arrange, Act, Assert
 
-**Test the behaviour, not the implementation.** Assert what a function returns, not which internal variables it set. Tests tied to internals break on every refactor and stop being worth keeping.
+As tests become longer, they need a clear structure. Most tests follow a three-step structure called the **Arrange, Act, Assert (AAA) pattern**.
 
-Write the test when you write the code, or immediately after. Tests added months later cover what you remember rather than what matters.
+> **The Arrange, Act, Assert (AAA) pattern is a way of structuring a test in three separate steps: preparing what the test needs, performing the action being tested, and checking the result.**
+
+Each step has one job:
+
+1. **Arrange:** prepare everything the test needs before the action. This includes creating objects, setting up the input values and stating the expected result.
+2. **Act:** perform the **one** action being tested, usually by calling a function or method, and store the actual result.
+3. **Assert:** compare the actual result with the expected result, using `assert`.
+
+Here is `test_multiply_two_numbers()` rewritten using the AAA pattern:
+
+```python
+def test_multiply_two_numbers():
+    # Arrange
+    calculator = Calculator()
+    a = 4
+    b = 5
+    expected = 20
+
+    # Act
+    result = calculator.multiply(a, b)
+
+    # Assert
+    assert result == expected
+```
+
+- **Arrange** creates the `Calculator` object, sets the inputs `a` and `b`, and records the expected result, `20`.
+- **Act** calls `calculator.multiply(a, b)` and stores the actual result in `result`.
+- **Assert** checks that `result` equals `expected`.
+
+The comments `# Arrange`, `# Act` and `# Assert` are optional, but they make each step easy to see. This test does exactly the same as the shorter version in **Writing a Test for a Method**. The difference is that each step is now clearly separated.
+
+Very short tests, such as `assert add(2, 3) == 5`, can combine all three steps in one line. For longer tests, keeping the steps separate makes them much easier to read and fix.
+
+## Running Specific Tests
+
+`python -m pytest` runs every test that pytest discovers. You can also choose which tests to run:
+
+- `python -m pytest -v` runs every test and lists each one by name.
+- `python -m pytest test_calculator.py` runs only the tests in one file.
+- `python -m pytest test_calculator.py::test_multiply_two_numbers` runs only one test function. The `::` separates the file name from the test function name.
+
+## Points to Remember
+
+- **A test case** defines an input, an action and an expected result. A test **passes** when the actual result equals the expected result, and **fails** when it does not.
+- **A test function** is a function whose name starts with `test`, and it checks results with `assert`.
+- **To test a method**, first create an object of the class, then call the method on that object.
+- **The AAA pattern** structures a test as Arrange, Act and Assert, so each step is clear.
 
 ## Further Reading
 
-- **The pytest documentation** — https://docs.pytest.org/
-- **Getting started with testing in Python** — https://realpython.com/python-testing/
+- 📎 **Official pytest getting started guide** — https://docs.pytest.org/en/stable/getting-started.html
+- 📎 **Official pytest guide to writing assertions** — https://docs.pytest.org/en/stable/how-to/assert.html
 
-A test is a function named `test_*` containing an `assert`, pytest finds and runs them, and its failure report shows the actual values and where they came from. Next, choosing the cases worth testing.
+The tests in this topic check a few typical inputs. But what happens with zero, empty values, very large numbers or inputs a function should reject? In the next topic, **Edge Cases**, you'll learn how to identify and test these situations, including how to check that a function raises an error and how to test many inputs with one test function.

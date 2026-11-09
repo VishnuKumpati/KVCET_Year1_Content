@@ -1,248 +1,312 @@
 # Edge Cases
 
-A test that passes proves nothing on its own. `add(2, 3) == 5` would still pass if `add` were written to return `5` always.
+A function can pass every test with ordinary inputs and still fail in real use. Many bugs stay hidden until the program receives an unusual input: a value exactly at a limit, an empty list, zero, or a value it should never accept. Users do enter such values, so a well-tested program checks them deliberately.
 
-Tests are only worth having if they would **fail** when the code is wrong. That means choosing inputs likely to expose a mistake, and those are almost never the ordinary ones.
+## What Edge Cases Are
 
-An **edge case** is an input at the limit of what the code handles: the empty collection, the first and last item, zero, the exact boundary of a condition. Bugs cluster there, because the ordinary cases are what the author was thinking about while writing.
+> **An edge case is an unusual input or situation that may cause a program to behave unexpectedly, especially near the limits of what it is designed to handle.**
 
-## The Categories
+Inputs can be divided into two groups:
 
-Run through this list for any function and most of its bugs will surface.
+- A **typical case** is an ordinary input that the program handles most of the time, such as marks of `75` out of `100`.
+- An **edge case** is an unusual input or situation that may cause unexpected behaviour, such as marks at the limits of the valid range or an empty list.
 
-**Nothing.** An empty list, an empty string, an empty dictionary, `None`. What does `average([])` do?
+Edge cases deserve special attention because programmers usually think about typical inputs while writing code. Mistakes such as using `>` instead of `>=` only show up when the input is exactly at the limit.
 
-**One.** A single item. Code written for "many" often assumes at least two — anything involving pairs, gaps between items, or "all but the last".
+## Common Types of Edge Cases
 
-**Many.** Enough to expose an algorithm that only works for small inputs, and to notice one that is unusably slow.
+| Type | Meaning | Example |
+| --- | --- | --- |
+| **Boundary values** | Values exactly at a limit, or just next to it | `0`, `39`, `40` and `100` for marks from 0 to 100 with a pass mark of 40 |
+| **Zero** | The value `0`, which often behaves differently from other numbers | Dividing by `0` |
+| **Negative numbers** | Values below zero, when only positive values make sense | Marks of `-1` |
+| **Empty values** | An empty string, list or dictionary | `""` or `[]` |
+| **Very large values** | Values much larger than usual, but still valid | A very large number of items in a shopping cart |
+| **Invalid input** | A value the function should reject | Marks of `101` |
 
-**Boundaries.** The exact value a condition tests, and the values either side. If a rule says "85 and above is an A", then `84`, `85` and `86` are the cases that matter.
+## The Example Function
 
-**Zero.** As an input, a divisor, a count, a length. Division by zero is the classic, and zero is falsy, which breaks `if value:` when `0` is legitimate data.
+This topic tests a function that decides whether a student has passed.
 
-**Negatives.** Where only positives were expected. A negative quantity, age or price usually means something upstream went wrong.
+**The rules:**
 
-**Duplicates.** Where uniqueness was assumed. Two students with the same name, two identical marks when ranking.
+- Valid marks are from `0` to `100`, including both values.
+- Marks of `40` or more mean **Pass**, and marks below `40` mean **Fail**.
+- Marks outside `0` to `100` are invalid, so the function raises a `ValueError`.
 
-**Wrong types.** A string where a number was expected — usually from user input or a file, where everything is text.
+Create a new folder named `results_project`, activate a virtual environment with pytest installed, as in **Testing with pytest**, and create this file:
 
-**Extremes.** Very large numbers, very long strings, a file of a million rows.
-
-**Awkward text.** Accents, emoji, right-to-left scripts, a name with an apostrophe. `len()` on text is not always the number of visible characters.
-
-## Boundaries Are the Richest Source
-
-Take a grading function:
+**File: `results.py`**
 
 ```python
-def grade(mark):
-    if mark >= 85:
-        return "A"
-    elif mark >= 70:
-        return "B"
-    elif mark >= 50:
-        return "C"
-    return "F"
+def get_result(marks):
+    if marks < 0 or marks > 100:
+        raise ValueError("Marks must be between 0 and 100")
+    if marks >= 40:
+        return "Pass"
+    return "Fail"
 ```
 
-Testing `78` and `91` tells you almost nothing. Every boundary is a place where `>=` might have been `>`, or a threshold mistyped.
+- The first `if` rejects marks below `0` or above `100` by raising a `ValueError`.
+- The second `if` returns `"Pass"` for marks of `40` or more.
+- Any other valid marks return `"Fail"`.
 
-Three boundaries, two values each:
+## Boundary Value Analysis
+
+The most important edge cases are the values at the **boundaries**.
+
+> **A boundary value is a value at the edge of a valid range, where the program's behaviour changes, such as the lowest or highest allowed value, or the value where a result changes from one outcome to another.**
+
+> **Boundary value analysis is a testing technique that checks the values at each boundary and the values just inside and just outside it.**
+
+`get_result()` has three boundaries:
+
+| Boundary | Values to Test | Expected Result |
+| --- | --- | --- |
+| **Lowest valid marks** | `-1` (just outside), `0` (at the boundary) and `1` (just inside) | `ValueError`, `"Fail"` and `"Fail"` |
+| **Pass mark** | `39` (just below), `40` (at the boundary) and `41` (just above) | `"Fail"`, `"Pass"` and `"Pass"` |
+| **Highest valid marks** | `99` (just inside), `100` (at the boundary) and `101` (just outside) | `"Pass"`, `"Pass"` and `ValueError` |
+
+Testing the value below, at and above each boundary checks every place where the function's behaviour changes. The nine values include **seven valid** marks, which return `"Pass"` or `"Fail"`, and **two invalid** marks, `-1` and `101`, which raise a `ValueError`.
+
+## Testing Boundary Values
+
+Start with the pass mark, where the result changes from `"Fail"` to `"Pass"`.
+
+**File: `test_results.py`**
+
+```python
+from results import get_result
+
+
+def test_marks_just_below_pass_mark():
+    assert get_result(39) == "Fail"
+
+
+def test_marks_at_pass_mark():
+    assert get_result(40) == "Pass"
+```
+
+Run `python -m pytest`, and both tests pass.
+
+### Why This Test Matters
+
+Suppose the pass condition were written as `marks > 40` instead of `marks >= 40`. A typical input, such as `75`, would still return `"Pass"`, so a test with `75` would not notice the mistake. But `get_result(40)` would now return `"Fail"`, and `test_marks_at_pass_mark` would fail:
+
+**Possible output (shortened):**
+
+```
+>       assert get_result(40) == "Pass"
+E       AssertionError: assert 'Fail' == 'Pass'
+```
+
+The boundary value `40` found a mistake that typical inputs could not.
+
+## Testing Many Inputs with `parametrize`
+
+Testing all nine boundary values with separate functions would mean writing nearly the same test again and again. pytest provides a shorter way.
+
+> **Parametrisation is a technique for running one test function several times, each time with a different set of input and expected values. In pytest, it is done with the `@pytest.mark.parametrize` decorator.**
+
+`@pytest.mark.parametrize` is a **decorator**, covered in **Decorators**. It is written directly above the test function.
+
+**Syntax:**
+
+```
+@pytest.mark.parametrize("parameter_names", [list_of_values])
+def test_name(parameter_names):
+    assert ...
+```
+
+Replace the two tests in `test_results.py` with one parametrised test that checks all seven valid boundary values:
 
 ```python
 import pytest
+from results import get_result
 
-from grading import grade
 
-@pytest.mark.parametrize("mark, expected", [
-    (49, "F"),
-    (50, "C"),
-    (69, "C"),
-    (70, "B"),
-    (84, "B"),
-    (85, "A"),
+@pytest.mark.parametrize("marks, expected", [
+    (0, "Fail"),
+    (1, "Fail"),
+    (39, "Fail"),
+    (40, "Pass"),
+    (41, "Pass"),
+    (99, "Pass"),
+    (100, "Pass"),
 ])
-def test_grade_boundaries(mark, expected):
-    assert grade(mark) == expected
+def test_get_result_at_boundaries(marks, expected):
+    assert get_result(marks) == expected
 ```
 
-**Output:**
+How it works:
+
+1. `import pytest` is needed, because `@pytest.mark.parametrize` belongs to pytest.
+2. `"marks, expected"` names the two variables that receive the values from each tuple.
+3. The list contains seven **tuples**. Each tuple is one test case: the first value goes into `marks`, and the second goes into `expected`.
+4. pytest runs `test_get_result_at_boundaries()` **seven times**, once for each tuple.
+5. Each run is reported as a **separate test**, so if one value fails, the others still run.
+
+Run `python -m pytest -v`:
+
+**Possible output (shortened):**
 
 ```
-test_grading.py::test_grade_boundaries[49-F] PASSED                      [  7%]
-test_grading.py::test_grade_boundaries[50-C] PASSED                      [ 14%]
-test_grading.py::test_grade_boundaries[69-C] PASSED                      [ 21%]
-test_grading.py::test_grade_boundaries[70-B] PASSED                      [ 28%]
-test_grading.py::test_grade_boundaries[84-B] PASSED                      [ 35%]
-test_grading.py::test_grade_boundaries[85-A] PASSED                      [ 42%]
+test_results.py::test_get_result_at_boundaries[0-Fail] PASSED            [ 14%]
+test_results.py::test_get_result_at_boundaries[1-Fail] PASSED            [ 28%]
+test_results.py::test_get_result_at_boundaries[39-Fail] PASSED           [ 42%]
+test_results.py::test_get_result_at_boundaries[40-Pass] PASSED           [ 57%]
+test_results.py::test_get_result_at_boundaries[41-Pass] PASSED           [ 71%]
+test_results.py::test_get_result_at_boundaries[99-Pass] PASSED           [ 85%]
+test_results.py::test_get_result_at_boundaries[100-Pass] PASSED          [100%]
 ```
 
-Six cases, one function. Change any `>=` to `>` and exactly one fails, naming the value that exposed it.
+The values in square brackets, such as `[40-Pass]`, show which tuple each run used. If the `40` case failed, its name, `[40-Pass]`, would show exactly which input caused the failure.
 
-The technique has a name: **boundary value analysis** — for every threshold, test the value on it and the value below it.
+## Testing That an Exception Is Raised
 
-Its companion is **equivalence partitioning**: divide the inputs into groups treated identically, and test one from each. For `grade`, the groups are the four bands, so `0`, `60`, `75` and `95` cover them. Testing `60`, `61` and `62` adds nothing, because they are the same case three times.
+For marks of `-1` and `101`, the **expected result** is not a returned value. It is a `ValueError`. A normal `assert` cannot check this, because the error stops the function before it returns anything. pytest provides **`pytest.raises()`** for this.
 
-Together they give the rule: **one value from each group, plus both values at every boundary.**
+> **`pytest.raises()` is used with a `with` statement to check that the code inside the block raises a specific exception. The test passes if the code inside the `with` block raises the expected exception. If it does not, pytest marks the test as failed.**
 
-## Off-by-One
+**Syntax:**
 
-The commonest bug this catches is the off-by-one, and it usually passes the obvious test:
+```
+with pytest.raises(ExceptionType):
+    code_that_should_raise_the_exception
+```
+
+Add this test to `test_results.py`:
 
 ```python
-def last_three(items):
-    return items[len(items) - 3:]
+@pytest.mark.parametrize("marks", [-1, 101])
+def test_get_result_rejects_marks_outside_range(marks):
+    with pytest.raises(ValueError):
+        get_result(marks)
 ```
+
+- `@pytest.mark.parametrize("marks", [-1, 101])` runs the test twice. With only **one** parameter, each value is written on its own, without a tuple.
+- `with pytest.raises(ValueError):` tells pytest that the code inside the block is **expected** to raise a `ValueError`.
+- `get_result(marks)` raises a `ValueError` for both `-1` and `101`, so both runs **pass**.
+
+### When the Expected Exception Is Not Raised
+
+Suppose the check for marks above `100` were missing, so the first line of `get_result()` were only `if marks < 0:`. Then `get_result(101)` would return `"Pass"` instead of raising an error, and the test would fail:
+
+**Possible output (shortened):**
+
+```
+_______________ test_get_result_rejects_marks_outside_range[101] _______________
+
+marks = 101
+
+    @pytest.mark.parametrize("marks", [-1, 101])
+    def test_get_result_rejects_marks_outside_range(marks):
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE ValueError
+```
+
+`DID NOT RAISE ValueError` means the code inside the `with` block finished **without** raising the expected exception. The `[101]` in the test name shows that the problem is the value `101`.
+
+## Testing Empty Values
+
+An empty list is another common edge case. Add a second function to `results.py`, which calculates the average of a list of marks:
 
 ```python
-def test_last_three_of_five():
-    assert last_three([1, 2, 3, 4, 5]) == [3, 4, 5]
-
-def test_last_three_of_two():
-    assert last_three([1, 2]) == [1, 2]
+def average(numbers):
+    if len(numbers) == 0:
+        raise ValueError("Cannot calculate the average of an empty list")
+    return sum(numbers) / len(numbers)
 ```
 
-**Output:**
+Without the `if` check, `average([])` would attempt to divide by zero and raise a `ZeroDivisionError`. The explicit check raises a `ValueError` with a message that explains why the operation cannot be performed.
 
-```
-test_buggy.py::test_last_three_of_five PASSED                            [ 50%]
-test_buggy.py::test_last_three_of_two FAILED                             [100%]
-
-================================== FAILURES ===================================
-___________________________ test_last_three_of_two ____________________________
-
-    def test_last_three_of_two():
->       assert last_three([1, 2]) == [1, 2]
-E       assert [2] == [1, 2]
-E
-E         At index 0 diff: 2 != 1
-E         Right contains one more item: 2
-E
-E         Full diff:
-E           [
-E         -     1,
-E               2,
-E           ]
-
-test_buggy.py:9: AssertionError
-```
-
-The normal case passed. With fewer than three items, `len(items) - 3` is **negative**, and a negative index counts from the end — so `[1, 2][-1:]` returned `[2]`.
-
-The fix is `items[-3:]`, which handles short lists correctly. The point is that no amount of staring at the normal case would have found this, and one edge case did immediately.
-
-pytest's diff makes it obvious what went wrong: the expected list contains one more item than the actual, and the missing one is at the front.
-
-## Deciding What Should Happen
-
-Edge cases often have no obvious right answer, and that is the real value of looking for them: they force a decision that would otherwise be made by accident.
+Add these tests to `test_results.py`, and change the import line to `from results import get_result, average`:
 
 ```python
-def average(marks):
-    return sum(marks) / len(marks)
+def test_average_of_numbers():
+    assert average([80, 90, 70]) == 80
+
+
+def test_average_of_empty_list_raises_error():
+    with pytest.raises(ValueError, match="empty list"):
+        average([])
 ```
 
-What should `average([])` do? Three defensible answers:
+- `test_average_of_numbers()` checks a **typical case**.
+- `test_average_of_empty_list_raises_error()` checks the **edge case**: an empty list.
+- The **`match`** argument checks that the error message contains the text `"empty list"`. This confirms that the **correct** error was raised, not a different `ValueError`.
 
-**Return `0.0`.** Convenient for a report. Misleading — it implies an average of zero rather than no data.
+## The Complete Test File
 
-**Raise `ValueError`.** Honest; an average of nothing is undefined. It puts the decision on the caller.
-
-**Return `None`.** Explicitly "no answer", and every caller must handle it.
-
-There is no universally correct choice — it depends on what the caller should do about it. What is not acceptable is the original, which raises `ZeroDivisionError`: an error about division, from a function the caller asked for an average, saying nothing about the real problem.
-
-Decide, implement, and write the test that records the decision:
+**File: `test_results.py`**
 
 ```python
-def average(marks):
-    if not marks:
-        return 0.0
-    return sum(marks) / len(marks)
+import pytest
+from results import get_result, average
+
+
+@pytest.mark.parametrize("marks, expected", [
+    (0, "Fail"),
+    (1, "Fail"),
+    (39, "Fail"),
+    (40, "Pass"),
+    (41, "Pass"),
+    (99, "Pass"),
+    (100, "Pass"),
+])
+def test_get_result_at_boundaries(marks, expected):
+    assert get_result(marks) == expected
+
+
+@pytest.mark.parametrize("marks", [-1, 101])
+def test_get_result_rejects_marks_outside_range(marks):
+    with pytest.raises(ValueError):
+        get_result(marks)
+
+
+def test_average_of_numbers():
+    assert average([80, 90, 70]) == 80
+
+
+def test_average_of_empty_list_raises_error():
+    with pytest.raises(ValueError, match="empty list"):
+        average([])
 ```
 
-```python
-def test_average_of_empty_is_zero():
-    assert average([]) == 0.0
+Run `python -m pytest`:
 
-def test_average_of_one():
-    assert average([78]) == 78.0
-
-def test_average_of_many():
-    assert average([78, 91, 64]) == pytest.approx(77.67, abs=0.01)
-```
-
-**Output:**
+**Possible output (shortened):**
 
 ```
-test_grading.py::test_average_of_empty_is_zero PASSED                    [ 64%]
-test_grading.py::test_average_of_one PASSED                              [ 71%]
-test_grading.py::test_average_of_many PASSED                             [ 78%]
+collected 11 items
+
+test_results.py ...........                                              [100%]
+
+============================== 11 passed in 0.02s ==============================
 ```
 
-The empty case is now documented behaviour rather than an accident. Anyone changing it breaks a test that states the intent.
+pytest counts **11 tests**: seven runs of the boundary test, two runs of the out-of-range test, and the two average tests.
 
-## Asking More of an Input
+## Finding Edge Cases for Any Function
 
-Another example, with several edges at once:
+Before writing tests for a function, work through these points:
 
-```python
-def top_n(marks, n):
-    return sorted(marks, reverse=True)[:n]
-```
+1. **Find the limits.** Note the lowest and highest values the function accepts, and test the values at and just outside each limit.
+2. **Find where the result changes.** Note every value where the output switches, such as a pass mark, and test the values on both sides.
+3. **Try zero and negative numbers**, if the function works with numbers.
+4. **Try empty values**, such as `""`, `[]` or `{}`, if the function works with strings or collections.
+5. **Try invalid input**, and decide what the function should do: return a result, or raise an exception.
 
-Three questions the ordinary case does not ask: what if there are fewer than `n` marks, what if there are none, and what if `n` is zero?
+## Points to Remember
 
-```python
-def test_top_n_fewer_than_asked():
-    assert top_n([78, 91], 5) == [91, 78]
-
-def test_top_n_of_empty():
-    assert top_n([], 3) == []
-
-def test_top_n_zero():
-    assert top_n([78, 91], 0) == []
-```
-
-**Output:**
-
-```
-test_grading.py::test_top_n_fewer_than_asked PASSED                      [ 85%]
-test_grading.py::test_top_n_of_empty PASSED                              [ 92%]
-test_grading.py::test_top_n_zero PASSED                                  [100%]
-```
-
-All three pass, because slicing already handles short lists gracefully. That is worth knowing rather than assuming — and the tests now guarantee it stays true if the implementation is ever rewritten with a loop.
-
-## Finding Edge Cases
-
-Four habits, roughly in order of usefulness.
-
-**Read the function's own conditions.** Every `if`, every comparison, every `range` is a boundary with two test values.
-
-**Ask what the input could be that you did not picture.** You imagined a list of marks. Could it be empty? Have one item? Contain a negative? Contain the same mark twice?
-
-**Look at the types.** A parameter named `count` might receive `0`, or `-1`, or `"3"`. A string parameter might receive `""`.
-
-**Write the test when you fix a bug.** Every bug found in use is an edge case you missed. A test written at that moment ensures it is found automatically if it ever returns — this is called a **regression test**, and it is the highest-value test there is, because you have proof the case occurs.
-
-## How Much Is Enough
-
-Exhaustive testing is impossible, and chasing a coverage percentage produces tests written to touch lines rather than to find bugs.
-
-A reasonable standard for each function:
-
-- one ordinary case, to show it works
-- both values at every boundary
-- the empty and single-item cases, where a collection is involved
-- the error cases, checked with `pytest.raises`
-- a regression test for every bug ever found in it
-
-That is typically five to ten tests for a function with real logic, and one or two for a trivial one. It is far more valuable than fifty tests of ordinary values.
+- **An edge case** is an unusual input or situation that may cause a program to behave unexpectedly, especially near the limits of what it is designed to handle.
+- **Boundary value analysis** tests the values at each boundary and just inside and outside it.
+- **`@pytest.mark.parametrize`** runs one test function several times with different values, reporting each run separately.
+- **`pytest.raises()`** checks that code raises an expected exception. If it is not raised, the test fails with `DID NOT RAISE`.
 
 ## Further Reading
 
-- **The pytest documentation** — https://docs.pytest.org/
-- **Boundary value analysis and equivalence partitioning** — https://www.guru99.com/equivalence-partitioning-boundary-value-analysis.html
+- 📎 **Official pytest guide to parametrisation** — https://docs.pytest.org/en/stable/how-to/parametrize.html
+- 📎 **Official pytest guide to assertions about expected exceptions** — https://docs.pytest.org/en/stable/how-to/assert.html#assertions-about-expected-exceptions
 
-Bugs live at the limits — empty, one, zero, negative, and either side of every threshold — and looking for them forces decisions about behaviour that would otherwise be made by accident. Next, the standards that make code readable in the first place.
+Tests check whether code produces the correct results, but they do not show what a program is doing while it runs in real use. In the next topic, **Logging**, you'll learn how to record what happens inside a running program.

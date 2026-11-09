@@ -658,50 +658,44 @@
                                        {
                                            "id":  "e91cf1dd-d623-470b-ad95-97fdfc1116a5",
                                            "title":  "Testing with pytest",
-                                           "tooltip":  "Week 13 - Writing tests, reading failures, raises and parametrize",
+                                           "tooltip":  "Week 13 - Test cases, assert, test discovery, reading failures and the AAA pattern",
                                            "url":  "modules/m5-production-ready-python/wk13-testing-quality-and-collaboration/1-testing-with-pytest.md"
                                        },
                                        {
                                            "id":  "a1fcd693-0686-4d58-9a44-8dd7d9cd8db0",
                                            "title":  "Edge Cases",
-                                           "tooltip":  "Week 13 - Boundaries, empty and zero, and choosing cases that find bugs",
+                                           "tooltip":  "Week 13 - Boundary value analysis, parametrize, pytest.raises and empty values",
                                            "url":  "modules/m5-production-ready-python/wk13-testing-quality-and-collaboration/2-edge-cases.md"
-                                       },
-                                       {
-                                           "id":  "3497e23e-fb2e-41d2-8b45-831b2021448d",
-                                           "title":  "PEP 8 and Clean Code",
-                                           "tooltip":  "Week 13 - Style, naming, small functions, and the tools that enforce them",
-                                           "url":  "modules/m5-production-ready-python/wk13-testing-quality-and-collaboration/3-pep8-and-clean-code.md"
                                        },
                                        {
                                            "id":  "5d5c5187-d85d-48fa-8118-11892c1ec751",
                                            "title":  "Logging",
-                                           "tooltip":  "Week 13 - Levels, basicConfig, a logger per module, and what not to log",
-                                           "url":  "modules/m5-production-ready-python/wk13-testing-quality-and-collaboration/4-logging.md"
+                                           "tooltip":  "Week 13 - Log levels, basicConfig, formatting, log files and named loggers",
+                                           "url":  "modules/m5-production-ready-python/wk13-testing-quality-and-collaboration/3-logging.md"
                                        },
                                        {
                                            "id":  "770bde1f-f1a3-4018-8fc4-66bb89e11461",
                                            "title":  "Git Fundamentals",
-                                           "tooltip":  "Week 13 - The three areas, commits, history, .gitignore and remotes",
-                                           "url":  "modules/m5-production-ready-python/wk13-testing-quality-and-collaboration/5-git-fundamentals.md"
+                                           "tooltip":  "Week 13 - Setup, staging and committing, .gitignore, pushing to GitHub and branches",
+                                           "url":  "modules/m5-production-ready-python/wk13-testing-quality-and-collaboration/4-git-fundamentals.md"
                                        },
                                        {
-                                           "id":  "b14a6cb8-282a-4f7b-9e22-442f4e04b32f",
-                                           "title":  "Branches and Pull Requests",
-                                           "tooltip":  "Week 13 - Feature branches, merging, review, and the workflow",
-                                           "url":  "modules/m5-production-ready-python/wk13-testing-quality-and-collaboration/6-branches-and-pull-requests.md"
+                                           "id":  "e3f1a6c2-5b7d-4c89-9a1e-2d64b0f7c853",
+                                           "title":  "Working with Remote Repositories",
+                                           "tooltip":  "Week 13 - Cloning, pulling, rejected pushes and the team workflow",
+                                           "url":  "modules/m5-production-ready-python/wk13-testing-quality-and-collaboration/5-working-with-remote-repositories.md"
                                        },
                                        {
                                            "id":  "038cd7cf-f52b-44c1-8dc5-70889b9b0ee9",
                                            "title":  "Merge Conflicts",
-                                           "tooltip":  "Week 13 - Reading conflict markers, resolving them, and aborting",
-                                           "url":  "modules/m5-production-ready-python/wk13-testing-quality-and-collaboration/7-merge-conflicts.md"
+                                           "tooltip":  "Week 13 - Conflicts from git pull, conflict markers, resolving, aborting and git merge",
+                                           "url":  "modules/m5-production-ready-python/wk13-testing-quality-and-collaboration/6-merge-conflicts.md"
                                        },
                                        {
                                            "id":  "a9dbcc53-5a91-431b-90ac-9cb954591cab",
                                            "title":  "AI-Assisted Development",
-                                           "tooltip":  "Week 13 - Verification, secrets, attribution, and the limits while learning",
-                                           "url":  "modules/m5-production-ready-python/wk13-testing-quality-and-collaboration/8-ai-assisted-development.md"
+                                           "tooltip":  "Week 13 - AI tools, Copilot in VS Code, effective prompts and checking AI-generated code",
+                                           "url":  "modules/m5-production-ready-python/wk13-testing-quality-and-collaboration/7-ai-assisted-development.md"
                                        }
                                    ]
                     },
